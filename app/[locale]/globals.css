@@ -102,7 +102,6 @@ body {
 
 .bluryball {
   background: rgba(0, 79, 221, 0.35);
-
   backdrop-filter: blur(170px);
   -webkit-backdrop-filter: blur(170px);
   filter: blur(170px);

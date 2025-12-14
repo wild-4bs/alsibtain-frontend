@@ -8,9 +8,11 @@ interface Props {
 export default function Layout({ children }: Props) {
   return (
     <>
-      <Header />
-      {children}
-      <Footer />
+      <div className="overflow-x-hidden">
+        <Header />
+        {children}
+        <Footer />
+      </div>
     </>
   );
 }

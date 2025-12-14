@@ -11,11 +11,11 @@ export const Hero = () => {
         width={10000}
         height={10000}
         alt="hero"
-        className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 opacity-85"
+        className="absolute top-0 left-0 object-cover w-full h-full pointer-events-none z-0 opacity-85"
       />
       <div className="absolute top-0 left-0 w-full h-full bg-linear-to-t from-black z-0"></div>
       <Container className="h-full flex items-center justify-center relative z-20">
-        <h1 className="font-medium text-5xl">
+        <h1 className="font-medium text-5xl text-center">
           Your Career. Our Next Landmark.
         </h1>
       </Container>

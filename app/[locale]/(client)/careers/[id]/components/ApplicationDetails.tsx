@@ -13,8 +13,8 @@ export const ApplicationDetails = ({
       <Container className="relative z-10">
         <h2 className="text-2xl font-bold mb-1">PROJECT MANAGER</h2>
         <p className="font-medium text-sm mb-11">Who Are We Looking For</p>
-        <div className="flex gap-10 justify-between">
-          <div className="font-bold text-sm">
+        <div className="lg:flex gap-10 lg:justify-between">
+          <div className="font-bold text-sm max-lg:mb-10">
             <div className="space-y-6">
               <ul className="space-y-3 text-sm">
                 <h3>Who We Are Looking For</h3>

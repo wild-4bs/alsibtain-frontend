@@ -20,7 +20,7 @@ export const Hero = () => {
         </h1>
         <p className="mb-6 mt-3 w-full lg:max-w-2xl">
           Be part of a trusted real estate developer shaping modern residential
-          projects across Iraq.  Work with a professional team, real impact, and
+          projects across Iraq. Work with a professional team, real impact, and
           clear room to grow.
         </p>
         <div className="flex gap-2">

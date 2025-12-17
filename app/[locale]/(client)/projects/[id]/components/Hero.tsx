@@ -1,8 +1,12 @@
+"use client";
 import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { cn } from "@/lib/utils";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { Oxanium } from "next/font/google";
 import Image from "next/image";
+import { useRef } from "react";
 
 const oxanium = Oxanium({
   subsets: ["latin"],
@@ -11,6 +15,12 @@ const oxanium = Oxanium({
 });
 
 export const Hero = () => {
+  const image = useRef(null);
+  useGSAP(() => {
+    gsap.from(image.current, {
+      opacity: 0,
+    });
+  }, []);
   return (
     <section className="bg-primary max-md:h-[60vh] relative">
       <Image
@@ -19,6 +29,7 @@ export const Hero = () => {
         width={10000}
         height={10000}
         className="w-full max-h-screen opacity-90 object-cover -mt-(--header-height) max-md:h-full"
+        ref={image}
       />
       <BluryBall className="w-[688px] h-[652px] max-sm:h-[200px] max-sm:top-1/2 top-[60%]" />
       <Container className="relative z-10">

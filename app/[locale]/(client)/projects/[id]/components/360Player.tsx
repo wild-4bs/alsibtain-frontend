@@ -1,3 +1,4 @@
+"use client";
 import Container from "@/components/Container";
 import PurpleLargeComet from "@/assets/objects/purple-large-comet.svg";
 import Image from "next/image";
@@ -9,6 +10,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alexandria } from "next/font/google";
 import { cn } from "@/lib/utils";
 import ArrowInsert from "@/assets/icons/arrow_insert.svg";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { SplitText } from "gsap/SplitText";
+import gsap from "gsap";
 const features = [
   { name: "غـرفـة 2", scene: "room2" },
   { name: "غـرفـة 3", scene: "room3" },
@@ -27,9 +32,33 @@ const alexandria = Alexandria({
 });
 
 export const Player360 = () => {
+  const title = useRef(null);
+  const section = useRef(null);
+  useGSAP(() => {
+    const splitTitle = SplitText.create(title.current, {
+      type: "chars",
+      smartWrap: true,
+    });
+
+    gsap.from(splitTitle.chars, {
+      y: 100,
+      stagger: {
+        amount: 0.1,
+        from: "random",
+      },
+      scrollTrigger: {
+        trigger: section.current,
+        scrub: true,
+        end: "top 10%",
+      },
+    });
+  }, []);
   return (
-    <section className="mt-36 relative">
-      <h2 className="text-center max-sm:mb-5 font-medium text-5xl mb-12 px-10 max-md:text-4xl">
+    <section className="mt-36 relative" ref={section}>
+      <h2
+        className="text-center max-sm:mb-5 font-medium text-5xl mb-12 px-10 max-md:text-4xl"
+        ref={title}
+      >
         Uruk City - <span className="font-light">Virtual 360</span>
       </h2>
       <PurpleLargeComet className="w-full scale-120 absolute rotate-155 duration-300 z-0 origin-center top-0 left-0" />

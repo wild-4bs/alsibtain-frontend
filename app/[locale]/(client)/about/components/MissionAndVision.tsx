@@ -1,31 +1,71 @@
+"use client";
 import Container from "@/components/Container";
-import AbstractDesign from "@/assets/objects/abstract.svg";
 import Image from "next/image";
 import { BluryBall } from "@/components/ui/BluryBall";
-export const aboutCards = [
-  {
-    title: "Our Vision",
-    subtitle: "Shaping Tomorrow’s Communities",
-    description:
-      "Our vision is to set a new standard for real estate development in Iraq creating sustainable, modern, and people-focused environments that support families and future generations.",
-  },
-  {
-    title: "Our Mission",
-    subtitle: "Building With Purpose",
-    description:
-      "Our mission is to transform development into a meaningful experience by combining thoughtful design, engineering excellence, and practical solutions that elevate everyday living.",
-  },
-  {
-    title: "Our Values",
-    subtitle: "Guided by Principles That Last",
-    description:
-      "Integrity, quality, innovation, sustainability, and community—these values shape every project we deliver and define who we are as a company.",
-  },
-];
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 export const MissionAndVision = () => {
+  const section = useRef(null);
+  const vision = useRef(null);
+  const mission = useRef(null);
+  const values = useRef(null);
+  const title = useRef(null);
+  const caption = useRef(null);
+
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section.current,
+        scrub: true,
+        end: "center 55%",
+      },
+    });
+    tl.from(
+      title.current,
+      {
+        x: "-50%",
+        opacity: 0,
+      },
+      "<"
+    );
+    tl.from(
+      caption.current,
+      {
+        x: "-50%",
+        opacity: 0,
+        delay: 0.2,
+      },
+      "<"
+    );
+    tl.from(
+      vision.current,
+      {
+        x: "50%",
+        opacity: 0,
+      },
+      "<"
+    );
+    tl.from(
+      mission.current,
+      {
+        y: "-50%",
+        opacity: 0,
+      },
+      "<"
+    );
+    tl.from(
+      values.current,
+      {
+        x: "-50%",
+        opacity: 0,
+      },
+      "<"
+    );
+  }, []);
   return (
-    <section className="my-32 leading-[150%] relative">
+    <section className="my-32 leading-[150%] relative" ref={section}>
       <Image
         width={1000}
         height={1000}
@@ -37,8 +77,10 @@ export const MissionAndVision = () => {
         <BluryBall className="top-12 -left-1/5 w-[900px] h-[350px]" />
         <BluryBall className="bottom-0 -right-[70%] left-[unest] w-[900px] h-[700px]" />
         <header className="mb-12 relative z-10">
-          <h2 className="font-semibold text-5xl mb-2">Our Vision & Mission</h2>
-          <p className="text-subtitle-color font-medium text-lg">
+          <h2 className="font-semibold text-5xl mb-2" ref={title}>
+            Our Vision & Mission
+          </h2>
+          <p className="text-subtitle-color font-medium text-lg" ref={caption}>
             Our purpose has always been clear: to build communities that last,
             serve, and inspire, Every decision we make — from planning to
             execution — reflects our long-term commitment to people, quality,
@@ -46,20 +88,50 @@ export const MissionAndVision = () => {
           </p>
         </header>
         <div className="flex gap-10 flex-wrap relative z-10">
-          {aboutCards.map((card, i) => (
-            <article
-              key={i}
-              className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
-            >
-              <h2 className="mb-6 font-semibold text-3xl">{card.title}</h2>
-              <h3 className="font-bold mb-5 text-lg text-subtitle-color">
-                {card.subtitle}
-              </h3>
-              <p className="font-medium text-lg text-subtitle-color">
-                {card.description}
-              </p>
-            </article>
-          ))}
+          <article
+            className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
+            ref={vision}
+          >
+            <h2 className="mb-6 font-semibold text-3xl">Our Vision</h2>
+            <h3 className="font-bold mb-5 text-lg text-subtitle-color">
+              Shaping Tomorrow's Communities
+            </h3>
+            <p className="font-medium text-lg text-subtitle-color">
+              Our vision is to set a new standard for real estate development in
+              Iraq creating sustainable, modern, and people-focused environments
+              that support families and future generations.
+            </p>
+          </article>
+
+          <article
+            className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
+            ref={mission}
+          >
+            <h2 className="mb-6 font-semibold text-3xl">Our Mission</h2>
+            <h3 className="font-bold mb-5 text-lg text-subtitle-color">
+              Building With Purpose
+            </h3>
+            <p className="font-medium text-lg text-subtitle-color">
+              Our mission is to transform development into a meaningful
+              experience by combining thoughtful design, engineering excellence,
+              and practical solutions that elevate everyday living.
+            </p>
+          </article>
+
+          <article
+            className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
+            ref={values}
+          >
+            <h2 className="mb-6 font-semibold text-3xl">Our Values</h2>
+            <h3 className="font-bold mb-5 text-lg text-subtitle-color">
+              Guided by Principles That Last
+            </h3>
+            <p className="font-medium text-lg text-subtitle-color">
+              Integrity, quality, innovation, sustainability, and
+              community—these values shape every project we deliver and define
+              who we are as a company.
+            </p>
+          </article>
         </div>
       </Container>
       <Image

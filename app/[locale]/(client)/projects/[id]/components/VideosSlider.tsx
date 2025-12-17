@@ -10,10 +10,13 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import PlayIcon from "@/assets/icons/play.svg";
+import MediaViewer from "@/components/ViewportMedia";
+import { PauseIcon } from "lucide-react";
 export const VideosSlider = () => {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
+  const [isPlaying, setIsPlaying] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [itemsLength, setItemsLength] = useState(0);
@@ -36,6 +39,14 @@ export const VideosSlider = () => {
   }, [api]);
   return (
     <section className="relative ms-36 mt-20 max-sm:ms-4 max-sm:mx-5 mb-52">
+      {isPlaying && (
+        <MediaViewer
+          src="/projects/1.mp4"
+          onClose={() => setIsPlaying(false)}
+          autoPlay
+          type="video"
+        />
+      )}
       <BluryBall className="w-full h-[266px] blur-[235px]" />
       <Carousel
         className="w-full relative overflow-hidden"
@@ -55,8 +66,12 @@ export const VideosSlider = () => {
                 alt="Project"
                 className="w-full h-full object-cover absolute top-0 left-0 z-0 rounded-2xl"
               />
-              <button className="absolute bottom-4 left-6 flex items-center justify-center size-10 z-10 rounded-full hover:opacity-80 duration-300 cursor-pointer">
-                <PlayIcon />
+              <button
+                onClick={() => setIsPlaying(true)}
+                className="absolute bottom-4 left-6 flex items-center justify-center size-10 z-10 rounded-full hover:opacity-80 duration-300 cursor-pointer"
+              >
+                {isPlaying && <PauseIcon />}
+                {!isPlaying && <PlayIcon />}
               </button>
               <div
                 className="layer w-full h-full absolute top-0 left-0"

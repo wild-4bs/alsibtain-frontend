@@ -1,18 +1,20 @@
+"use client";
 import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { cn } from "@/lib/utils";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
 import {
-  Code,
   Film,
   Laptop,
-  LayoutGrid,
   LineChart,
   Pencil,
   Rocket,
   Smartphone,
-  TrendingUp,
 } from "lucide-react";
 import { Space_Grotesk } from "next/font/google";
+import { useRef } from "react";
 
 const space_grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -66,16 +68,64 @@ const services = [
 ];
 
 export const Services = () => {
+  const title = useRef(null);
+  const section = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section.current,
+        scrub: 1,
+        end: "top 10%",
+      },
+    });
+
+    const splitTitle = SplitText.create(title.current, {
+      type: "chars",
+      smartWrap: true,
+    });
+
+    const services = section.current?.querySelectorAll(
+      ".services-page-service"
+    );
+
+    if (!services) return;
+    tl.from(splitTitle.chars, {
+      opacity: 0,
+      y: 100,
+      stagger: {
+        amount: 0.1,
+        from: "random",
+      },
+    });
+    tl.from(services, {
+      y: 100,
+      opacity: 0,
+      stagger: {
+        amount: 0.3,
+        from: "center",
+      },
+    });
+  }, []);
   return (
-    <section className={cn(space_grotesk.className, "relative z-20 mt-20")}>
+    <section
+      ref={section}
+      className={cn(space_grotesk.className, "relative z-20 mt-20")}
+      id="our-services"
+    >
       <BluryBall className="bottom-0 left-0 translate-y-1/2" />
       <BluryBall className="top-0 right-0 left-[unset] translate-x-1/2 translate-y-0" />
       <Container>
-        <h2 className="text-center text-4xl mb-16">Our Services</h2>
+        <h2 className="text-center text-4xl mb-16" ref={title}>
+          Our Services
+        </h2>
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service, i) => (
-            <article key={i} className="p-8 rounded-xl border border-[#737373]">
-              <div className="size-16 bg-[#5535E61A] rounded-xl flex items-center justify-center mb-5">
+            <article
+              key={i}
+              className="p-8 rounded-xl border border-[#737373] services-page-service"
+            >
+              <div className="size-16 bg-[#5535E61A] rounded-xl flex items-center justify-center mb-5 ">
                 {service.icon}
               </div>
               <h3 className="font-normal text-lg">{service.title}</h3>

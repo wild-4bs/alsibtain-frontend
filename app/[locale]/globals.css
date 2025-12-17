@@ -62,7 +62,7 @@
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
-  --input: #19499f;
+  --input: #58585883;
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -105,4 +105,53 @@ body {
   backdrop-filter: blur(170px);
   -webkit-backdrop-filter: blur(170px);
   filter: blur(170px);
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 16px var(--primary);
+  }
+  50% {
+    text-shadow: 0 0 32px var(--primary), 0 0 48px var(--primary);
+  }
+}
+
+@keyframes pulse-glow-white {
+  0%,
+  100% {
+    text-shadow: 0 0 16px rgba(255, 255, 255, 0.9);
+  }
+  50% {
+    text-shadow: 0 0 32px rgba(255, 255, 255, 0.9),
+      0 0 48px rgba(255, 255, 255, 0.9);
+  }
+}
+
+@keyframes pulse-glow-bg {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow-white {
+  animation: pulse-glow-white 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow-bg {
+  animation: pulse-glow-bg 3s ease-in-out infinite;
+}
+
+html {
+  scroll-behavior: smooth;
 }

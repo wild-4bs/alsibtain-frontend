@@ -58,7 +58,6 @@ export const localizeCount = (
   }
 };
 
-// مثال للاستخدام:
 console.log(
   localizeCount(0, "ar", {
     singular: "يوم",

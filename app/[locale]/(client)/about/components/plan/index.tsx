@@ -1,6 +1,11 @@
+"use client";
 import Container from "@/components/Container";
 import { Step } from "./Step";
 import { BluryBall } from "@/components/ui/BluryBall";
+import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
+import { SplitText } from "gsap/SplitText";
+import gsap from "gsap";
 const steps = [
   {
     id: "01",
@@ -46,14 +51,69 @@ const steps = [
   },
 ];
 export const Plan = () => {
+  const title = useRef(null);
+  const caption = useRef(null);
+  const section = useRef<HTMLElement>(null);
+  useGSAP(() => {
+    if (!title.current || !caption.current || !section.current) return;
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section.current,
+        start: "top center",
+      },
+    });
+    const splitTitle = SplitText.create(title.current, {
+      type: "chars",
+      smartWrap: true,
+    });
+    const splitCaption = SplitText.create(caption.current, {
+      type: "chars",
+      smartWrap: true,
+    });
+    const steps = section.current.querySelectorAll(".about-page-plan-step");
+
+    tl.from(splitTitle.chars, {
+      y: 30,
+      autoAlpha: 0,
+      stagger: {
+        amount: 0.2,
+        from: "random",
+      },
+    });
+    tl.from(
+      splitCaption.chars,
+      {
+        y: 30,
+        autoAlpha: 0,
+        stagger: {
+          amount: 0.2,
+          from: "random",
+        },
+      },
+      "<"
+    );
+    if (steps) {
+      tl.from(steps, {
+        y: 200,
+        opacity: 0,
+        stagger: {
+          amount: 0.5,
+          from: "random",
+        },
+      });
+    }
+  }, []);
   return (
-    <section>
+    <section ref={section}>
       <Container>
         <header className="mb-12">
-          <h2 className="font-semibold text-5xl leading-[150%]">
+          <h2 className="font-semibold text-5xl leading-[150%]" ref={title}>
             Navigating the Estatein Experience
           </h2>
-          <p className="font-medium text-lg text-subtitle-color leading-[150%]">
+          <p
+            className="font-medium text-lg text-subtitle-color leading-[150%]"
+            ref={caption}
+          >
             At Estatein, we've designed a straightforward process to help you
             find and purchase your dream property with ease. Here's a
             step-by-step guide to how it all works.

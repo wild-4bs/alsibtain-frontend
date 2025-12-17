@@ -7,9 +7,12 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
 import { ArrowUp, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const clientTestimonials = [
   {
@@ -47,6 +50,8 @@ const clientTestimonials = [
 const NAV_SIZE = 50;
 
 export const Clients = () => {
+  const title = useRef(null);
+  const section = useRef(null);
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -68,10 +73,27 @@ export const Clients = () => {
     };
   }, [api]);
 
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: section.current, scrub: 1, end: "top 20%" },
+    });
+    const splitTitle = SplitText.create(title.current, {
+      type: "words",
+    });
+    tl.from(splitTitle.words, {
+      y: -100,
+      opacity: 0,
+      stagger: { amount: 0.3, from: "end" },
+    });
+  }, []);
+
   return (
-    <section className="my-28">
+    <section className="my-28" ref={section}>
       <Container>
-        <h2 className="text-6xl font-medium text-center mb-16 max-sm:text-4xl px-4">
+        <h2
+          className="text-6xl font-medium text-center mb-16 max-sm:text-4xl px-4"
+          ref={title}
+        >
           What Our Clients Say <br className="max-md:hidden" /> About Us
         </h2>
 

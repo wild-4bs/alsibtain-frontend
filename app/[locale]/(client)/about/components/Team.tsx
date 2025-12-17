@@ -1,5 +1,9 @@
+"use client";
 import Container from "@/components/Container";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import Image from "next/image";
+import { useRef } from "react";
 
 export const teamMembers = [
   {
@@ -29,8 +33,30 @@ export const teamMembers = [
 ];
 
 export const Team = () => {
+  const section = useRef<HTMLElement>(null);
+  useGSAP(() => {
+    const teamMembers = section?.current?.querySelectorAll(
+      ".about-page-team-member"
+    );
+    if (!teamMembers) return;
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section.current,
+        scrub: true,
+        end: "bottom 70%",
+      },
+    });
+    tl.from(teamMembers, {
+      y: "-100%",
+      opacity: 0,
+      stagger: {
+        amount: 0.3,
+        from: "random",
+      },
+    });
+  }, []);
   return (
-    <section className="mb-32">
+    <section className="mb-32" ref={section}>
       <Container>
         <header className="leading-[150%] mb-8">
           <h2 className="mb-1 font-semibold text-4xl">
@@ -46,7 +72,7 @@ export const Team = () => {
           {teamMembers.map((member, i) => (
             <article
               key={i}
-              className="p-6 border border-input/60 rounded-xl text-center"
+              className="p-6 border border-input/60 rounded-xl text-center about-page-team-member"
             >
               <Image
                 src={member.image}

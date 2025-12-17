@@ -7,7 +7,7 @@ import { PartnershipTypes } from "./components/PartnershipTypes";
 import { CallToAction } from "./components/CallToAction";
 import { Projects } from "./components/Projects";
 import { Clients } from "./components/Clients";
-import { CallToAction as CallToActionHome } from "../components/CallToAction";
+import { CallToAction as CallToActionHome } from "../../../../components/CallToAction";
 
 const barlow = Barlow({
   subsets: ["latin"],

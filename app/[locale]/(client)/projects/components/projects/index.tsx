@@ -1,3 +1,4 @@
+"use client";
 import Container from "@/components/Container";
 import { Badge } from "@/components/ui/badge";
 import { Project } from "./Project";
@@ -8,6 +9,10 @@ import Sphere from "@/assets/objects/sphere.svg";
 import Sphere2 from "@/assets/objects/sphere-2.svg";
 import Sphere3 from "@/assets/objects/sphere-3.svg";
 import Image from "next/image";
+import { useRef, useEffect } from "react";
+import { useGSAP } from "@gsap/react";
+import { SplitText } from "gsap/SplitText";
+import gsap from "gsap";
 
 export const projects = [
   {
@@ -30,14 +35,115 @@ export const projects = [
 ];
 
 export const Projects = () => {
+  const logo = useRef(null);
+  const xLine = useRef(null);
+  const yLine = useRef(null);
+  const title = useRef(null);
+  const section = useRef<HTMLElement>(null);
+  const sphere1 = useRef(null);
+  const sphere2 = useRef(null);
+  const sphere3 = useRef(null);
+
+  useGSAP(() => {
+    const splitTitle = SplitText.create(title.current, {
+      type: "chars",
+      smartWrap: true,
+    });
+
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: section.current, scrub: true, end: "top top" },
+    });
+
+    tl.from(splitTitle.chars, {
+      y: 100,
+      stagger: {
+        amount: 0.1,
+        from: "random",
+      },
+    });
+
+    tl.from(
+      sphere1.current,
+      {
+        scale: 0,
+      },
+      "<"
+    );
+    tl.from(
+      sphere2.current,
+      {
+        scale: 0,
+      },
+      "<"
+    );
+    tl.from(
+      sphere3.current,
+      {
+        scale: 0,
+      },
+      "<"
+    );
+    tl.from(
+      logo.current,
+      {
+        scale: 0,
+      },
+      "<"
+    );
+    tl.from(
+      xLine.current,
+      {
+        width: 0,
+      },
+      "<"
+    );
+    tl.from(
+      yLine.current,
+      {
+        height: 0,
+      },
+      "<"
+    );
+    const projects = section.current?.querySelectorAll(
+      ".projects-page-project"
+    );
+    if (!projects) return;
+    tl.from(
+      projects,
+      {
+        y: 10,
+        opacity: 0,
+        stagger: 0.06,
+      },
+      "<"
+    );
+  }, []);
+
+  useEffect(() => {
+    const gridImg = section.current?.querySelector('img[alt="Image"]');
+    if (!gridImg) return;
+
+    let position = 0;
+    const speed = 0.5;
+
+    const animate = () => {
+      position += speed;
+      (gridImg as HTMLElement).style.objectPosition = `${position}px center`;
+      requestAnimationFrame(animate);
+    };
+
+    const animationId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationId);
+  }, []);
+
   return (
-    <section className="relative">
+    <section className="relative" ref={section}>
       <Container>
-        <header className="text-center mb-12">
+        <header className="text-center mb-12 z-10 relative">
           <Badge className="py-2 px-3 opacity-62 mb-1">
             <h2>Projects</h2>
           </Badge>
-          <h3 className="font-medium text-6xl leading-16">
+          <h3 className="font-medium text-6xl leading-16" ref={title}>
             Choose a Project <br /> To Explore
           </h3>
         </header>
@@ -82,13 +188,28 @@ export const Projects = () => {
           <BluryBall className="bottom-0 left-[unset] right-0 translate-x-1/2 translate-y-0 w-[600px] h-[500px] blur-[235.3px]" />
           <BluryBall className="top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] blur-[235.3px]" />
           <FullWidthComet className="absolute top-[60%] left-[50%] -translate-y-[50%] -translate-x-[60%] z-0" />
-          <div className="absolute top-1/2 max-md:hidden left-0 w-full h-px bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.2),rgba(255,255,255,0.2),transparent)]"></div>
-          <div className="absolute top-0 left-1/2 max-md:hidden h-full w-px bg-[linear-gradient(to_bottom,transparent,rgba(255,255,255,0.2),rgba(255,255,255,0.2),transparent)]"></div>
+          <div
+            ref={xLine}
+            className="absolute top-1/2 max-md:hidden left-0 w-full h-px bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.2),rgba(255,255,255,0.2),transparent)]"
+          ></div>
+          <div
+            ref={yLine}
+            className="absolute top-0 left-1/2 max-md:hidden h-full w-px bg-[linear-gradient(to_bottom,transparent,rgba(255,255,255,0.2),rgba(255,255,255,0.2),transparent)]"
+          ></div>
           <div className="flex items-center justify-center w-[235px] h-[235px] absolute max-md:hidden top-1/2 left-1/2 -translate-x-1/2 -mt-[calc(235px/2)] z-20 rounded-full">
-            <Sphere className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10" />
-            <Sphere2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20" />
-            <Sphere3 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30" />
-            <Logo className="w-fit h-fit z-20 relative -mt-2" />
+            <Sphere
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
+              ref={sphere1}
+            />
+            <Sphere2
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
+              ref={sphere2}
+            />
+            <Sphere3
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
+              ref={sphere3}
+            />
+            <Logo className="w-fit h-fit z-20 relative -mt-2" ref={logo} />
           </div>
           {projects.map((project, i) => (
             <Project
@@ -98,7 +219,9 @@ export const Projects = () => {
             />
           ))}
         </div>
-        <p className="font-normal text-sm leading-6 mt-20 relative z-10">*Please click on the project name or logo to learn more.</p>
+        <p className="font-normal text-sm leading-6 mt-20 relative z-10">
+          *Please click on the project name or logo to learn more.
+        </p>
       </Container>
     </section>
   );

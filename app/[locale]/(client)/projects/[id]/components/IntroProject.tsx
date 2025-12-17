@@ -1,12 +1,25 @@
+"use client";
 import Container from "@/components/Container";
 import Image from "next/image";
 import PurpleLargeComet from "@/assets/objects/purple-large-comet.svg";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { PlayIcon } from "lucide-react";
+import { Magnetic } from "@/components/Magnetic";
 
+import { useState } from "react";
+import MediaViewer from "@/components/ViewportMedia";
 export const IntroProject = () => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <section className="mt-30 max-lg:mt-36 max-md:mt-48 max-sm:mt-64 relative flex flex-col gap-8">
+      {isOpen && (
+        <MediaViewer
+          type="video"
+          src="/projects/1.mp4"
+          onClose={() => setIsOpen(false)}
+          autoPlay
+        />
+      )}
       <Image
         src={"/circle-pattern.png"}
         alt="pattern"
@@ -32,12 +45,18 @@ export const IntroProject = () => {
             className="w-full h-full object-cover opacity-70"
           />
           <button className="absolute flex cursor-pointer items-center justify-center top-1/2 left-1/2 p-4 -translate-x-1/2 -translate-y-1/2 rounded-full">
-            <PlayIcon
-              className="size-[50px] relative z-10"
-              strokeLinecap="square"
-              strokeLinejoin="miter"
-              strokeMiterlimit="10"
-            />
+            <Magnetic
+              className="relative z-10"
+              strength={10}
+              onClick={() => setIsOpen(true)}
+            >
+              <PlayIcon
+                className="size-[50px]"
+                strokeLinecap="square"
+                strokeLinejoin="miter"
+                strokeMiterlimit="10"
+              />
+            </Magnetic>
             <PlayIcon className="size-[50px] z-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary blur-xs" />
           </button>
         </div>

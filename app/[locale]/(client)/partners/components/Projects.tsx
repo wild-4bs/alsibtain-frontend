@@ -1,3 +1,4 @@
+"use client";
 import Container from "@/components/Container";
 import Image from "next/image";
 import Beenhere from "@/assets/icons/beenhere.svg";
@@ -9,9 +10,39 @@ import {
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { BluryBall } from "@/components/ui/BluryBall";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { SplitText } from "gsap/SplitText";
+import gsap from "gsap";
+
 export const Projects = () => {
+  const title = useRef(null);
+  const section = useRef<HTMLElement>(null);
+  const image = useRef(null);
+  useGSAP(() => {
+    const splitTitle = SplitText.create(title.current, {
+      type: "chars",
+      smartWrap: true,
+    });
+
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: section.current, scrub: true, end: "top 10%" },
+    });
+    tl.from(splitTitle.chars, {
+      x: -100,
+      opacity: 0,
+      stagger: {
+        amount: 0.1,
+        from: "random",
+      },
+    });
+    tl.to(image.current, {
+      clipPath: "circle(70.7% at 50% 50%)",
+      x: 0,
+    });
+  }, []);
   return (
-    <section className="relative">
+    <section className="relative" ref={section}>
       <BluryBall className="left-[unset] right-0 translate-x-1/2 h-full w-[40%]" />
       <Container className="flex gap-16 relative z-10 max-lg:flex-col px-10!">
         <div className="image h-[421.2621765136719px] w-3xl relative rounded-3xl max-xl:w-2xl max-lg:w-[calc(100%-130px)] max-md:w-full max-md:h-[300px]">
@@ -20,7 +51,9 @@ export const Projects = () => {
             fill
             alt="project"
             objectFit="cover"
-            className="rounded-3xl"
+            className="rounded-3xl -translate-x-20"
+            style={{ clipPath: "circle(0.4% at 100% 0)" }}
+            ref={image}
           />
           <div className="absolute max-md:translate-x-0 max-md:translate-y-1/2 max-md:bottom-0 bottom-16 right-0 translate-x-[70%] w-[172px] bg-white/13 backdrop-blur-xl border border-white/20 rounded-2xl px-6 py-7 shadow-lg">
             <span className="font-barlow font-medium text-3xl inline-block mb-1">
@@ -32,7 +65,7 @@ export const Projects = () => {
           </div>
         </div>
         <div className="flex flex-col max-md:mt-[50px]">
-          <h2 className="font-medium text-5xl mb-4">
+          <h2 className="font-medium text-5xl mb-4" ref={title}>
             Explore Uruk City <br /> Residential Community
           </h2>
           <div className="size-12 mb-5 flex items-center justify-center self-end border border-white/30 rounded-full bg-white/20">

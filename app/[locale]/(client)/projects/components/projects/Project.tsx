@@ -8,7 +8,7 @@ interface Props {
 
 export const Project = ({ title, caption }: Props) => {
   return (
-    <Link href={"/projects/1"}>
+    <Link href={"/projects/1"} className="projects-page-project">
       <article className="flex items-center flex-col relative z-10">
         <LogoSm className="mb-4" />
         <h4 className="font-medium text-base leading-6 mb-3">{title}</h4>

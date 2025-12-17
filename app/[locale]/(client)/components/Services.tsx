@@ -1,7 +1,11 @@
+"use client";
 import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
-import { GlassCard } from "@/components/ui/GlassCard";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Briefcase, HousePlus, Star, Users } from "lucide-react";
+import { useRef } from "react";
 
 const services = [
   {
@@ -49,8 +53,32 @@ const services = [
   },
 ];
 export const Services = () => {
+  const section = useRef<HTMLElement>(null);
+  useGSAP(() => {
+    if (!section.current) return;
+    ScrollTrigger.refresh();
+    const services = gsap.utils.toArray<HTMLElement>(
+      section.current.querySelectorAll(".home-page-service")
+    );
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section.current,
+        end: "+=200%",
+        pin: true,
+        scrub: true,
+      },
+    });
+
+    services.forEach((service) => {
+      tl.fromTo(service, { y: "100%", opacity: 0 }, { y: 0, opacity: 1 });
+    });
+  }, []);
   return (
-    <section className="bg-black pb-12 z-40 relative rounded-b-[15rem]">
+    <section
+      className="bg-black pt-20 pb-12 z-40 relative rounded-b-[15rem]"
+      ref={section}
+    >
       <Container className="relative">
         <BluryBall className="left-0 top-2/4 -translate-x-2/4 w-[600px] h-[400px] opacity-20" />
         <BluryBall className="right-0 left-[unset] top-2/4 translate-x-2/4  w-[600px] h-[400px] opacity-20" />
@@ -59,7 +87,7 @@ export const Services = () => {
             return (
               <article
                 key={i}
-                className="relative z-10 rounded-4xl p-8 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white/10 transition-all duration-300"
+                className="relative z-10 home-page-service rounded-4xl p-8 bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white/10 transition-all duration-300"
               >
                 <div className="size-12 flex items-center justify-center bg-primary/90 rounded-full mb-5 shadow-lg shadow-primary/50">
                   {service.icon}

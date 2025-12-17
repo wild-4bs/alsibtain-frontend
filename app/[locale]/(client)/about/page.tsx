@@ -5,7 +5,7 @@ import { Plan } from "./components/plan";
 import { MissionAndVision } from "./components/MissionAndVision";
 import { Team } from "./components/Team";
 import { Partners } from "../components/Partners";
-import { CallToAction } from "../components/CallToAction";
+import { CallToAction } from "../../../../components/CallToAction";
 
 const urbanist = Urbanist({
   subsets: ["latin"],

@@ -10,7 +10,7 @@ export const Step = ({ headline, description, title, index }: Props) => {
   const stepNumber = String(index).padStart(2, "0");
 
   return (
-    <article className="w-full flex-1 min-w-sm overflow-hidden max-sm:min-w-full">
+    <article className="w-full flex-1 min-w-sm overflow-hidden max-sm:min-w-full about-page-plan-step">
       <header className="px-5 py-4 border-l border-l-primary">
         <h3 className="relative z-30">
           Step {stepNumber} — {title}

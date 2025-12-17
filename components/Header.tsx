@@ -8,6 +8,13 @@ import { BluryBall } from "./ui/BluryBall";
 import { Link, usePathname } from "@/i18n/routing";
 import clsx from "clsx";
 import { Sidebar } from "./Sidebar";
+import Languages from "@/assets/icons/languages.svg";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import SplitText from "gsap/SplitText";
+
+gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(SplitText);
 
 export const navLinks = [
   { name: "Home", path: "/" },
@@ -22,6 +29,7 @@ export const navLinks = [
 
 export const Header = () => {
   const pathname = usePathname();
+
   return (
     <header className="relative z-50">
       <Container className="flex items-center gap-8 justify-between h-(--header-height) max-xl:px-2">
@@ -37,11 +45,14 @@ export const Header = () => {
                 <li key={i}>
                   <Link
                     href={link.path}
-                    className={clsx("px-2 py-2 inline-block", {
-                      "font-black":
-                        pathname == link.path ||
-                        (pathname.includes(link.path) && link.path != "/"),
-                    })}
+                    className={clsx(
+                      "px-2 py-2 inline-block hover:scale-105 hover:underline duration-100",
+                      {
+                        "font-black":
+                          pathname == link.path ||
+                          (pathname.includes(link.path) && link.path != "/"),
+                      }
+                    )}
                   >
                     {link.name}
                   </Link>
@@ -50,15 +61,20 @@ export const Header = () => {
             </ul>
           </GlassCard>
         </div>
-        <Button
-          variant={"outline"}
-          className="rounded-full relative z-10 p-2 max-lg:hidden"
-        >
-          <span className="px-2 py-3 inline-block">Get in touch</span>
-          <div className="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-            <ArrowRight />
-          </div>
-        </Button>
+        <div className="flex items-center gap-2">
+          <button className="bg-transparent hover:bg-primary/30 size-10 flex items-center justify-center rounded-lg cursor-pointer duration-300">
+            <Languages />
+          </button>
+          <Button
+            variant={"outline"}
+            className="rounded-full relative z-10 p-2 max-lg:hidden"
+          >
+            <span className="px-2 py-3 inline-block">Get in touch</span>
+            <div className="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+              <ArrowRight />
+            </div>
+          </Button>
+        </div>
         <Sidebar />
       </Container>
     </header>

@@ -27,7 +27,10 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={locale} dir={dir} suppressHydrationWarning>
       <head></head>
-      <body className={`antialiased`} suppressHydrationWarning>
+      <body
+        className={`antialiased max-w-dvw overflow-x-hidden`}
+        suppressHydrationWarning
+      >
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>

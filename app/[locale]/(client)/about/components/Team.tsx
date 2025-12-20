@@ -43,7 +43,7 @@ export const Team = () => {
       scrollTrigger: {
         trigger: section.current,
         scrub: true,
-        end: "bottom 70%",
+        end: "top 20%",
       },
     });
     tl.from(teamMembers, {

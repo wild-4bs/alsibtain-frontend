@@ -8,42 +8,80 @@ import { cn } from "@/lib/utils";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
-import { Building2, Notebook, House, Landmark } from "lucide-react";
-
+import Phone from "@/assets/icons/phone.svg";
+import Warehouse from "@/assets/icons/warehouse.svg";
+import Roofing from "@/assets/icons/roofing.svg";
+import HomeWork from "@/assets/icons/home_work.svg";
+import Apartment from "@/assets/icons/apartment.svg";
+import { Link } from "@/i18n/routing";
 /* ------------------------------------------------------------------ */
 /*  Icon layout (same spread as before)                                */
 /* ------------------------------------------------------------------ */
-
 const floatingIcons = [
   {
     id: 1,
-    icon: <Notebook className="size-8 transition-colors duration-200" />,
-    className: "absolute top-[6%] left-1/2 -translate-x-1/2",
+    icon: <Phone />,
+    className: `
+      absolute top-[0%] left-1/2 -translate-x-1/2
+      sm:top-[1%]
+      sm:-translate-x-1/2
+      md:top-[6%]
+    `,
   },
   {
     id: 2,
-    icon: <Landmark className="size-8 transition-colors duration-200" />,
-    className: "absolute top-[28%] left-[6%]",
+    icon: <Warehouse />,
+    className: `
+      absolute top-[10%] left-[2%]
+      sm:left-[-6%]
+      sm:top-[36%]
+      md:left-[6%]
+      md:top-[28%]
+    `,
   },
   {
     id: 3,
-    icon: <House className="size-8 transition-colors duration-200" />,
-    className: "absolute bottom-[10%] right-[12%]",
+    icon: <Roofing />,
+    className: `
+      absolute bottom-[2%] right-[20%]
+      sm:right-[-6%]
+      sm:bottom-[4%]
+      md:right-[12%]
+      md:bottom-[10%]
+    `,
   },
   {
     id: 4,
-    icon: <Building2 className="size-8 transition-colors duration-200" />,
-    className: "absolute top-[14%] right-[6%]",
+    icon: <HomeWork />,
+    className: `
+      absolute top-[5%] right-[6%]
+      sm:right-[-6%]
+      sm:top-[4%]
+      md:right-[6%]
+      md:top-[14%]
+    `,
   },
   {
     id: 5,
-    icon: <House className="size-8 transition-colors duration-200" />,
-    className: "absolute bottom-[34%] right-[4%]",
+    icon: <Apartment />,
+    className: `
+      absolute bottom-[10%] right-[0%]
+      sm:right-[-8%]
+      sm:bottom-[44%]
+      md:right-[4%]
+      md:bottom-[34%]
+    `,
   },
   {
     id: 6,
-    icon: <Landmark className="size-8 transition-colors duration-200" />,
-    className: "absolute bottom-[22%] left-[10%]",
+    icon: <Warehouse />,
+    className: `
+      absolute bottom-[6%] left-[0%]
+      sm:left-[-8%]
+      sm:bottom-[30%]
+      md:left-[10%]
+      md:bottom-[22%]
+    `,
   },
 ];
 
@@ -91,6 +129,7 @@ export const CallToAction = () => {
           flex flex-col items-center justify-center
           text-center rounded-4xl
           border border-white/10
+          z-20
         "
       >
         {/* Floating Icons */}
@@ -102,11 +141,11 @@ export const CallToAction = () => {
             }}
             onMouseEnter={(e) => {
               pauseAll();
-              e.currentTarget.classList.add("text-white");
+              e.currentTarget.classList.add("[&_path]:fill-white");
             }}
             onMouseLeave={(e) => {
               resumeAll();
-              e.currentTarget.classList.remove("text-white");
+              e.currentTarget.classList.remove("[&_path]:fill-white");
             }}
             className={cn(
               `
@@ -143,8 +182,9 @@ export const CallToAction = () => {
           Our projects are designed to grow with communities — sustainable,
           smart, and built to last.
         </p>
-        <Button
-          className="
+        <Link href={"/projects"}>
+          <Button
+            className="
            z-10 mt-8 
               relative w-fit rounded-full px-10 py-5
               bg-primary text-primary-foreground font-semibold
@@ -157,9 +197,10 @@ export const CallToAction = () => {
               after:bg-primary after:blur-lg after:opacity-40 after:-z-20
               animate-pulse
             "
-        >
-          Explore Projects
-        </Button>
+          >
+            Explore Projects
+          </Button>
+        </Link>
       </Container>
     </section>
   );

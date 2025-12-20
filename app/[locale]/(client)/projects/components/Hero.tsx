@@ -7,6 +7,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
+import { Link } from "@/i18n/routing";
 
 export const Hero = () => {
   const title = useRef(null);
@@ -69,12 +70,14 @@ export const Hero = () => {
             living. Each project reflects our commitment to quality, innovation,
             and long-term value.
           </p>
-          <Button
-            className="bg-linear-to-tr from-[black_20%] to-[theme(colors.primary)_80% rounded-full px-6 py-6 opacity-0 translate-y-10"
-            ref={button}
-          >
-            Scroll to Explore
-          </Button>
+          <Link href={"#projects"}>
+            <Button
+              className="bg-linear-to-tr from-[black_20%] to-[theme(colors.primary)_80% rounded-full px-6 py-6 opacity-0 translate-y-10"
+              ref={button}
+            >
+              Scroll to Explore
+            </Button>
+          </Link>
         </div>
         <div
           className="absolute top-0 right-0 w-[65%] h-full max-h-[80%] rounded-bl-[12.375rem] z-0 max-md:w-[97%] max-md:me-[2%]"

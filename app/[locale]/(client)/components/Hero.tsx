@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { GlassCard } from "@/components/ui/GlassCard";
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import clsx from "clsx";
 
@@ -57,52 +57,23 @@ const carouselData = [
       "Trusted by thousands of families and businesses, Al-Subtain stands as a pillar of reliability in Iraq's real estate sector.",
     image: "/home/uruk.png",
   },
-  {
-    id: 6,
-    title: "A Legacy of Trust",
-    description:
-      "Trusted by thousands of families and businesses, Al-Subtain stands as a pillar of reliability in Iraq's real estate sector.",
-    image: "/home/uruk.png",
-  },
-  {
-    id: 7,
-    title: "A Legacy of Trust",
-    description:
-      "Trusted by thousands of families and businesses, Al-Subtain stands as a pillar of reliability in Iraq's real estate sector.",
-    image: "/home/uruk.png",
-  },
-  {
-    id: 8,
-    title: "A Legacy of Trust",
-    description:
-      "Trusted by thousands of families and businesses, Al-Subtain stands as a pillar of reliability in Iraq's real estate sector.",
-    image: "/home/uruk.png",
-  },
-  {
-    id: 9,
-    title: "A Legacy of Trust",
-    description:
-      "Trusted by thousands of families and businesses, Al-Subtain stands as a pillar of reliability in Iraq's real estate sector.",
-    image: "/home/uruk.png",
-  },
-  {
-    id: 10,
-    title: "A Legacy of Trust",
-    description:
-      "Trusted by thousands of families and businesses, Al-Subtain stands as a pillar of reliability in Iraq's real estate sector.",
-    image: "/home/uruk.png",
-  },
 ];
 
-const OdometerDigit = ({ value }: { value: number }) => {
+// Memoized Odometer component to prevent unnecessary re-renders
+const OdometerDigit = React.memo(({ value }: { value: number }) => {
   const digitRef = useRef<HTMLDivElement>(null);
+  const prevValue = useRef(value);
 
   useGSAP(() => {
-    gsap.to(digitRef.current, {
-      y: -value * 24,
-      duration: 0.6,
-      ease: "power3.out",
-    });
+    // Only animate if value actually changed
+    if (prevValue.current !== value) {
+      gsap.to(digitRef.current, {
+        y: -value * 24,
+        duration: 0.6,
+        ease: "power3.out",
+      });
+      prevValue.current = value;
+    }
   }, [value]);
 
   return (
@@ -116,31 +87,47 @@ const OdometerDigit = ({ value }: { value: number }) => {
       </div>
     </div>
   );
-};
+});
+
+OdometerDigit.displayName = "OdometerDigit";
 
 export const Hero = () => {
-  const plugin = useRef(Autoplay({ delay: 3000, stopOnInteraction: true }));
+  // Memoize plugin to prevent recreation on every render
+  const plugin = useMemo(() => Autoplay({ delay: 3000, stopOnInteraction: true }), []);
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const title = useRef<HTMLHeadingElement>(null);
   const caption = useRef<HTMLParagraphElement>(null);
   const tagline = useRef<HTMLHeadingElement>(null);
+  const hasAnimated = useRef(false);
+
+  // Memoize callback to prevent recreation
+  const updateSlide = useCallback(() => {
+    if (api) {
+      setCurrentSlide(api.selectedScrollSnap());
+    }
+  }, [api]);
 
   useEffect(() => {
     if (!api) return;
-    const update = () => setCurrentSlide(api.selectedScrollSnap());
-    update();
-    api.on("select", update);
+    
+    updateSlide();
+    api.on("select", updateSlide);
+    
     return () => {
-      api.off("select", update);
+      api.off("select", updateSlide);
     };
-  }, [api]);
+  }, [api, updateSlide]);
 
+  // Optimize GSAP animation to run only once
   useGSAP(() => {
+    if (hasAnimated.current || !title.current || !caption.current || !tagline.current) return;
+    
+    hasAnimated.current = true;
     const tl = gsap.timeline();
-    const splitTitle = SplitText.create(title.current!, { type: "words" });
-    const splitCaption = SplitText.create(caption.current!, { type: "lines" });
+    const splitTitle = SplitText.create(title.current, { type: "words" });
+    const splitCaption = SplitText.create(caption.current, { type: "lines" });
 
     tl.from(splitTitle.words, {
       y: 100,
@@ -165,14 +152,27 @@ export const Hero = () => {
         autoAlpha: 0,
         duration: 0.8,
       });
+
+    // Cleanup function
+    return () => {
+      splitTitle.revert();
+      splitCaption.revert();
+    };
   }, []);
 
-  const slideNumber = currentSlide + 1;
-  const tens = Math.floor(slideNumber / 10);
-  const ones = slideNumber % 10;
+  // Memoize calculated values
+  const slideNumber = useMemo(() => currentSlide + 1, [currentSlide]);
+  const tens = useMemo(() => Math.floor(slideNumber / 10), [slideNumber]);
+  const ones = useMemo(() => slideNumber % 10, [slideNumber]);
+
+  // Memoize slide change handler
+  const handleSlideChange = useCallback((index: number) => {
+    setCurrentSlide(index);
+    api?.scrollTo(index);
+  }, [api]);
 
   return (
-    <section className="h-[calc(100vh-var(--header-height))] relative overflow-hidden flex flex-col rounded-b-[165px] max-md:rounded-b-[100px]">
+    <section className="sm:h-[calc(100vh-var(--header-height))] h-[80vh] relative overflow-hidden flex flex-col rounded-b-[165px] max-md:rounded-b-[100px]">
       <Container className="pt-20 relative z-10">
         <h1 ref={tagline} className="text-xs font-light mb-2">
           Al-Subtain REAL ESTATE
@@ -192,22 +192,41 @@ export const Hero = () => {
         </GlassCard>
       </Container>
 
-      <article className="mt-8 self-end w-full max-w-md ps-4 z-20">
-        <BluryBall className="w-[562px] h-[211px]" />
-        <GlassCard className="px-2 py-5">
-          <Carousel plugins={[plugin.current]} setApi={setApi}>
+      <article className="mt-8 relative self-end w-full max-w-md ps-4 z-20">
+        <BluryBall className="w-[462px] h-[111px]" />
+        <GlassCard className="px-4 py-5">
+          <Carousel plugins={[plugin]} setApi={setApi}>
             <CarouselContent>
               {carouselData.map((item, i) => (
-                <CarouselItem key={i}>
-                  <h3 className="font-bold text-base mb-2">{item.title}</h3>
+                <CarouselItem key={item.id}>
+                  <h3 className="font-bold text-base mb-2 max-sm:text-sm">
+                    {item.title}
+                  </h3>
                   <ScrollArea className="h-12">
-                    <p className="text-xs">{item.description}</p>
+                    <p className="text-xs max-sm:text-white/90">
+                      {item.description}
+                    </p>
                   </ScrollArea>
                 </CarouselItem>
               ))}
             </CarouselContent>
           </Carousel>
         </GlassCard>
+        <div className="flex items-center gap-2 mt-4 relative z-10 w-fit float-right me-10">
+          {carouselData.map((item, i) => (
+            <button
+              key={item.id}
+              onClick={() => handleSlideChange(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              className={clsx(
+                "size-4 bg-[#7070708b] duration-300 ease-out cursor-pointer",
+                {
+                  "bg-white": currentSlide === i,
+                }
+              )}
+            ></button>
+          ))}
+        </div>
       </article>
 
       <div className="flex-1 flex items-end pb-12 z-20">
@@ -222,10 +241,11 @@ export const Hero = () => {
           </div>
         </Container>
       </div>
-      <BluryBall className="top-1/2 left-1/2 md:w-[552px] h-[552px] z-0!" />
-
       {carouselData.map((item, i) => (
-        <div key={i} className="absolute bottom-0 right-[15%] w-fit z-10!">
+        <div
+          key={item.id}
+          className="absolute bottom-0 right-[10%]! md:right-[30%] w-fit z-10!"
+        >
           <Image
             src={item.image}
             alt=""

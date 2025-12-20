@@ -8,6 +8,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
+import { Link } from "@/i18n/routing";
 
 export const counters = [
   {
@@ -115,15 +116,19 @@ export const Hero = () => {
             and a commitment to long-term quality.
           </p>
           <div className="flex gap-4 mb-10 relative z-10">
-            <Button
-              variant={"outline"}
-              className="h-14 border-white bg-transparent max-sm:h-12 call-to-action-button"
-            >
-              Contact Us
-            </Button>
-            <Button className="h-14 max-sm:h-12 call-to-action-button">
-              Our Projects
-            </Button>
+            <Link href={"/contact"}>
+              <Button
+                variant={"outline"}
+                className="h-14 border-white bg-transparent max-sm:h-12 call-to-action-button"
+              >
+                Contact Us
+              </Button>
+            </Link>
+            <Link href={"/projects"}>
+              <Button className="h-14 max-sm:h-12 call-to-action-button">
+                Our Projects
+              </Button>
+            </Link>
           </div>
           <div className="flex items-center gap-5 flex-wrap relative z-10">
             {counters.map((counter, i) => (

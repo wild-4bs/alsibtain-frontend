@@ -16,20 +16,32 @@ const oxanium = Oxanium({
 
 export const Hero = () => {
   const image = useRef(null);
+  const detailsList = useRef(null);
+
   useGSAP(() => {
-    gsap.from(image.current, {
-      opacity: 0,
+    gsap.to(image.current, {
+      clipPath: "circle(70.7% at 50% 50%)",
+      duration: 1,
+      onComplete: () => {
+        gsap.to(detailsList.current, {
+          clipPath: "inset(0 0% 0 0)",
+          duration: 0.5,
+        });
+      },
     });
   }, []);
   return (
-    <section className="bg-primary max-md:h-[60vh] relative">
+    <section
+      className="bg-primary max-md:h-[60vh] relative"
+      style={{ clipPath: "circle(0.0% at 50% 50%)" }}
+      ref={image}
+    >
       <Image
         src={"/projects/single-project.jpg"}
         alt="singleproject"
         width={10000}
         height={10000}
         className="w-full max-h-screen opacity-90 object-cover -mt-(--header-height) max-md:h-full"
-        ref={image}
       />
       <BluryBall className="w-[688px] h-[652px] max-sm:h-[200px] max-sm:top-1/2 top-[60%]" />
       <Container className="relative z-10">
@@ -41,7 +53,9 @@ export const Hero = () => {
           style={{
             background:
               "linear-gradient(to right, transparent 0%, #19499FAB 30%)",
+            clipPath: "inset(0 100% 0 0)",
           }}
+          ref={detailsList}
         >
           <div className="flex flex-col gap-2">
             <dt>Project Name</dt>

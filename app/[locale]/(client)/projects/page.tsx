@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import { Hero } from "./components/Hero";
 import { Projects } from "./components/projects";
-import { ProjectsList } from "./components/ProjectsList";
+import { Gallery } from "./components/Gallery";
 import { cn } from "@/lib/utils";
 
 const inter = Inter({
@@ -15,7 +15,7 @@ export default function page() {
     <main className={cn(inter.className)}>
       <Hero />
       <Projects />
-      <ProjectsList />
+      <Gallery />
     </main>
   );
 }

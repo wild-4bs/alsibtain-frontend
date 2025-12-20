@@ -19,7 +19,7 @@ export default function page() {
   return (
     <main className={cn(barlow.className)}>
       <Hero />
-      <Partners />
+      <Partners className="z-0" />
       <WhyUs />
       <PartnershipTypes />
       <CallToAction />

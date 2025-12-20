@@ -33,7 +33,7 @@ export const About = () => {
       smartWrap: true,
     });
     const splitCaption = SplitText.create(caption.current, {
-      type: "chars",
+      type: "lines",
       smartWrap: true,
     });
 
@@ -56,11 +56,11 @@ export const About = () => {
       opacity: 0,
     });
     tl.from(
-      splitCaption.chars,
+      splitCaption.lines,
       {
-        y: 10,
+        y: 40,
         autoAlpha: 0,
-        stagger: 0.0006,
+        stagger: 0.03,
         duration: 1,
       },
       1

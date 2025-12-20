@@ -19,7 +19,7 @@ export const MissionAndVision = () => {
       scrollTrigger: {
         trigger: section.current,
         scrub: true,
-        end: "center 55%",
+        end: "top 10%",
       },
     });
     tl.from(

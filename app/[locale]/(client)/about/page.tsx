@@ -20,7 +20,7 @@ export default function page() {
       <Plan />
       <MissionAndVision />
       <Team />
-      <Partners className="mb-24" />
+      <Partners className="mb-24 z-0 relative" />
       <CallToAction />
     </main>
   );

@@ -99,9 +99,8 @@ body {
   overflow-x: hidden;
   width: 100vw;
 }
-
 .bluryball {
-  background: rgba(0, 79, 221, 0.35);
+  background: rgba(0, 77, 221, 0.47);
   backdrop-filter: blur(170px);
   -webkit-backdrop-filter: blur(170px);
   filter: blur(170px);

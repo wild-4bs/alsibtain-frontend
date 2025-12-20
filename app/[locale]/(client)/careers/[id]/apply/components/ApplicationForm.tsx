@@ -23,7 +23,7 @@ export const ApplicationForm = ({ className }: ComponentProps<"section">) => {
   return (
     <section className={cn("mt-10", className)}>
       <Container>
-        <h2 className="text-sm font-normal mb-10">Job Application ( Web )</h2>
+        <h2 className="text-sm font-normal mb-10">Job Application</h2>
         <form>
           <div
             className="grid md:grid-cols-2"

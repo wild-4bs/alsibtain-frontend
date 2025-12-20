@@ -1,6 +1,7 @@
 import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
 import { ArrowRight } from "lucide-react";
 
 export const CallToAction = () => {
@@ -13,9 +14,11 @@ export const CallToAction = () => {
           needs. We look forward to supporting your vision and answering any
           inquiries you may have.
         </p>
-        <Button className="rounded-none px-16! h-12 relative z-10">
-          Get in Touch <ArrowRight />
-        </Button>
+        <Link href={"/contact"}>
+          <Button className="rounded-none px-16! h-12 relative z-10 bg-[#004FDD9E]">
+            Get in Touch <ArrowRight />
+          </Button>
+        </Link>
       </Container>
     </section>
   );

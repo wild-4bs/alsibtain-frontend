@@ -8,19 +8,28 @@ import Facebook from "@/assets/social/facebook.svg";
 import Instagram from "@/assets/social/instagram.svg";
 import Whatsapp from "@/assets/social/whatsapp.svg";
 import Youtube from "@/assets/social/youtube.svg";
+import { Poppins } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
 
 export const Footer = () => {
   return (
     <footer
-      className="
-    mt-20 border-b-0 border border-[#FFFFFF3B] rounded-t-[8rem]
-    mx-3 lg:mx-12 pt-12 pb-5 relative z-20
-    bg-[linear-gradient(to_bottom,#1b1b1b,#000)]
-  "
+      className={cn(
+        "mt-20 border-b-0 border border-[#FFFFFF3B] rounded-t-[8rem] mx-3 lg:mx-12 pt-12 pb-5 relative z-20 bg-[linear-gradient(to_bottom,#1b1b1b,#000)]",
+        poppins.className
+      )}
     >
       <Container className="grid grid-cols-4 gap-12 mb-12 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 max-sm:text-center">
         <div className="logo leading-5">
-          <FooterLogo className="mb-6 max-sm:mx-auto" />
+          <Link href={"/"}>
+            <FooterLogo className="mb-6 max-sm:mx-auto" />
+          </Link>
           <h2 className="font-medium mb-2">
             Al-Subtain Real Estate Development
           </h2>

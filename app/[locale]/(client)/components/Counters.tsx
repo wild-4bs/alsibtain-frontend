@@ -65,7 +65,7 @@ export const Counters = () => {
   return (
     <section ref={sectionRef}>
       <Container>
-        <ul className="w-full flex justify-around my-12 gap-12 max-lg:flex-wrap max-sm:text-center">
+        <ul className="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 text-center my-12 gap-12 max-lg:flex-wrap max-sm:text-center">
           <li className="text-2xl">
             <h3 className="font-medium counter-number">+21</h3>
             <span className="font-light counter-text">Years of Excellence</span>

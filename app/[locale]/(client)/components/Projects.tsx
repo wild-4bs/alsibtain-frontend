@@ -10,6 +10,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import MediaViewer from "@/components/ViewportMedia";
+import { Link } from "@/i18n/routing";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import gsap from "gsap";
@@ -147,15 +148,17 @@ const ProjectSlide: React.FC<ProjectSlideProps> = ({
                 <dd ref={areaValueEl}>{area}</dd>
               </div>
             </div>
-            <Button
-              className="h-auto max-md:self-end rounded-full pe-1 ps-4 hover:bg-primary/30 hover:text-foreground font-medium text-lg flex gap-4 group"
-              variant={"ghost"}
-            >
-              Read More{" "}
-              <div className="size-10 flex items-center justify-center rounded-full border border-white group-hover:scale-125 ease-out duration-200">
-                <ArrowUpRight />
-              </div>
-            </Button>
+            <Link href={"/projects/id"} className="max-md:self-end inline-block">
+              <Button
+                className="h-auto rounded-full pe-1 ps-4 hover:bg-primary/30 hover:text-foreground font-medium text-lg flex gap-4 group"
+                variant={"ghost"}
+              >
+                Read More{" "}
+                <div className="size-10 flex items-center justify-center rounded-full border border-white group-hover:scale-125 ease-out duration-200">
+                  <ArrowUpRight />
+                </div>
+              </Button>
+            </Link>
           </div>
         </Container>
       </div>
@@ -234,7 +237,7 @@ export const Projects = () => {
         />
       )}
       <Carousel
-        className="w-full relative h-vh bg-primary/10 rounded-b-[8rem] overflow-hidden"
+        className="w-full relative h-vh max-md:h-[90vh] bg-primary/10 rounded-b-[8rem] max-md:rounded-b-[4rem] overflow-hidden"
         setApi={setApi}
         opts={{ loop: true }}
       >
@@ -246,7 +249,7 @@ export const Projects = () => {
           className="w-full h-auto absolute left-0 object-cover bottom-0 object-bottom"
         />
         <BluryBall className="z-0" />
-        <CarouselContent className="w-full h-screen m-0">
+        <CarouselContent className="w-full h-screen max-md:h-[90vh] m-0">
           {projectsData.map((project, index) => (
             <ProjectSlide
               key={project.id}

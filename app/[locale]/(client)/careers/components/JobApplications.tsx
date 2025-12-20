@@ -1,8 +1,14 @@
+"use client";
 import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
+import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
 import { ArrowRight } from "lucide-react";
+import { Rubik } from "next/font/google";
+import { useRef } from "react";
 
 const jobCategories = [
   {
@@ -31,6 +37,11 @@ const jobCategories = [
     openings: null,
   },
 ];
+
+const rubik = Rubik({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
 
 const jobs = [
   {
@@ -66,13 +77,89 @@ const jobs = [
 ];
 
 export const JobApplications = () => {
+  const tagline = useRef(null);
+  const title = useRef(null);
+  const caption = useRef(null);
+  const section = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    const splitTitle = SplitText.create(title.current, {
+      type: "words",
+      smartWrap: true,
+    });
+
+    const splitCaption = SplitText.create(caption.current, {
+      type: "words",
+      smartWrap: true,
+    });
+    const splitTagline = SplitText.create(tagline.current, {
+      type: "words",
+      smartWrap: true,
+    });
+    const tl = gsap.timeline({
+      scrollTrigger: { trigger: section.current },
+    });
+    const jobsList = section.current?.querySelectorAll(
+      ".careers-page-job-list"
+    );
+    const applicationsList = section.current?.querySelectorAll(
+      ".careers-page-application-list"
+    );
+
+    if (!jobsList || !applicationsList) return;
+    tl.from(splitTitle.words, {
+      y: -100,
+      opacity: 0,
+      stagger: {
+        amount: 0.1,
+        from: "random",
+      },
+    });
+    tl.from(splitTagline.words, {
+      opacity: 0,
+      stagger: {
+        amount: 0.2,
+        from: "random",
+      },
+    });
+    tl.from(splitCaption.words, {
+      opacity: 0,
+      stagger: {
+        amount: 0.3,
+        from: "random",
+      },
+    });
+
+    tl.from(
+      jobsList,
+      {
+        x: -100,
+        opacity: 0,
+        stagger: 0.1,
+      },
+      "<"
+    );
+    tl.to(
+      applicationsList,
+      {
+        x: 0,
+        opacity: 1,
+        stagger: 0.1,
+      },
+      "<"
+    );
+  }, []);
   return (
-    <section className="mt-22">
+    <section className={`mt-22 ${rubik.className}`} id="jobs" ref={section}>
       <Container>
         <header className="text-center">
-          <h2 className="mb-2 text-lg font-medium">Come join us</h2>
-          <h3 className="mb-5 font-bold text-4xl">Career Openings</h3>
-          <p className="mb-11 text-sm">
+          <h2 className="mb-2 text-lg font-medium" ref={tagline}>
+            Come join us
+          </h2>
+          <h3 className="mb-5 font-bold text-4xl" ref={title}>
+            Career Openings
+          </h3>
+          <p className="mb-11 text-sm" ref={caption}>
             We’re always looking for creative, talented self-starters to join
             the Al-sabtain family. <br /> Check out our open roles below and
             fill out an application.
@@ -81,7 +168,7 @@ export const JobApplications = () => {
         <div className="flex gap-12 max-xl:flex-col">
           <ul>
             {jobCategories.map((category, i) => (
-              <li key={i}>
+              <li key={i} className="careers-page-job-list">
                 <button
                   className={clsx(
                     "py-1.5 text-lg hover:text-white/70 duration-200 cursor-pointer font-medium",
@@ -99,9 +186,10 @@ export const JobApplications = () => {
           </ul>
           <ul className="w-full flex-1 flex flex-col gap-5">
             {jobs.map((job, i) => (
-              <div
+              <Link
+                href={`/careers/${job.id}`}
                 key={i}
-                className="py-6 bg-white px-8 flex rounded-sm items-center text-black hover:bg-white/95 duration-300 hover:[&>button]:text-black"
+                className="careers-page-application-list py-6 bg-white px-8 flex rounded-sm items-center text-black hover:bg-white/95 duration-300 hover:[&>button]:text-black opacity-0 translate-x-20"
               >
                 <div className="flex items-center w-full max-md:flex-col max-md:items-start gap-2">
                   <h3 className="font-medium text-xl md:w-[40%]">
@@ -122,15 +210,13 @@ export const JobApplications = () => {
                     </div>
                   </dl>
                 </div>
-                <Link href={`/careers/${job.id}`}>
-                  <Button
-                    variant={"ghost"}
-                    className="text-subtitle-color duration-300 hover:bg-black/20"
-                  >
-                    <ArrowRight className="size-5" />
-                  </Button>
-                </Link>
-              </div>
+                <Button
+                  variant={"ghost"}
+                  className="text-subtitle-color duration-300 hover:bg-black/20"
+                >
+                  <ArrowRight className="size-5" />
+                </Button>
+              </Link>
             ))}
           </ul>
         </div>

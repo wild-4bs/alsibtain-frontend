@@ -7,7 +7,7 @@ import gsap from "gsap";
 import Image from "next/image";
 import { useRef } from "react";
 
-export const ProjectsList = () => {
+export const Gallery = () => {
   const section = useRef<HTMLElement>(null);
   useGSAP(() => {
     const projects = section.current?.querySelectorAll(
@@ -34,7 +34,7 @@ export const ProjectsList = () => {
     );
   }, []);
   return (
-    <section className="mt-56 relative" ref={section}>
+    <section className="mt-56 relative translate-y-25" ref={section}>
       <BluryBall className="w-[90%] h-[638px] blur-[228.1px] bottom-0 left-1/2" />
       <Container className="relative z-10">
         <div className="grid grid-cols-1 gap-6 min-[500px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

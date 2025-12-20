@@ -89,12 +89,14 @@ export const Sidebar = () => {
             </li>
           ))}
         </ul>
-        <Button className="rounded-md relative z-10 p-2 w-full justify-start">
-          <span className="px-2 py-3 inline-block">Get in touch</span>
-          <div className="size-6 rounded-full bg-white text-black flex items-center justify-center">
-            <ArrowRight />
-          </div>
-        </Button>
+        <Link href={"/contact"}>
+          <Button className="rounded-md relative z-10 p-2 w-full justify-start">
+            <span className="px-2 py-3 inline-block">Get in touch</span>
+            <div className="size-6 rounded-full bg-white text-black flex items-center justify-center">
+              <ArrowRight />
+            </div>
+          </Button>
+        </Link>
       </div>
     </aside>
   );

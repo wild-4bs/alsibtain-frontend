@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { X, ZoomIn, ZoomOut, Download, Play, Pause } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { X, ZoomIn, ZoomOut, Play, Pause } from "lucide-react";
 import {
   Carousel,
   CarouselContent,
@@ -18,7 +18,6 @@ type MediaViewerProps = {
   autoPlay?: boolean;
   showControls?: boolean;
   enableZoom?: boolean;
-  enableDownload?: boolean;
   loop?: boolean;
 };
 
@@ -30,7 +29,6 @@ const MediaViewer: React.FC<MediaViewerProps> = ({
   autoPlay = false,
   showControls = true,
   enableZoom = true,
-  enableDownload = true,
   loop = true,
 }) => {
   const sources = srcArray.length ? srcArray : src ? [src] : [];
@@ -70,16 +68,6 @@ const MediaViewer: React.FC<MediaViewerProps> = ({
     if (videoRef.current)
       isPlaying ? videoRef.current.play() : videoRef.current.pause();
   }, [isPlaying]);
-
-  const handleDownload = useCallback(async () => {
-    const url = sources[currentIndex];
-    const blob = await fetch(url).then((r) => r.blob());
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `media-${Date.now()}`;
-    link.click();
-    URL.revokeObjectURL(link.href);
-  }, [sources, currentIndex]);
 
   const mediaContent = () => {
     if (type === "video")
@@ -189,15 +177,6 @@ const MediaViewer: React.FC<MediaViewerProps> = ({
             <ZoomIn size={20} />
           </button>
         </div>
-      )}
-
-      {enableDownload && (
-        <button
-          onClick={handleDownload}
-          className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/10 p-2 rounded-full text-white"
-        >
-          <Download size={20} />
-        </button>
       )}
 
       <div

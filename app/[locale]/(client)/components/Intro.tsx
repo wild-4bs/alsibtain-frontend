@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Image from "next/image";
@@ -8,10 +9,9 @@ import { useRef } from "react";
 export const Intro = () => {
   const section = useRef(null);
   useGSAP(() => {
-    gsap.from(section.current, {
-      height: 0,
-      padding: 0,
-      opacity: 0,
+    gsap.to(section.current, {
+      clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+      opacity: 1,
       scrollTrigger: {
         trigger: section.current,
         end: "center 20%",
@@ -21,7 +21,8 @@ export const Intro = () => {
   }, []);
   return (
     <section
-      className="p-14 rounded-b-[165px] max-sm:rounded-b-[100px] h-fit bg-primary/10 text-center overflow-hidden relative"
+      className="p-14 rounded-b-[165px] max-sm:rounded-b-[100px] h-fit bg-primary/10 text-center overflow-hidden relative opacity-0"
+      style={{ clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)" }}
       ref={section}
     >
       <Image
@@ -44,10 +45,12 @@ export const Intro = () => {
         living that goes beyond walls and spaces — it's about life, legacy, and
         belonging.
       </p>
-      <Button className="relative rounded-full bg-primary text-white overflow-visible">
-        <span className="relative z-10">Explore Our Projects</span>
-        <span className="absolute inset-0 rounded-full bg-primary blur-2xl opacity-60 animate-pulse-glow-bg -z-10"></span>
-      </Button>
+      <Link href={"/projects"}>
+        <Button className="relative rounded-full bg-primary text-white overflow-visible">
+          <span className="relative z-10">Explore Our Projects</span>
+          <span className="absolute inset-0 rounded-full bg-primary blur-2xl opacity-60 animate-pulse-glow-bg -z-10"></span>
+        </Button>
+      </Link>
     </section>
   );
 };

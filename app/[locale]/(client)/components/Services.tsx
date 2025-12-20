@@ -76,7 +76,7 @@ export const Services = () => {
   }, []);
   return (
     <section
-      className="bg-black pt-20 pb-12 z-40 relative rounded-b-[15rem]"
+      className="bg-black pt-20 pb-12 z-40 relative rounded-b-[15rem] max-lg:pb-20 max-lg:rounded-b-[10rem] max-md:rounded-b-[7rem]"
       ref={section}
     >
       <Container className="relative">

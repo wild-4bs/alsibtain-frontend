@@ -12,7 +12,7 @@ export const Hero = () => {
         height={10000}
         objectFit="cover"
         alt="hero"
-        className="w-[96%] object-cover z-0 pointer-events-none h-full left-1/2 absolute top-0 -translate-x-1/2 rounded-b-[2.5rem]"
+        className="w-[90%] max-md:w-full object-cover z-0 pointer-events-none h-full left-1/2 absolute top-0 -translate-x-1/2 rounded-b-[2.5rem]"
       />
     </section>
   );

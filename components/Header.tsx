@@ -12,9 +12,18 @@ import Languages from "@/assets/icons/languages.svg";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import SplitText from "gsap/SplitText";
+import { useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { Poppins } from "next/font/google";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(SplitText);
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
 
 export const navLinks = [
   { name: "Home", path: "/" },
@@ -29,14 +38,18 @@ export const navLinks = [
 
 export const Header = () => {
   const pathname = usePathname();
-
+  useEffect(() => {
+    window.addEventListener("load", () => {
+      ScrollTrigger.refresh();
+    });
+  }, []);
   return (
-    <header className="relative z-50">
+    <header className={cn("relative z-50 bg-transparent", poppins.className)}>
       <Container className="flex items-center gap-8 justify-between h-(--header-height) max-xl:px-2">
-        <div className="relative">
+        <Link className="relative" href={"/"}>
           <BluryBall className="w-[500px] h-[500px]" />
           <Logo className="relative z-10" />
-        </div>
+        </Link>
         <div className="flex-1 flex justify-center">
           <GlassCard className="px-6 w-fit py-0 rounded-full relative z-10 max-xl:px-2 max-lg:hidden">
             <BluryBall className="w-full h-[200px] -top-20" />
@@ -65,15 +78,17 @@ export const Header = () => {
           <button className="bg-transparent hover:bg-primary/30 size-10 flex items-center justify-center rounded-lg cursor-pointer duration-300">
             <Languages />
           </button>
-          <Button
-            variant={"outline"}
-            className="rounded-full relative z-10 p-2 max-lg:hidden"
-          >
-            <span className="px-2 py-3 inline-block">Get in touch</span>
-            <div className="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-              <ArrowRight />
-            </div>
-          </Button>
+          <Link href={"/contact"}>
+            <Button
+              variant={"outline"}
+              className="rounded-full relative z-10 p-2 max-lg:hidden"
+            >
+              <span className="px-2 py-3 inline-block">Get in touch</span>
+              <div className="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                <ArrowRight />
+              </div>
+            </Button>
+          </Link>
         </div>
         <Sidebar />
       </Container>

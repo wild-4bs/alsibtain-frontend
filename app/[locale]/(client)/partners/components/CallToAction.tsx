@@ -2,6 +2,7 @@
 import Container from "@/components/Container";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
@@ -36,12 +37,14 @@ export const CallToAction = () => {
           Our team is here to discuss partnership opportunities and explore how
           we can build impactful projects together.
         </p>
-        <Button
-          ref={button}
-          className="mt-3 font-medium px-10 rounded-full bg-[#2255B1] h-11"
-        >
-          Contact Us
-        </Button>
+        <Link href={"/contact"}>
+          <Button
+            ref={button}
+            className="mt-3 font-medium px-10 rounded-full bg-[#2255B1] h-11"
+          >
+            Contact Us
+          </Button>
+        </Link>
       </Container>
     </section>
   );

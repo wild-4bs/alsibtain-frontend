@@ -14,6 +14,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
+
 const features = [
   { name: "غـرفـة 2", scene: "room2" },
   { name: "غـرفـة 3", scene: "room3" },
@@ -32,20 +33,22 @@ const alexandria = Alexandria({
 });
 
 export const Player360 = () => {
-  const title = useRef(null);
-  const section = useRef(null);
+  const title = useRef<HTMLHeadingElement>(null);
+  const section = useRef<HTMLElement>(null);
+
   useGSAP(() => {
-    const splitTitle = SplitText.create(title.current, {
+    const splitTitle = SplitText.create(title.current!, {
       type: "chars",
       smartWrap: true,
     });
 
     gsap.from(splitTitle.chars, {
-      y: 100,
+      opacity: 0,
       stagger: {
-        amount: 0.1,
+        amount: 0.03,
         from: "random",
       },
+      ease: "power2.out",
       scrollTrigger: {
         trigger: section.current,
         scrub: true,
@@ -53,6 +56,7 @@ export const Player360 = () => {
       },
     });
   }, []);
+
   return (
     <section className="mt-36 relative" ref={section}>
       <h2
@@ -61,7 +65,9 @@ export const Player360 = () => {
       >
         Uruk City - <span className="font-light">Virtual 360</span>
       </h2>
+
       <PurpleLargeComet className="w-full scale-120 absolute rotate-155 duration-300 z-0 origin-center top-0 left-0" />
+
       <Container
         className={cn(
           "py-6 rounded-[3rem] relative z-10 flex gap-5 max-xl:flex-col max-md:px-6",
@@ -76,11 +82,13 @@ export const Player360 = () => {
           alt="project"
           className="w-[800px] max-2xl:w-[700px] max-xl:w-full max-xl:rounded-4xl max-xl:h-[400px] object-cover rounded-tl-[5rem] rounded-bl-[5rem]"
         />
+
         <div className="content w-full flex-1 py-8 px-10" dir="rtl">
           <header className="flex gap-12 max-sm:flex-col max-sm:justify-start max-md:gap-4 justify-between pb-4 border-b border-b-[#BCBCBC] mb-6">
             <h3 className="font-semibold text-2xl">
               مديـــنـــة أوروك <br /> الســــــــكنيـــــــــة
             </h3>
+
             <dl className="flex flex-col gap-1 font-light text-base whitespace-nowrap">
               <div className="flex items-center gap-2">
                 <dt>
@@ -102,12 +110,14 @@ export const Player360 = () => {
               </div>
             </dl>
           </header>
+
           <div className="mb-8">
             <header className="flex gap-12 max-md:flex-col">
               <h2 className="font-semibold text-4xl leading-[140%]">
                 جولة افتراضيــة <br className="max-md:hidden" />
                 النمـــوذج الأول
               </h2>
+
               <div className="w-full flex-1 flex flex-col gap-3">
                 <div className="flex flex-col w-full flex-1 items-end">
                   <span className="w-full inline-block text-end">المساحة</span>
@@ -116,6 +126,7 @@ export const Player360 = () => {
                   </span>
                   <span className="w-full inline-block text-end">مربع</span>
                 </div>
+
                 <dl className="flex flex-col w-full flex-1 items-end [&_dt]:min-w-[140px] font-bold text-lg">
                   <div className="flex items-center gap-2">
                     <dt>عدد الغرف:</dt>
@@ -129,6 +140,7 @@ export const Player360 = () => {
               </div>
             </header>
           </div>
+
           <div className="px-6 py-5 border border-[#19499F] rounded-3xl">
             <ScrollArea className="h-48 w-full overflow-hidden">
               <div
@@ -137,9 +149,9 @@ export const Player360 = () => {
               >
                 {features.map((feature, i) => (
                   <Button
+                    key={i}
                     className="h-10 text-start justify-start rounded-full border border-[#19499F] bg-[#00153B] font-medium text-base relative pe-10"
                     dir="rtl"
-                    key={i}
                   >
                     <div className="size-10 rounded-full flex items-center justify-center border border-[#19499F] absolute top-1/2 end-0 -translate-y-1/2">
                       <ArrowInsert />

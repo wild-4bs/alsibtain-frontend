@@ -13,22 +13,24 @@ export const VirtualTour = ({ className, ...props }: ComponentProps<"div">) => {
       const viewer = new Marzipano.Viewer(viewerRef.current, {
         controls: {
           mouseViewMode: "drag",
+          scroll: false, // disable zoom with scroll
+          pinch: false, // disable pinch zoom on touch devices
         },
       });
 
       // Higher resolution geometry for better quality
       const geometry = new Marzipano.EquirectGeometry([{ width: 4096 }]);
 
-      // More permissive view limits
+      // Fixed view limiter with no zoom
       const limiter = Marzipano.RectilinearView.limit.traditional(
         2048,
         (120 * Math.PI) / 180
       );
 
-      // ---------- SCENE 1 (Outside) ----------
+      // ---------- SCENE 1 ----------
       const source1 = Marzipano.ImageUrlSource.fromString("/scene-1.png");
       const view1 = new Marzipano.RectilinearView(
-        { yaw: 0, pitch: 0, fov: Math.PI / 2 },
+        { yaw: 0, pitch: 0, fov: Math.PI / 2 }, // fixed FOV
         limiter
       );
       const scene1 = viewer.createScene({
@@ -38,7 +40,7 @@ export const VirtualTour = ({ className, ...props }: ComponentProps<"div">) => {
         pinFirstLevel: true,
       });
 
-      // ---------- SCENE 2 (Inside) ----------
+      // ---------- SCENE 2 ----------
       const source2 = Marzipano.ImageUrlSource.fromString("/scene-2.png");
       const view2 = new Marzipano.RectilinearView(
         { yaw: 0, pitch: 0, fov: Math.PI / 2 },
@@ -51,7 +53,7 @@ export const VirtualTour = ({ className, ...props }: ComponentProps<"div">) => {
         pinFirstLevel: true,
       });
 
-      // Helper function to create hotspot element
+      // ---------- Hotspot helper ----------
       const createHotspotElement = (label: string) => {
         const hotspot = document.createElement("button");
         hotspot.innerHTML = `
@@ -69,7 +71,7 @@ export const VirtualTour = ({ className, ...props }: ComponentProps<"div">) => {
         return hotspot;
       };
 
-      // ---------- Hotspot for Scene 1 (to go to kitchen) ----------
+      // Hotspot for Scene 1
       const hotspot1 = createHotspotElement("المطبخ");
       hotspot1.addEventListener("click", () => {
         scene2.switchTo({ transitionDuration: 1000 });
@@ -79,7 +81,7 @@ export const VirtualTour = ({ className, ...props }: ComponentProps<"div">) => {
         pitch: 0,
       });
 
-      // ---------- Hotspot for Scene 2 (to go to bathroom) ----------
+      // Hotspot for Scene 2
       const hotspot2 = createHotspotElement("الحمام");
       hotspot2.addEventListener("click", () => {
         scene1.switchTo({ transitionDuration: 1000 });
@@ -92,7 +94,6 @@ export const VirtualTour = ({ className, ...props }: ComponentProps<"div">) => {
       // Start with scene 1
       scene1.switchTo({ transitionDuration: 0 });
 
-      // Cleanup on unmount
       return () => {
         viewer.destroy();
       };

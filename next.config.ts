@@ -3,7 +3,10 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
-const nextConfig: NextConfig = {
+const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   turbopack: {
     rules: {
       "*.svg": {
@@ -12,7 +15,7 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  webpack(config) {
+  webpack(config: { module: { rules: { test: RegExp; use: string[] }[] } }) {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],

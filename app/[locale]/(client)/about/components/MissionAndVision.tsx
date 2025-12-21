@@ -36,16 +36,21 @@ const sectionsData = {
       ar: "النزاهة، الجودة، الابتكار، الاستدامة، والمجتمع—هذه القيم تشكل كل مشروع نقدمه وتحدد من نحن كشركة.",
     },
   },
-};
+} as const;
+
+// Define types for keys and locale
+const sectionKeys = ["vision", "mission", "values"] as const;
+type SectionKey = (typeof sectionKeys)[number]; // "vision" | "mission" | "values"
+type Locale = "en" | "ar";
 
 export const MissionAndVision = () => {
-  const section = useRef(null);
-  const visionRef = useRef(null);
-  const missionRef = useRef(null);
-  const valuesRef = useRef(null);
-  const title = useRef(null);
-  const caption = useRef(null);
-  const locale = useLocale() as "ar" | "en";
+  const section = useRef<HTMLElement | null>(null);
+  const visionRef = useRef<HTMLElement | null>(null);
+  const missionRef = useRef<HTMLElement | null>(null);
+  const valuesRef = useRef<HTMLElement | null>(null);
+  const title = useRef<HTMLHeadingElement | null>(null);
+  const caption = useRef<HTMLParagraphElement | null>(null);
+  const locale = useLocale() as Locale;
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -62,7 +67,9 @@ export const MissionAndVision = () => {
     tl.from(missionRef.current, { y: "-50%", opacity: 0 }, "<");
     tl.from(valuesRef.current, { x: "-50%", opacity: 0 }, "<");
   }, []);
+
   const t = useTranslations("about.missionAndVision");
+
   return (
     <section className="my-32 leading-[150%] relative" ref={section}>
       <Image
@@ -84,7 +91,7 @@ export const MissionAndVision = () => {
           </p>
         </header>
         <div className="flex gap-10 flex-wrap relative z-10">
-          {["vision", "mission", "values"].map((key) => (
+          {sectionKeys.map((key) => (
             <article
               key={key}
               className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"

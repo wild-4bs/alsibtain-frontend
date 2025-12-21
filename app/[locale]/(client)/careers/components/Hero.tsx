@@ -6,6 +6,7 @@ import { Link } from "@/i18n/routing";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRef } from "react";
 
@@ -57,6 +58,7 @@ export const Hero = () => {
       "<"
     );
   }, []);
+  const t = useTranslations("careers.hero");
   return (
     <section className="relative z-10 -mt-(--header-height) bg-primary">
       <BluryBall className="top-0 z-10" />
@@ -68,21 +70,21 @@ export const Hero = () => {
         alt="image"
       />
       <Container className="h-screen text-center flex flex-col items-center justify-center relative z-10">
-        <h1 className="uppercase text-4xl font-medium" ref={title}>
-          Join Al-Subtain and Help Build <br /> Tomorrow’s Communities
-        </h1>
+        <h1
+          className="uppercase text-4xl font-medium"
+          ref={title}
+          dangerouslySetInnerHTML={{ __html: t("title") }}
+        ></h1>
         <p className="mb-6 mt-3 w-full lg:max-w-2xl" ref={caption}>
-          Be part of a trusted real estate developer shaping modern residential
-          projects across Iraq. Work with a professional team, real impact, and
-          clear room to grow.
+          {t("caption")}
         </p>
         <div className="flex gap-2">
           <Link href={"#jobs"} ref={button1}>
-            <Button className="bg-[#19499F]">Join The Team</Button>
+            <Button className="bg-[#19499F]">{t("cta1")}</Button>
           </Link>
           <Link href={"/contact"} ref={button2}>
             <Button variant={"outline"} className="border-white border-2">
-              Contact Us
+              {t("cta2")}
             </Button>
           </Link>
         </div>

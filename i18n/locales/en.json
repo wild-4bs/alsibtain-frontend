@@ -1,1 +1,274 @@
-{}
+{
+  "home": {
+    "hero": {
+      "title": "We Build Life, Not <br /> Just Buildings",
+      "caption": "Over 21 years of shaping Iraq's urban future — <br /> where architecture meets human vision",
+      "tagline": "  Al-Subtain REAL ESTATE"
+    },
+    "intro": {
+      "title": "<primary>Experience</primary> <white>Life Through Architecture</white>",
+      "caption": "For over two decades, Al-Subtain Real Estate Development has been shaping Iraq's skyline — crafting communities where design, trust, and innovation come together. Every project we build reflects a vision of living that goes beyond walls and spaces — it's about life, legacy, and belonging.",
+      "cta": "Explore Our Projects"
+    },
+    "about": {
+      "tagline": "About Us",
+      "title": "Al-Subtain Real Estate",
+      "caption": "For over two decades, Al-Sibtain Real Estate Development has stood as a symbol of excellence and integrity in Iraq’s real estate landscape. Founded in the holy city of Karbala in 2003, the company has grown into a trusted national developer — delivering large-scale residential, commercial, and healthcare projects that combine modern design, local authenticity, and global standards. Every project we build is guided by a simple yet powerful belief: architecture is not just about structures — it’s about people, life, and legacy. Through visionary planning, innovative engineering, and a deep understanding of community needs, Al-Sibtain has created urban spaces that bring people together, inspire belonging, and reflect the values of trust, quality, and progress. From the ambitious Uruk City, to the serene Al-Salam City, and the world-class Al-Kafeel Hospital, each development tells a story of purposeful creation — a story that shapes the present and builds the future of Iraq. With a dedicated team of experts, architects, and engineers, Al-Sibtain continues to redefine modern development through sustainable practices, precision in delivery, and a commitment to timeless design.",
+      "button": "Contact Us"
+    }
+  },
+  "about": {
+    "hero": {
+      "title": "Communities Designed for Real <br /> Living.",
+      "caption": "Since 2003, Al-Subtain has been developing communities that bring people together, combining thoughtful planning, solid engineering, and a commitment to long-term quality.",
+      "cta1": "Contact Us",
+      "cta2": "Our Projects"
+    },
+    "steps": {
+      "title": "Navigating the Estatein Experience",
+      "caption": "At Estatein, we've designed a straightforward process to help you find and purchase your dream property with ease. Here's a step-by-step guide to how it all works."
+    },
+    "missionAndVision": {
+      "title": "Our Vision & Mission",
+      "caption": "Our purpose has always been clear: to build communities that last, serve, and inspire, Every decision we make — from planning to execution — reflects our long-term commitment to people, quality, and the future of Iraq."
+    },
+    "team": {
+      "title": "The Minds and Hands Behind Our Success",
+      "caption": "At Al-Subtain, our success is driven by the dedication and expertise of our team. Get to know the people behind our mission to make your real estate dreams a reality."
+    }
+  },
+  "projects": {
+    "hero": {
+      "title": "Discover Our <br /> Landmark Projects",
+      "caption": "Explore a portfolio of visionary developments shaping modern urban living. Each project reflects our commitment to quality, innovation, and long-term value.",
+      "button": "Scroll To Explore"
+    },
+    "projects": {
+      "badge": "Projects",
+      "title": "Choose a Project <br /> To Explore",
+      "explaination": "*Please click on the project name or logo to learn more."
+    },
+    "singleProject": {
+      "labels": {
+        "unitType": "Unit Type",
+        "totalResidentialUnits": "Total Residential Units",
+        "totalArea": "Total Area",
+        "location": "Location",
+        "projectName": "Project Name",
+        "rooms": "Rooms",
+        "bathrooms": "Bathrooms"
+      },
+      "projectIntro": {
+        "caption": "A master-planned residential community in Karbala, spanning 1.37 million m² with 1,348 modern units, featuring diverse home sizes designed for family living."
+      },
+      "360Viewer": {
+        "title": "Uruk City - Virtual 360"
+      }
+    }
+  },
+  "services": {
+    "hero": {
+      "title": "Building the Future of <br /> Modern Communities",
+      "caption": " Through strategic planning, disciplined development, and long-term vision, Al-Subtain delivers integrated residential projects designed to enrich cities and elevate everyday living.",
+      "cta": "Scroll Down"
+    },
+    "services": {
+      "title": "Our Services"
+    },
+    "counters": {
+      "caption": "We work together with our clients to design and construct homes and surroundings that match their values and way of life.",
+      "cta": "View Projects"
+    }
+  },
+  "partners": {
+    "hero": {
+      "title": "Partner With Al-Subtain to <br /> Shape Future Communities",
+      "caption": "Collaborate with a trusted Iraqi developer on large-scale residential projects, We work closely with government entities, financial institutions, and strategic investors, to deliver sustainable, high-value communities across Iraq.",
+      "cta": "Contact Us"
+    },
+    "whyUs": {
+      "title": "Why Partner With Us?"
+    },
+    "partnershipTypes": {
+      "title": "Types of Partnerships",
+      "caption": "Explore the key partnership models we offer to support large-scale development, enhance community services, and create long-term value across our projects.",
+      "button": "Contact Us",
+      "badge": "Partners"
+    },
+    "cta": {
+      "badge": "Call To Action",
+      "title": "Ready to collaborate",
+      "caption": "Our team is here to discuss partnership opportunities and explore how we can build impactful projects together.",
+      "button": "Contact Us"
+    },
+    "projects": {
+      "title": "Explore Uruk City Residential Community",
+      "detailsButton": "View Project Details",
+      "count": "Residential Units Planned"
+    },
+    "clients": {
+      "title": "What Our Clients Say <br /> About Us"
+    }
+  },
+
+  "news&media": {
+    "hero": {
+      "badge": "Story",
+      "title": "Local Government Faces Criticism Over New Policies",
+      "caption": "Local Government Faces Criticism Over New Policies as thousands took to the streets to oppose recent policy changes, leading to clashes with law enforcement and a state of emergency declared in several cities."
+    },
+    "cta": {
+      "title": "Thank you for choosing Al-Subtain for your real estate development needs. <br /> We look forward to supporting your vision and answering any inquiries you may have.",
+      "button": "Get in Touch"
+    }
+  },
+
+  "careers": {
+    "hero": {
+      "title": "Join Al-Subtain and Help Build <br /> Tomorrow’s Communities",
+      "caption": " Be part of a trusted real estate developer shaping modern residential projects across Iraq. Work with a professional team, real impact, and clear room to grow.",
+      "cta1": "Join The Team",
+      "cta2": "Contact Us"
+    },
+    "jobs": {
+      "tagline": "Come join us",
+      "title": "Career Openings",
+      "caption": "We’re always looking for creative, talented self-starters to join the Al-sabtain family. <br /> Check out our open roles below and fill out an application.",
+      "deadline": "Deadline",
+      "experience": "Experience"
+    },
+    "benefits": {
+      "tagline": "Benefits",
+      "title": "Why you Should Join Our Awesome Team",
+      "caption": "<p> At Al-Subtain, we believe that great projects start with great people.</p><p>We provide a supportive, professional environment where every team member can grow, contribute, and build a meaningful career in real estate development.</p>"
+    },
+    "singleCareer": {
+      "title": "Your Career. Our Next Landmark.",
+      "jobSummary": "Job Summary",
+      "location": "Location",
+      "jobType": "Job Type",
+      "datePosted": "Date Posted",
+      "experience": "Experience",
+      "workingHours": "Working Hours",
+      "workingDays": "Working Days",
+      "vacancy": "Vacancy",
+      "viewAllJobs": "View all Jobs",
+      "whoAreWeLookingFor": "Who Are We Looking For",
+      "whatYouWillBeDoing": "What You Will Be Doing",
+      "educationalRequirement": "Education Requirement",
+      "whatWeOffer": "What We Offer",
+      "applyNow": "Apply Now",
+      "apply": {
+        "title": "Your Career. Our Next Landmark.",
+        "jobName": "Web application",
+        "button": "Apply Now"
+      }
+    }
+  },
+
+  "inputs": {
+    "firstName": {
+      "label": "First Name",
+      "placeholder": "Enter first name"
+    },
+    "lastName": {
+      "label": "Last Name",
+      "placeholder": "Enter last name"
+    },
+    "jobRole": {
+      "label": "Job Role",
+      "placeholder": "Select job role"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter email"
+    },
+    "address": {
+      "label": "Enter Address",
+      "placeholder": "Enter your address"
+    },
+    "street": {
+      "label": "Street",
+      "placeholder": "Enter street"
+    },
+    "city": {
+      "label": "City",
+      "placeholder": "Enter city"
+    },
+    "cvUpload": {
+      "label": "Upload Your CV",
+      "placeholder": "No file selected"
+    },
+    "startDate": {
+      "label": "Start Date",
+      "placeholder": "mm / dd / yyyy"
+    }
+  },
+
+  "cta": {
+    "caption": "Thank you for choosing Al-Subtain for your real estate development needs. We look forward to supporting your vision and answering any inquiries you may have.",
+    "button": "Get in Touch"
+  },
+  "header": {
+    "button": "Get in touch",
+    "links": {
+      "contact": "Contact Us",
+      "careers": "Careers",
+      "news": "News & Media",
+      "partners": "Partners",
+      "services": "Services",
+      "projects": "Projects",
+      "about": "About Us",
+      "home": "Home"
+    }
+  },
+  "common": {
+    "stories": "Stories",
+    "tech": "Tech",
+    "technology": "Technology",
+    "seeMore": "See More",
+    "partners": {
+      "title": "Trusted by Leading Brands in the Industry"
+    },
+    "cta": {
+      "title": "Future-ready development <br /> built with purpose",
+      "caption": "Our projects are designed to grow with communities — sustainable, smart, and built to last.",
+      "button": "Explore Projects"
+    }
+  },
+
+  "footer": {
+    "company": {
+      "name": "Al-Subtain Real Estate Development",
+      "description": "Building life, not just buildings. \n Karbala, Iraq"
+    },
+    "quickLinks": {
+      "title": "Quick Links"
+    },
+    "projects": {
+      "title": "Our Projects",
+      "urukCity": "Uruk City",
+      "salamCity": "Al-Salam City",
+      "kafeelHospital": "Al-Kafeel Hospital",
+      "alAbbas": "Al-Abbas"
+    },
+    "headquarters": {
+      "title": "Head Office",
+      "address": "Al-Hur Street, Karbala – Iraq",
+      "phone": "+964 7750050123",
+      "email": "info@alsibtain.com",
+      "website": "www.alsibtain.com"
+    },
+    "social": {
+      "title": "Follow Us"
+    },
+    "copyright": {
+      "year": "© 2025 Al-Subtain",
+      "text": "Real Estate Development. All rights reserved."
+    },
+    "developer": {
+      "text": "Designed & Developed by",
+      "company": "malamih.net"
+    }
+  }
+}

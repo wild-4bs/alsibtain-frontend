@@ -7,41 +7,67 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { getDirectionClass } from "@/lib/TextDirection";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ArrowUp, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const clientTestimonials = [
   {
     id: 1,
-    name: "Ali Kareem",
-    role: "Homeowner - Karbala",
+    name: {
+      en: "Ali Kareem",
+      ar: "علي كريم",
+    },
+    role: {
+      en: "Homeowner - Karbala",
+      ar: "مالك منزل - كربلاء",
+    },
     image: "/clients/1.png",
-    testimonial:
-      "Al-Subtain made the entire process smooth and professional. From choosing the unit to understanding the project details, their team supported us at every stage. Truly a trustworthy developer.",
+    testimonial: {
+      en: "Al-Subtain made the entire process smooth and professional. From choosing the unit to understanding the project details, their team supported us at every stage. Truly a trustworthy developer.",
+      ar: "جعلت السبطين العملية بأكملها سلسة ومهنية. من اختيار الوحدة إلى فهم تفاصيل المشروع، دعمنا فريقهم في كل مرحلة. مطور جدير بالثقة حقاً.",
+    },
     rating: 5,
     link: "#",
   },
   {
     id: 2,
-    name: "Hassan Al-Rubaie",
-    role: "Real Estate Investor",
+    name: {
+      en: "Hassan Al-Rubaie",
+      ar: "حسن الربيعي",
+    },
+    role: {
+      en: "Real Estate Investor",
+      ar: "مستثمر عقاري",
+    },
     image: "/clients/2.png",
-    testimonial:
-      "Their projects are well-planned and built with long-term value in mind. Al-Subtain has become my preferred choice for reliable and safe real estate investments in Iraq.",
+    testimonial: {
+      en: "Their projects are well-planned and built with long-term value in mind. Al-Subtain has become my preferred choice for reliable and safe real estate investments in Iraq.",
+      ar: "مشاريعهم مخططة جيداً ومبنية مع مراعاة القيمة طويلة الأجل. أصبحت السبطين خياري المفضل للاستثمارات العقارية الموثوقة والآمنة في العراق.",
+    },
     rating: 5,
     link: "#",
   },
   {
     id: 3,
-    name: "Hassan Al-Rubaie",
-    role: "Real Estate Investor",
+    name: {
+      en: "Hassan Al-Rubaie",
+      ar: "حسن الربيعي",
+    },
+    role: {
+      en: "Real Estate Investor",
+      ar: "مستثمر عقاري",
+    },
     image: "/clients/2.png",
-    testimonial:
-      "Their projects are well-planned and built with long-term value in mind. Al-Subtain has become my preferred choice for reliable and safe real estate investments in Iraq.",
+    testimonial: {
+      en: "Their projects are well-planned and built with long-term value in mind. Al-Subtain has become my preferred choice for reliable and safe real estate investments in Iraq.",
+      ar: "مشاريعهم مخططة جيداً ومبنية مع مراعاة القيمة طويلة الأجل. أصبحت السبطين خياري المفضل للاستثمارات العقارية الموثوقة والآمنة في العراق.",
+    },
     rating: 5,
     link: "#",
   },
@@ -55,6 +81,8 @@ export const Clients = () => {
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const locale = useLocale() as "ar" | "en";
+  const isRtl = locale === "ar";
 
   useEffect(() => {
     if (!api) return;
@@ -87,15 +115,32 @@ export const Clients = () => {
     });
   }, []);
 
+  const t = useTranslations("partners.clients");
+
+  const handlePrevClick = () => {
+    if (isRtl) {
+      api?.scrollNext();
+    } else {
+      api?.scrollPrev();
+    }
+  };
+
+  const handleNextClick = () => {
+    if (isRtl) {
+      api?.scrollPrev();
+    } else {
+      api?.scrollNext();
+    }
+  };
+
   return (
     <section className="my-28" ref={section}>
       <Container>
         <h2
-          className="text-6xl font-medium text-center mb-16 max-sm:text-4xl px-4"
+          className="text-6xl font-medium text-center mb-16 rtl:leading-[120%] max-sm:text-4xl px-4"
           ref={title}
-        >
-          What Our Clients Say <br className="max-md:hidden" /> About Us
-        </h2>
+          dangerouslySetInnerHTML={{ __html: t("title") }}
+        ></h2>
 
         <div
           className="relative"
@@ -105,27 +150,29 @@ export const Clients = () => {
           }}
         >
           <button
-            onClick={() => api?.scrollPrev()}
-            disabled={!canScrollPrev}
+            onClick={handlePrevClick}
+            disabled={(!canScrollPrev && !isRtl) || (!canScrollNext && isRtl)}
             className="
-    absolute left-0 top-1/2 -translate-y-1/2 z-10
-    size-8 lg:size-9
-    rounded-full border border-white/40
-    flex items-center justify-center
-    disabled:opacity-30 disabled:pointer-events-none
-  "
+              absolute left-0 top-1/2 -translate-y-1/2 z-10
+              size-8 lg:size-9
+              rounded-full border border-white/40
+              flex items-center justify-center
+              disabled:opacity-30 disabled:pointer-events-none
+            "
           >
-            <ChevronLeft className="size-4 lg:size-5" />
+            <ChevronLeft className={`size-4 lg:size-5 `} />
           </button>
           <button
-            onClick={() => api?.scrollNext()}
-            disabled={!canScrollNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer
+            onClick={handleNextClick}
+            disabled={(!canScrollNext && !isRtl) || (!canScrollPrev && isRtl)}
+            className="
+              absolute right-0 top-1/2 -translate-y-1/2 z-10 cursor-pointer
               size-9 rounded-full border border-white
               flex items-center justify-center
-              disabled:opacity-30 disabled:pointer-events-none"
+              disabled:opacity-30 disabled:pointer-events-none
+            "
           >
-            <ChevronRight size={28} />
+            <ChevronRight className={`size-5 lg:size-7 `} />
           </button>
 
           <Carousel
@@ -133,6 +180,7 @@ export const Clients = () => {
             opts={{
               align: "start",
               slidesToScroll: 1,
+              direction: isRtl ? "rtl" : "ltr",
             }}
           >
             <CarouselContent className="-ml-6">
@@ -141,24 +189,24 @@ export const Clients = () => {
                   key={client.id}
                   className="pl-6 basis-1/2 max-md:basis-full"
                 >
-                  <div className=" h-full bg-white/5 border border-white/20 rounded-3xl p-6 lg:p-8 flex flex-col backdrop-blur-2xl">
+                  <div className="h-full bg-white/5 border border-white/20 rounded-3xl p-6 lg:p-8 flex flex-col backdrop-blur-2xl">
                     <header className="flex flex-col items-center justify-center">
                       <Image
                         src={client.image}
                         width={1000}
                         height={1000}
-                        alt={client.name}
+                        alt={client.name[locale]}
                         className="size-16 rounded-full object-cover mb-7"
                       />
                       <h3 className="font-medium text-sm lg:text-base text-center mb-2">
-                        {client.name}
+                        {client.name[locale]}
                       </h3>
                       <span className="font-normal text-subtitle-color">
-                        {client.role}
+                        {client.role[locale]}
                       </span>
                     </header>
                     <p className="font-light text-subtitle-color text-center mt-8 flex-1 mb-5">
-                      {client.testimonial}
+                      {client.testimonial[locale]}
                     </p>
                     <footer className="flex items-center justify-between gap-5">
                       <div className="flex items-center gap-2">
@@ -174,7 +222,7 @@ export const Clients = () => {
                         variant={"ghost"}
                         className="hover:bg-primary/10 hover:text-white/90"
                       >
-                        <ArrowUp className="rotate-45 size-6" />
+                        <ArrowUp className="rotate-45 size-6 rtl:-rotate-45" />
                       </Button>
                     </footer>
                   </div>

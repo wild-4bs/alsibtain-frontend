@@ -1,85 +1,161 @@
+"use client";
 import Container from "@/components/Container";
 import { Story } from "./Story";
 import { Button } from "@/components/ui/button";
+import { useLocale, useTranslations } from "next-intl";
 
 const storiesData = [
   {
     id: 1,
     image: "/stories/1.jpg",
-    title: "Life-Changing Moments: Personal Narratives that Inspire",
-    author: "JANE MAY",
-    date: "TODAY",
+    title: {
+      en: "Life-Changing Moments: Personal Narratives that Inspire",
+      ar: "لحظات تغير الحياة: روايات شخصية ملهمة",
+    },
+    author: {
+      en: "JANE MAY",
+      ar: "جين ماي",
+    },
+    date: {
+      en: "TODAY",
+      ar: "اليوم",
+    },
   },
   {
     id: 2,
     image: "/stories/2.jpg",
-    title: "Overcoming Adversity: Inspiring Tales of Resilience",
-    author: "TAYLOR STONE",
-    date: "TODAY",
+    title: {
+      en: "Overcoming Adversity: Inspiring Tales of Resilience",
+      ar: "التغلب على الشدائد: قصص ملهمة عن المرونة",
+    },
+    author: {
+      en: "TAYLOR STONE",
+      ar: "تايلور ستون",
+    },
+    date: {
+      en: "TODAY",
+      ar: "اليوم",
+    },
   },
   {
     id: 3,
     image: "/stories/3.jpg",
-    title: "Cultural Chronicles: Traditions and Tales from Around the World",
-    author: "LILLY LANE",
-    date: "TODAY",
+    title: {
+      en: "Cultural Chronicles: Traditions and Tales from Around the World",
+      ar: "سجلات ثقافية: تقاليد وقصص من حول العالم",
+    },
+    author: {
+      en: "LILLY LANE",
+      ar: "ليلي لين",
+    },
+    date: {
+      en: "TODAY",
+      ar: "اليوم",
+    },
   },
   {
     id: 4,
     image: "/stories/4.jpg",
-    title: "Unheard Voices: Stories from Remote Communities",
-    author: "JANE MAY",
-    date: "TODAY",
+    title: {
+      en: "Unheard Voices: Stories from Remote Communities",
+      ar: "أصوات غير مسموعة: قصص من المجتمعات النائية",
+    },
+    author: {
+      en: "JANE MAY",
+      ar: "جين ماي",
+    },
+    date: {
+      en: "TODAY",
+      ar: "اليوم",
+    },
   },
   {
     id: 5,
     image: "/stories/5.jpg",
-    title: "Unexpected Heroes: Ordinary People Doing Extraordinary Things",
-    author: "TAYLOR STONE",
-    date: "TODAY",
+    title: {
+      en: "Unexpected Heroes: Ordinary People Doing Extraordinary Things",
+      ar: "أبطال غير متوقعين: أشخاص عاديون يفعلون أشياء استثنائية",
+    },
+    author: {
+      en: "TAYLOR STONE",
+      ar: "تايلور ستون",
+    },
+    date: {
+      en: "TODAY",
+      ar: "اليوم",
+    },
   },
   {
     id: 6,
     image: "/stories/6.jpg",
-    title: "Urban Legends: Exploring the Myths and Mysteries of Cities",
-    author: "JANE MAY",
-    date: "YESTERDAY",
+    title: {
+      en: "Urban Legends: Exploring the Myths and Mysteries of Cities",
+      ar: "أساطير حضرية: استكشاف خرافات وأسرار المدن",
+    },
+    author: {
+      en: "JANE MAY",
+      ar: "جين ماي",
+    },
+    date: {
+      en: "YESTERDAY",
+      ar: "أمس",
+    },
   },
   {
     id: 7,
     image: "/stories/7.jpg",
-    title: "Innovative Minds: Stories of Creativity and Invention",
-    author: "TAYLOR STONE",
-    date: "YESTERDAY",
+    title: {
+      en: "Innovative Minds: Stories of Creativity and Invention",
+      ar: "عقول مبتكرة: قصص الإبداع والاختراع",
+    },
+    author: {
+      en: "TAYLOR STONE",
+      ar: "تايلور ستون",
+    },
+    date: {
+      en: "YESTERDAY",
+      ar: "أمس",
+    },
   },
   {
     id: 8,
     image: "/stories/8.jpg",
-    title: "The Human Connection: Heartwarming Stories that Unite Us",
-    author: "JANE MAY",
-    date: "YESTERDAY",
+    title: {
+      en: "The Human Connection: Heartwarming Stories that Unite Us",
+      ar: "الرابطة الإنسانية: قصص دافئة توحدنا",
+    },
+    author: {
+      en: "JANE MAY",
+      ar: "جين ماي",
+    },
+    date: {
+      en: "YESTERDAY",
+      ar: "أمس",
+    },
   },
 ];
 
 export const Stories = () => {
+  const locale = useLocale() as "en" | "ar";
+  const t = useTranslations("common");
+
   return (
     <section className="mt-28">
       <Container>
-        <h2 className="font-black text-3xl mb-6">Stories</h2>
-
+        <h2 className="font-black text-3xl mb-6">{t("stories")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
           {storiesData.map((story) => (
             <Story
               key={story.id}
               image={story.image}
-              title={story.title}
-              createdBy={story.author}
-              date={story.date}
+              title={story.title[locale]}
+              createdBy={story.author[locale]}
+              date={story.date[locale]}
             />
           ))}
         </div>
         <Button className="mt-6 text-lg font-black" variant={"ghost"}>
-          See more +
+          {t("seeMore")} +
         </Button>
       </Container>
     </section>

@@ -14,6 +14,7 @@ import Roofing from "@/assets/icons/roofing.svg";
 import HomeWork from "@/assets/icons/home_work.svg";
 import Apartment from "@/assets/icons/apartment.svg";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "use-intl";
 /* ------------------------------------------------------------------ */
 /*  Icon layout (same spread as before)                                */
 /* ------------------------------------------------------------------ */
@@ -120,7 +121,7 @@ export const CallToAction = () => {
 
   const pauseAll = () => tweensRef.current.forEach((t) => t?.pause());
   const resumeAll = () => tweensRef.current.forEach((t) => t?.resume());
-
+  const t = useTranslations("common.cta");
   return (
     <section>
       <Container
@@ -174,13 +175,13 @@ export const CallToAction = () => {
         <BluryBall className="left-[unset] translate-y-0 right-0 bottom-0 translate-x-1/2 bg-primary/60" />
 
         {/* Content */}
-        <h2 className="relative z-10 text-2xl font-semibold mb-4 leading-tight">
-          Future-ready development <br /> built with purpose
-        </h2>
+        <h2
+          className="relative z-10 text-2xl font-semibold mb-4 leading-tight"
+          dangerouslySetInnerHTML={{ __html: t("title") }}
+        ></h2>
 
         <p className="relative z-10 max-w-md text-sm text-white/80">
-          Our projects are designed to grow with communities — sustainable,
-          smart, and built to last.
+          {t("caption")}
         </p>
         <Link href={"/projects"}>
           <Button
@@ -198,7 +199,7 @@ export const CallToAction = () => {
               animate-pulse
             "
           >
-            Explore Projects
+            {t("button")}
           </Button>
         </Link>
       </Container>

@@ -6,94 +6,103 @@ import Image from "next/image";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
-export const counters = [
+export const countersData = [
   {
-    title: "Year Of Excellence",
+    title: { en: "Year Of Excellence", ar: "سنة من التميز" },
     count: "21+",
   },
   {
-    title: "Projects",
+    title: { en: "Projects", ar: "المشاريع" },
     count: "25+",
   },
   {
-    title: "Housing Units",
+    title: { en: "Housing Units", ar: "الوحدات السكنية" },
     count: "3000+",
   },
   {
-    title: "Provinces",
+    title: { en: "Provinces", ar: "المحافظات" },
     count: "3+",
   },
 ];
 
 export const Hero = () => {
-  const title = useRef(null);
-  const caption = useRef(null);
+  const title = useRef<HTMLHeadingElement>(null);
+  const caption = useRef<HTMLParagraphElement>(null);
   const section = useRef<HTMLElement>(null);
-  const image = useRef(null);
-  const abstractContainer = useRef(null);
+  const image = useRef<HTMLDivElement>(null);
+  const abstractContainer = useRef<HTMLDivElement>(null);
+
+  const t = useTranslations("about.hero");
+  const locale = useLocale() as "ar" | "en";
 
   useGSAP(() => {
-    const splitTitle = SplitText.create(title.current, {
-      type: "chars",
-      smartWrap: true,
-    });
-    const splitCaption = SplitText.create(caption.current, {
-      type: "words",
-      smartWrap: true,
-    });
+    if (!title.current || !caption.current) return;
+
     const tl = gsap.timeline();
-    tl.from(splitTitle.chars, {
-      x: 20,
+
+    // Animate words for title
+    const titleWords = title.current.innerText.split(" ");
+    const wrappedTitle = titleWords
+      .map((word) => `<span class="inline-block mr-1">${word}</span>`)
+      .join(" ");
+    title.current.innerHTML = wrappedTitle;
+
+    tl.from(title.current.querySelectorAll("span"), {
+      y: 20,
       opacity: 0,
-      stagger: 0.02,
+      stagger: 0.05,
+      duration: 0.5,
+      ease: "power2.out",
     });
-    tl.from(splitCaption.words, {
+
+    // Animate caption words
+    const captionWords = caption.current.innerText.split(" ");
+    const wrappedCaption = captionWords
+      .map((word) => `<span class="inline-block mr-1">${word}</span>`)
+      .join(" ");
+    caption.current.innerHTML = wrappedCaption;
+
+    tl.from(caption.current.querySelectorAll("span"), {
       opacity: 0,
-      stagger: 0.02,
+      y: 10,
+      stagger: 0.03,
+      duration: 0.4,
+      ease: "power1.out",
     });
+
+    // Animate buttons
     tl.fromTo(
       ".call-to-action-button",
-      {
-        y: 10,
-        opacity: 0,
-        duration: 0.1,
-        ease: "linear",
-      },
-      { y: 0, opacity: 1 },
-      1
-    );
-    tl.fromTo(
-      ".counter",
-      {
-        y: 10,
-        opacity: 0,
-        duration: 0.1,
-        ease: "linear",
-      },
-      { y: 0, opacity: 1 },
-      1
-    );
-    tl.from(
-      image.current,
-      {
-        x: "10%",
-        opacity: 0,
-        delay: 0.4,
-      },
-      1
+      { y: 10, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.3, stagger: 0.1 }
     );
 
+    // Animate counters
+    tl.fromTo(
+      ".counter",
+      { y: 10, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.3, stagger: 0.1 }
+    );
+
+    // Animate image
+    if (image.current) {
+      tl.from(image.current, { x: "10%", opacity: 0, delay: 0.4 });
+    }
+
     // Infinite scrolling animation for abstract design
-    gsap.to(abstractContainer.current, {
-      x: "-50%",
-      duration: 10,
-      ease: "none",
-      repeat: -1,
-    });
+    if (abstractContainer.current) {
+      gsap.to(abstractContainer.current, {
+        x: "-50%",
+        duration: 10,
+        ease: "none",
+        repeat: -1,
+      });
+    }
   }, []);
 
   return (
@@ -104,16 +113,13 @@ export const Hero = () => {
           <h1
             className="mb-5 font-semibold text-5xl max-sm:text-4xl leading-[130%] relative z-10"
             ref={title}
-          >
-            Communities Designed for Real <br /> Living.
-          </h1>
+            dangerouslySetInnerHTML={{ __html: t("title") }}
+          />
           <p
             className="font-medium text-lg max-sm:text-base text-subtitle-color mb-6 relative z-10"
             ref={caption}
           >
-            Since 2003, Al-Subtain has been developing communities that bring
-            people together combining thoughtful planning, solid engineering,
-            and a commitment to long-term quality.
+            {t("caption")}
           </p>
           <div className="flex gap-4 mb-10 relative z-10">
             <Link href={"/contact"}>
@@ -121,17 +127,17 @@ export const Hero = () => {
                 variant={"outline"}
                 className="h-14 border-white bg-transparent max-sm:h-12 call-to-action-button"
               >
-                Contact Us
+                {t("cta1")}
               </Button>
             </Link>
             <Link href={"/projects"}>
               <Button className="h-14 max-sm:h-12 call-to-action-button">
-                Our Projects
+                {t("cta2")}
               </Button>
             </Link>
           </div>
           <div className="flex items-center gap-5 flex-wrap relative z-10">
-            {counters.map((counter, i) => (
+            {countersData.map((counter, i) => (
               <div
                 key={i}
                 className="px-6 py-4 bg-[#1A1A1A] border border-[#262626] rounded-2xl lg:min-w-[200px] sm:min-w-[170px] min-w-full counter"
@@ -140,7 +146,7 @@ export const Hero = () => {
                   {counter.count}
                 </span>
                 <h2 className="font-medium text-sm leading-[130%] max-sm:text-xs">
-                  {counter.title}
+                  {counter.title[locale]}
                 </h2>
               </div>
             ))}

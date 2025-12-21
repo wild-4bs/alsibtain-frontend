@@ -14,21 +14,26 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
+import { useLocale } from "next-intl";
+import { getDirectionClass } from "@/lib/TextDirection";
+import { useTranslations } from "use-intl";
 
 export const Projects = () => {
   const title = useRef(null);
   const section = useRef<HTMLElement>(null);
   const image = useRef(null);
+  const locale = useLocale() as "ar" | "en";
+
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current, {
-      type: "chars",
+      type: locale == "en" ? "chars" : "words",
       smartWrap: true,
     });
 
     const tl = gsap.timeline({
       scrollTrigger: { trigger: section.current, scrub: true, end: "top 10%" },
     });
-    tl.from(splitTitle.chars, {
+    tl.from(locale == "en" ? splitTitle.chars : splitTitle.words, {
       x: -100,
       opacity: 0,
       stagger: {
@@ -41,6 +46,7 @@ export const Projects = () => {
       x: 0,
     });
   }, []);
+  const t = useTranslations("partners.projects");
   return (
     <section className="relative" ref={section}>
       <BluryBall className="left-[unset] right-0 translate-x-1/2 h-full w-[40%]" />
@@ -60,38 +66,43 @@ export const Projects = () => {
               1,348
             </span>
             <h3 className="font-medium text-sm leading-4 text-subtitle-color">
-              Residential Units Planned
+              {t("count")}
             </h3>
           </div>
         </div>
         <div className="flex flex-col max-md:mt-[50px]">
-          <h2 className="font-medium text-5xl mb-4" ref={title}>
-            Explore Uruk City <br /> Residential Community
+          <h2 className="font-medium text-5xl mb-4 rtl:mb-10" ref={title}>
+            {t("title")}
           </h2>
           <div className="size-12 mb-5 flex items-center justify-center self-end border border-white/30 rounded-full bg-white/20">
             <Beenhere />
           </div>
           <div className="flex flex-col select-none lg:ps-[120px]">
-            <Carousel>
+            <Carousel
+              opts={{ direction: getDirectionClass(locale) as "rtl" | "ltr" }}
+            >
               <CarouselContent>
                 <CarouselItem>
                   <p>
-                    Discover a master-planned residential development in
-                    Karbala, offering 1,348 modern units and a fully integrated
-                    living experience designed for families.
+                    {
+                      {
+                        en: "Discover a master-planned residential development in Karbala, offering 1,348 modern units and a fully integrated living experience designed for families.",
+                        ar: "اكتشف مشروعًا سكنيًا مخططًا بعناية في كربلاء، يضم 1,348 وحدة سكنية حديثة ويوفّر تجربة معيشية متكاملة صُممت خصيصًا للعائلات.",
+                      }[locale]
+                    }
                   </p>
                 </CarouselItem>
               </CarouselContent>
               <button className="hover:underline text-xs font-medium mt-8">
-                View Project Details
+                {t("detailsButton")}
               </button>
             </Carousel>
             <div className="flex justify-between mt-5">
               <div className="flex self-end gap-3 items-center">
-                <button className="size-8 rounded-full flex hover:opacity-70 duration-300 cursor-pointer items-center justify-center border border-white">
+                <button className="size-8 rounded-full flex hover:opacity-70 rtl:rotate-180 duration-300 cursor-pointer items-center justify-center border border-white">
                   <ChevronLeft size={18} strokeWidth={4} />
                 </button>
-                <button className="size-8 rounded-full flex hover:opacity-70 duration-300 cursor-pointer items-center justify-center border border-white">
+                <button className="size-8 rounded-full flex rtl:rotate-180 hover:opacity-70 duration-300 cursor-pointer items-center justify-center border border-white">
                   <ChevronRight size={18} strokeWidth={4} />
                 </button>
               </div>
@@ -101,20 +112,22 @@ export const Projects = () => {
                     variant={"outline"}
                     className="text-sm border-white/44 font-normal"
                   >
-                    Real Estate
+                    {{ en: "Real Estate", ar: "عقارات" }[locale]}
                   </Badge>
                 </div>
+
                 <Badge
                   variant={"outline"}
                   className="text-sm border-white/44 font-normal"
                 >
-                  Karbala
+                  {{ en: "Karbala", ar: "كربلاء" }[locale]}
                 </Badge>
+
                 <Badge
                   variant={"outline"}
                   className="text-sm border-white/44 font-normal"
                 >
-                  Iraq
+                  {{ en: "Iraq", ar: "العراق" }[locale]}
                 </Badge>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRef } from "react";
 
@@ -13,14 +14,14 @@ export const Hero = () => {
   const caption = useRef(null);
   const badge = useRef(null);
   const image = useRef(null);
-
+  const locale = useLocale() as "ar" | "en";
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current, {
       type: "words",
       smartWrap: true,
     });
     const splitCaption = SplitText.create(caption.current, {
-      type: "chars",
+      type: locale == "ar" ? "words" : "chars",
       smartWrap: true,
     });
     const tl = gsap.timeline();
@@ -32,7 +33,7 @@ export const Hero = () => {
         from: "center",
       },
     });
-    tl.from(splitCaption.chars, {
+    tl.from(locale == "en" ? splitCaption.chars : splitCaption.words, {
       opacity: 0,
       y: -100,
       stagger: {
@@ -45,6 +46,7 @@ export const Hero = () => {
       opacity: 1,
     });
   }, []);
+  const t = useTranslations("partners.hero");
   return (
     <section className="relative h-[calc(100vh-var(--header-height))] flex items-end">
       <Image
@@ -60,23 +62,17 @@ export const Hero = () => {
       <BluryBall className="left-0" />
       <Container className="relative z-10 pb-20 flex justify-between gap-20 max-xl:flex-col max-xl:justify-start max-xl:gap-10">
         <h1
-          className="font-medium text-6xl leading-[130%] flex-1 w-full max-md:text-5xl max-md:leading-[120%] max-md:text-center"
+          className="font-medium text-6xl leading-[108%] flex-1 w-full max-md:text-5xl max-md:leading-[120%] max-md:text-center"
           ref={title}
-        >
-          Partner With Al-Subtain to <br /> Shape Future Communities
-        </h1>
+          dangerouslySetInnerHTML={{ __html: t("title") }}
+        ></h1>
         <div className="flex flex-col gap-6 w-md max-md:mx-auto max-md:w-full max-md:text-center max-md:items-center">
-          <p ref={caption}>
-            Collaborate with a trusted Iraqi developer on large-scale
-            residential projects, We work closely with government entities,
-            financial institutions, and strategic investors, to deliver
-            sustainable, high-value communities across Iraq.
-          </p>
+          <p ref={caption}>{t("caption")}</p>
           <Button
             ref={badge}
-            className="bg-[#FFFFFF21] border-white/50 border min-w-32 min-h-8 hover:bg-[#ffffff54] w-fit -translate-x-20 opacity-0"
+            className="bg-[#FFFFFF21] uppercase border-white/50 border min-w-32 min-h-8 hover:bg-[#ffffff54] w-fit -translate-x-20 opacity-0"
           >
-            CONTACT US
+            {t("cta")}
           </Button>
         </div>
       </Container>

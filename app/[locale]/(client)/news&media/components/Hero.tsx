@@ -8,6 +8,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(SplitText);
 
@@ -17,10 +18,10 @@ export const Hero = () => {
   const title = useRef<HTMLHeadingElement>(null);
   const caption = useRef<HTMLParagraphElement>(null);
   const imageWrapper = useRef<HTMLDivElement>(null);
-
+  const locale = useLocale() as "en" | "ar";
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current!, {
-      type: "chars",
+      type: locale == "en" ? "chars" : "words",
       smartWrap: true,
     });
 
@@ -40,7 +41,7 @@ export const Hero = () => {
 
     // TITLE (chars, random, more stagger)
     tl.from(
-      splitTitle.chars,
+      locale == "en" ? splitTitle.chars : splitTitle.words,
       {
         opacity: 0,
         stagger: {
@@ -75,7 +76,7 @@ export const Hero = () => {
       "<"
     );
   }, []);
-
+  const t = useTranslations("news&media.hero");
   return (
     <section className="relative z-10" ref={section}>
       <BluryBall className="left-[unset] right-0 bottom-0 translate-y-1/2 translate-x-1/2 w-[468px] h-[382px]" />
@@ -101,19 +102,19 @@ export const Hero = () => {
               className="mb-2 font-bold text-xs px-2 py-1"
               variant={"secondary"}
             >
-              Story
+              {t("badge")}
             </Badge>
           </div>
 
-          <h1 className="font-black text-3xl mb-2" ref={title}>
-            Local Government Faces Criticism Over New Policies
+          <h1 className="font-black text-3xl mb-2 rtl:mb-4" ref={title}>
+            {t("title")}
           </h1>
 
-          <p className="font-medium text-base leading-[100%]" ref={caption}>
-            Local Government Faces Criticism Over New Policies as thousands took
-            to the streets to oppose recent policy changes, leading to clashes
-            with law enforcement and a state of emergency declared in several
-            cities.
+          <p
+            className="font-medium text-base leading-[100%] rtl:leading-[120%]"
+            ref={caption}
+          >
+            {t("caption")}
           </p>
         </div>
       </Container>

@@ -4,6 +4,8 @@ import { Hero } from "./components/Hero";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Stories } from "./components/stories";
 import { CallToAction } from "./components/CallToAction";
+import { useLocale } from "next-intl";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -12,8 +14,9 @@ const inter = Inter({
 });
 
 export default function page() {
+  const locale = useLocale();
   return (
-    <main className={inter.className}>
+    <main className={cn(locale == "en" && inter.className)}>
       <Hero />
       <div className="relative">
         <BluryBall className="left-0 h-full w-[30%]" />

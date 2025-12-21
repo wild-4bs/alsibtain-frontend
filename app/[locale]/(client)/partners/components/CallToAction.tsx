@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
 export const CallToAction = () => {
@@ -22,27 +23,26 @@ export const CallToAction = () => {
       opacity: 0,
     });
   }, []);
-
+  const t = useTranslations("partners.cta");
   return (
     <section className="my-32" ref={section}>
       <Container className="flex flex-col items-center gap-4 text-center">
-        <Badge variant={"dark"}>Call To Action</Badge>
+        <Badge variant={"dark"}>{t("badge")}</Badge>
         <h2 className="font-bold text-4xl">
-          Ready to collaborate
+          {t("title")}
           <span className="inline-block" ref={questionMark}>
             ?
           </span>
         </h2>
         <p className="font-medium text-base text-subtitle-color">
-          Our team is here to discuss partnership opportunities and explore how
-          we can build impactful projects together.
+          {t("caption")}
         </p>
         <Link href={"/contact"}>
           <Button
             ref={button}
             className="mt-3 font-medium px-10 rounded-full bg-[#2255B1] h-11"
           >
-            Contact Us
+            {t("button")}
           </Button>
         </Link>
       </Container>

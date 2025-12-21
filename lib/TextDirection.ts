@@ -8,7 +8,7 @@ export const isRTL = (locale: string): boolean =>
 export const getTextDirection = (locale: string): "rtl" | "ltr" =>
   isRTL(locale) ? "rtl" : "ltr";
 
-export const getDirectionClass = (locale: string): string =>
+export const getDirectionClass = (locale: string): "rtl" | "ltr" =>
   isRTL(locale) ? "rtl" : "ltr";
 
 export const getFontFamily = (locale: string) => {

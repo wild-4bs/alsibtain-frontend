@@ -9,36 +9,57 @@ import { SplitText } from "gsap/SplitText";
 import { ArrowUpRight } from "lucide-react";
 
 import { Zap, Banknote, Sticker, PieChart } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useRef } from "react";
 
 const partnershipsData = [
   {
     id: 1,
     icon: <Zap size={32} className="text-primary" />,
-    title: "Government Collaboration",
-    description:
-      "Working with ministries, municipalities, and public entities to support urban development initiatives.",
+    title: {
+      en: "Government Collaboration",
+      ar: "التعاون الحكومي",
+    },
+    description: {
+      en: "Working with ministries, municipalities, and public entities to support urban development initiatives.",
+      ar: "العمل مع الوزارات والبلديات والجهات العامة لدعم مبادرات التنمية الحضرية.",
+    },
   },
   {
     id: 2,
     icon: <Banknote size={32} className="text-primary" />,
-    title: "Investment Partnerships",
-    description:
-      "For investors seeking reliable long-term returns through structured real estate models.",
+    title: {
+      en: "Investment Partnerships",
+      ar: "شراكات الاستثمار",
+    },
+    description: {
+      en: "For investors seeking reliable long-term returns through structured real estate models.",
+      ar: "للمستثمرين الذين يسعون للحصول على عوائد موثوقة طويلة الأجل من خلال نماذج عقارية منظمة.",
+    },
   },
   {
     id: 3,
     icon: <Sticker size={32} className="text-primary" />,
-    title: "Engineering & Construction Partners",
-    description:
-      "Collaborating with experienced firms to ensure high-quality planning, design, and execution.",
+    title: {
+      en: "Engineering & Construction Partners",
+      ar: "شركاء الهندسة والبناء",
+    },
+    description: {
+      en: "Collaborating with experienced firms to ensure high-quality planning, design, and execution.",
+      ar: "التعاون مع الشركات ذات الخبرة لضمان التخطيط والتصميم والتنفيذ عالي الجودة.",
+    },
   },
   {
     id: 4,
     icon: <PieChart size={32} className="text-primary" />,
-    title: "Service & Infrastructure Providers",
-    description:
-      "Partnerships that enhance community services—utilities, roads, education, health, and commercial support.",
+    title: {
+      en: "Service & Infrastructure Providers",
+      ar: "مزودو الخدمات والبنية التحتية",
+    },
+    description: {
+      en: "Partnerships that enhance community services—utilities, roads, education, health, and commercial support.",
+      ar: "الشراكات التي تعزز الخدمات المجتمعية - المرافق والطرق والتعليم والصحة والدعم التجاري.",
+    },
   },
 ];
 
@@ -47,29 +68,27 @@ export const PartnershipTypes = () => {
   const caption = useRef(null);
   const button = useRef(null);
   const section = useRef<HTMLElement>(null);
-
+  const locale = useLocale() as "ar" | "en";
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current, {
-      type: "chars",
+      type: locale == "en" ? "chars" : "words",
       smartWrap: true,
     });
     const splitCaption = SplitText.create(caption.current, {
-      type: "chars",
+      type: locale == "en" ? "chars" : "words",
       smartWrap: true,
     });
-
-    const icons = gsap.utils.toArray(".partnership-icon");
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section.current,
         scrub: true,
-        end:"top 10%"
+        end: "top 10%",
       },
     });
 
     tl.from(
-      splitTitle.chars,
+      locale == "en" ? splitTitle.chars : splitTitle.words,
       {
         y: -100,
         opacity: 0,
@@ -81,7 +100,7 @@ export const PartnershipTypes = () => {
       "<"
     );
     tl.from(
-      splitCaption.chars,
+      locale == "en" ? splitCaption.chars : splitCaption.words,
       {
         x: -100,
         opacity: 0,
@@ -92,35 +111,39 @@ export const PartnershipTypes = () => {
       },
       "<"
     );
-  }, []);
 
+    tl.to(button.current, {
+      opacity: 1,
+      x: 0,
+      y: 0,
+    });
+  }, []);
+  const t = useTranslations("partners.partnershipTypes");
   return (
     <section className="relative mt-26" ref={section}>
       <BluryBall className="left-0 w-[40%] h-full" />
       <Container className="flex gap-10 relative z-10 max-lg:flex-col">
         <div className="flex flex-col gap-6 w-full">
-          <Badge variant={"dark"}>Partners</Badge>
+          <Badge variant={"dark"}>{t("badge")}</Badge>
           <h2 className="font-bold text-6xl" ref={title}>
-            Types of Partnerships
+            {t("title")}
           </h2>
           <p
             className="font-medium text-base leading-6 text-subtitle-color"
             ref={caption}
           >
-            Explore the key partnership models we offer to support large-scale
-            development, enhance community services, and create long-term value
-            across our projects.
+            {t("caption")}
           </p>
           <Button
             variant={"secondary"}
             className="w-fit h-12 font-medium rounded-full duration-200 -translate-x-20 opacity-0"
             ref={button}
           >
-            <div className="-translate-y-0.5">Contact Us</div>
+            <div className="-translate-y-0.5">{t("button")}</div>
             <div className="size-4.5 flex items-center justify-center rounded-full border border-black">
               <ArrowUpRight
                 color="#000000"
-                className="size-4"
+                className="size-4 rtl:rotate-270"
                 strokeWidth={2}
               />
             </div>
@@ -135,9 +158,11 @@ export const PartnershipTypes = () => {
               <div className="size-16 rounded-2xl bg-[#0D0D0D] flex items-center justify-center partnership-icon">
                 {partnership.icon}
               </div>
-              <h3 className="text-2xl font-medium">{partnership.title}</h3>
+              <h3 className="text-2xl font-medium">
+                {partnership.title[locale]}
+              </h3>
               <p className="text-base leading-6 font-medium text-subtitle-color">
-                {partnership.description}
+                {partnership.description[locale]}
               </p>
             </article>
           ))}

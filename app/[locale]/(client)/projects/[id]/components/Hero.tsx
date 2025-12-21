@@ -1,12 +1,15 @@
 "use client";
+
 import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { cn } from "@/lib/utils";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useTranslations } from "next-intl";
 import { Oxanium } from "next/font/google";
 import Image from "next/image";
 import { useRef } from "react";
+import { useLocale } from "next-intl";
 
 const oxanium = Oxanium({
   subsets: ["latin"],
@@ -15,8 +18,11 @@ const oxanium = Oxanium({
 });
 
 export const Hero = () => {
-  const image = useRef(null);
-  const detailsList = useRef(null);
+  const image = useRef<HTMLDivElement>(null);
+  const detailsList = useRef<HTMLDListElement>(null);
+
+  const t = useTranslations("projects.singleProject");
+  const locale = useLocale() as "ar" | "en";
 
   useGSAP(() => {
     gsap.to(image.current, {
@@ -30,6 +36,7 @@ export const Hero = () => {
       },
     });
   }, []);
+
   return (
     <section
       className="bg-primary max-md:h-[60vh] relative"
@@ -47,8 +54,8 @@ export const Hero = () => {
       <Container className="relative z-10">
         <dl
           className={cn(
-            "grid grid-cols-5 max-w-[90%] max-sm:ps-5 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-3 w-full -translate-x-1/2 translate-y-1/2 [&_dt]:font-medium text-lg [&_dt]:text-subtitle-color [&_dd]:font-bold absolute bottom-0 left-1/2 [&_div]:not-first:border-s [&_] [&_div]:not-first:border-s-primary px-11 py-6 border border-primary rounded-4xl",
-            oxanium.className
+            "grid grid-cols-5 max-w-[90%] max-sm:ps-5 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-3 w-full -translate-x-1/2 translate-y-1/2 [&_dt]:font-medium text-lg [&_dt]:text-subtitle-color [&_dd]:font-bold absolute bottom-0 left-1/2 [&_div]:not-first:border-s [&_div]:not-first:border-s-primary px-11 py-6 border border-primary rounded-4xl",
+            locale == "en" && oxanium.className
           )}
           style={{
             background:
@@ -58,24 +65,37 @@ export const Hero = () => {
           ref={detailsList}
         >
           <div className="flex flex-col gap-2">
-            <dt>Project Name</dt>
-            <dd>Uruk City Residential Development</dd>
+            <dt>{t("labels.projectName")}</dt>
+            <dd>
+              {
+                {
+                  ar: "مشروع مدينة أوروك السكني",
+                  en: "Uruk City Residential Development",
+                }[locale]
+              }
+            </dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
-            <dt>Location</dt>
-            <dd>Karbala, Iraq</dd>
+            <dt>{t("labels.location")}</dt>
+            <dd>{{ ar: "كربلاء، العراق", en: "Karbala, Iraq" }[locale]}</dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
-            <dt>Total Area</dt>
-            <dd>950,500 m²</dd>
+            <dt>{t("labels.totalArea")}</dt>
+            <dd>{{ ar: "950,500 م²", en: "950,500 m²" }[locale]}</dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
-            <dt>Total Residential Units</dt>
-            <dd>1,348 units</dd>
+            <dt>{t("labels.totalResidentialUnits")}</dt>
+            <dd>{{ ar: "1,348 وحدة", en: "1,348 units" }[locale]}</dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
-            <dt>Unit Type</dt>
-            <dd>Horizontal residential units</dd>
+            <dt>{t("labels.unitType")}</dt>
+            <dd>
+              {
+                { ar: "وحدات سكنية أفقية", en: "Horizontal residential units" }[
+                  locale
+                ]
+              }
+            </dd>
           </div>
         </dl>
       </Container>

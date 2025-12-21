@@ -3,6 +3,7 @@ import { Hero } from "./components/Hero";
 import { Projects } from "./components/projects";
 import { Gallery } from "./components/Gallery";
 import { cn } from "@/lib/utils";
+import { useLocale } from "next-intl";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -11,8 +12,9 @@ const inter = Inter({
 });
 
 export default function page() {
+  const locale = useLocale();
   return (
-    <main className={cn(inter.className)}>
+    <main className={cn(locale == "en" && inter.className)}>
       <Hero />
       <Projects />
       <Gallery />

@@ -5,8 +5,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { getDirectionClass } from "@/lib/TextDirection";
 import clsx from "clsx";
 import Autoplay from "embla-carousel-autoplay";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
@@ -15,7 +17,7 @@ export const ProjectsSlider = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [itemsLength, setItemsLength] = useState(0);
-
+  const locale = useLocale() as "ar" | "en";
   useEffect(() => {
     if (!api) return;
 
@@ -38,6 +40,7 @@ export const ProjectsSlider = () => {
         className="w-full relative max-md:w-[90%] max-md:mx-auto"
         plugins={[plugin.current]}
         setApi={setApi}
+        opts={{ direction: getDirectionClass(locale) }}
       >
         <CarouselContent className="w-full h-full items-center">
           {Array.from({ length: 6 }).map((_, i) => (

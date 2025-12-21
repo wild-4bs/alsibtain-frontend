@@ -12,6 +12,8 @@ import React, { useEffect, useState } from "react";
 import PlayIcon from "@/assets/icons/play.svg";
 import MediaViewer from "@/components/ViewportMedia";
 import { PauseIcon } from "lucide-react";
+import { useLocale } from "next-intl";
+import { getDirectionClass } from "@/lib/TextDirection";
 export const VideosSlider = () => {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
@@ -37,6 +39,7 @@ export const VideosSlider = () => {
       api.off("select", update);
     };
   }, [api]);
+  const locale = useLocale() as "en" | "ar";
   return (
     <section className="relative ms-36 mt-20 max-sm:ms-4 max-sm:mx-5 mb-52">
       {isPlaying && (
@@ -52,6 +55,7 @@ export const VideosSlider = () => {
         className="w-full relative overflow-hidden"
         plugins={[plugin.current]}
         setApi={setApi}
+        opts={{ direction: getDirectionClass(locale) }}
       >
         <CarouselContent className="w-full m-0 flex items-center gap-6 px-3 select-none">
           {Array.from({ length: 6 }).map((_, index) => (

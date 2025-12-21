@@ -11,6 +11,7 @@ import MediaViewer from "@/components/ViewportMedia";
 import { useGSAP } from "@gsap/react";
 import SplitText from "gsap/src/SplitText";
 import gsap from "gsap";
+import { useTranslations } from "next-intl";
 export const IntroProject = () => {
   const [isOpen, setIsOpen] = useState(false);
   const title = useRef(null);
@@ -35,6 +36,7 @@ export const IntroProject = () => {
       },
     });
   }, []);
+  const t = useTranslations("projects.singleProject.projectIntro");
   return (
     <section
       className="pt-30 max-lg:mt-36 max-md:mt-48 max-sm:mt-64 relative flex flex-col gap-8"
@@ -59,9 +61,7 @@ export const IntroProject = () => {
       <BluryBall className="top-0 left-0 translate-x-0 translate-y-0 blur-[120px]" />
       <PurpleLargeComet className="absolute bottom-0 w-full right-0" />
       <h2 className="text-center font-medium text-lg px-10" ref={title}>
-        A master-planned residential community in Karbala, spanning 1.37 million
-        m² with 1,348 modern units, featuring diverse home sizes designed for
-        family living.
+        {t("caption")}
       </h2>
       <Container className="max-w-[90%] w-full select-none bg-primary relative max-h-[750px] h-[90vh] f p-0! z-10 rounded-4xl  not-last:overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full">

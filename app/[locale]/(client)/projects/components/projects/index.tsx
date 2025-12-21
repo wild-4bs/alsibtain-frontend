@@ -13,24 +13,37 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
+import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 export const projects = [
   {
-    name: "Al-Salam City",
-    description: "A peaceful residential community built for lasting comfort.",
+    name: { en: "Al-Salam City", ar: "مدينة السلام" },
+    description: {
+      en: "A peaceful residential community built for lasting comfort.",
+      ar: "مجتمع سكني هادئ مصمم للراحة الدائمة.",
+    },
   },
   {
-    name: "Uruk City",
-    description: "A modern integrated city offering complete, elevated living.",
+    name: { en: "Uruk City", ar: "مدينة أوروك" },
+    description: {
+      en: "A modern integrated city offering complete, elevated living.",
+      ar: "مدينة متكاملة حديثة توفر أسلوب حياة متكامل وراقي.",
+    },
   },
   {
-    name: "Al-Abbas Residential Complex",
-    description:
-      "A fully serviced community with educational, commercial amenities.",
+    name: { en: "Al-Abbas Residential Complex", ar: "مجمع العباس السكني" },
+    description: {
+      en: "A fully serviced community with educational, commercial amenities.",
+      ar: "مجتمع متكامل مزود بالخدمات التعليمية والتجارية.",
+    },
   },
   {
-    name: "Al-Kafeel Hospital",
-    description: "Advanced medical care with global standards and excellence.",
+    name: { en: "Al-Kafeel Hospital", ar: "مستشفى الكفيل" },
+    description: {
+      en: "Advanced medical care with global standards and excellence.",
+      ar: "رعاية طبية متقدمة بمعايير عالمية وأعلى مستويات الجودة.",
+    },
   },
 ];
 
@@ -45,9 +58,16 @@ export const Projects = () => {
   const sphere3 = useRef<SVGSVGElement>(null);
   const logo = useRef<SVGSVGElement>(null);
 
+  const locale = useLocale() as "ar" | "en";
+  const t = useTranslations("projects.projects");
+
   useGSAP(() => {
-    const splitTitle = SplitText.create(title.current!, {
-      type: "chars",
+    if (!title.current || !section.current) return;
+
+    const splitType = locale === "ar" ? "words" : "chars";
+
+    const splitTitle = SplitText.create(title.current, {
+      type: splitType,
       smartWrap: true,
     });
 
@@ -60,7 +80,7 @@ export const Projects = () => {
     });
 
     // Title animation
-    titleTl.from(splitTitle.chars, {
+    titleTl.from(splitTitle[splitType], {
       y: 100,
       opacity: 0,
       stagger: { amount: 0.1, from: "random" },
@@ -85,18 +105,20 @@ export const Projects = () => {
           "<"
         );
     });
-  }, []);
+  }, [locale]);
 
   return (
     <section className="relative" ref={section} id="projects">
       <Container>
         <header className="text-center mb-12 z-10 relative">
           <Badge className="py-2 px-3 opacity-62 mb-1">
-            <h2>Projects</h2>
+            <h2>{t("badge")}</h2>
           </Badge>
-          <h3 className="font-medium text-6xl leading-16" ref={title}>
-            Choose a Project <br /> To Explore
-          </h3>
+          <h3
+            className="font-medium text-6xl leading-16 rtl:leading-[120%]"
+            ref={title}
+            dangerouslySetInnerHTML={{ __html: t("title") }}
+          ></h3>
         </header>
 
         <div className="grid grid-cols-2 max-md:grid-cols-1 gap-[235px] relative max-md:gap-20">
@@ -162,14 +184,14 @@ export const Projects = () => {
           {projects.map((project, i) => (
             <Project
               key={i}
-              title={project.name}
-              caption={project.description}
+              title={project.name[locale]}
+              caption={project.description[locale]}
             />
           ))}
         </div>
 
         <p className="font-normal text-sm leading-6 mt-20 relative z-10">
-          *Please click on the project name or logo to learn more.
+          {t("explaination")}
         </p>
       </Container>
     </section>

@@ -6,15 +6,53 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const countersData = [
+  {
+    value: 25,
+    suffix: "+",
+    title: {
+      en: "Total Projects",
+      ar: "إجمالي المشاريع",
+    },
+  },
+  {
+    value: 21,
+    suffix: "+",
+    title: {
+      en: "Years of experience",
+      ar: "سنوات من الخبرة",
+    },
+  },
+  {
+    value: 3000,
+    suffix: "+",
+    title: {
+      en: "Happy Customers",
+      ar: "عملاء سعداء",
+    },
+  },
+  {
+    value: 3,
+    suffix: "+",
+    title: {
+      en: "Provinces",
+      ar: "محافظات",
+    },
+  },
+];
+
 export const Counters = () => {
   const section = useRef<HTMLElement | null>(null);
   const image1 = useRef<HTMLImageElement | null>(null);
   const image2 = useRef<HTMLImageElement | null>(null);
+  const locale = useLocale() as "en" | "ar";
+  const t = useTranslations("services.counters");
 
   useGSAP(() => {
     if (!section.current) return;
@@ -46,7 +84,7 @@ export const Counters = () => {
           scrollTrigger: {
             trigger: section.current,
             start: "top 80%",
-            once: true, // run only once
+            once: true,
           },
           snap: { innerText: 1 },
           onUpdate: () => {
@@ -74,33 +112,26 @@ export const Counters = () => {
               max-md:w-full
               max-md:[&_dl]:w-full"
             >
-              <dl className="flex flex-col gap-1 py-12 justify-center ps-16 sm:border-e border-e-input border-b border-b-input">
-                <dd>
-                  <span data-counter data-value="25" />+
-                </dd>
-                <dt>Total Projects</dt>
-              </dl>
-
-              <dl className="flex flex-col gap-1 py-12 justify-center ps-16 max-sm:border-b max-sm:border-b-input">
-                <dd>
-                  <span data-counter data-value="21" />+
-                </dd>
-                <dt>Years of experience</dt>
-              </dl>
-
-              <dl className="flex flex-col gap-1 py-12 justify-center ps-16 max-sm:border-b max-sm:border-b-input">
-                <dd>
-                  <span data-counter data-value="3000" />+
-                </dd>
-                <dt>Happy Customers</dt>
-              </dl>
-
-              <dl className="flex flex-col gap-1 py-12 justify-center ps-16 sm:border-t border-t-input sm:border-s border-s-input -mt-px -ms-px">
-                <dd>
-                  <span data-counter data-value="3" />+
-                </dd>
-                <dt>Provinces</dt>
-              </dl>
+              {countersData.map((counter, index) => (
+                <dl
+                  key={index}
+                  className={`flex flex-col gap-1 py-12 justify-center ps-16 ${
+                    index === 0
+                      ? "sm:border-e border-e-input border-b border-b-input"
+                      : index === 1
+                      ? "max-sm:border-b max-sm:border-b-input"
+                      : index === 2
+                      ? "max-sm:border-b max-sm:border-b-input"
+                      : "sm:border-t border-t-input sm:border-s border-s-input -mt-px -ms-px"
+                  }`}
+                >
+                  <dd>
+                    <span data-counter data-value={counter.value} />
+                    {counter.suffix}
+                  </dd>
+                  <dt>{counter.title[locale]}</dt>
+                </dl>
+              ))}
             </div>
 
             <Image
@@ -115,15 +146,14 @@ export const Counters = () => {
 
           <div className="flex justify-between mt-10 max-sm:flex-col max-sm:items-center gap-3">
             <p className="text-lg w-full max-w-2xl max-sm:text-center">
-              We work together with our clients to design and construct homes
-              and surroundings that match their values and way of life.
+              {t("caption")}
             </p>
 
             <Button
               variant="ghost"
               className="rounded-md hover:bg-primary/10 hover:text-primary w-[200px] text-base h-12"
             >
-              View Projects <ArrowRight />
+              {t("cta")} <ArrowRight className="rtl:rotate-180" />
             </Button>
           </div>
         </div>

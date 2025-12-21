@@ -6,8 +6,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { getDirectionClass } from "@/lib/TextDirection";
 import clsx from "clsx";
 import Autoplay from "embla-carousel-autoplay";
+import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 export const Projects = () => {
@@ -32,13 +34,15 @@ export const Projects = () => {
       api.off("select", update);
     };
   }, [api]);
+  const locale = useLocale();
   return (
-    <section className="mt-36 h-[650px] relative max-lg:h-[550px] relative">
+    <section className="mt-36 h-[650px] relative max-lg:h-[550px]">
       <BluryBall className="w-full" />
       <Carousel
         className="w-full relative max-md:w-[90%] max-md:mx-auto"
         plugins={[plugin.current]}
         setApi={setApi}
+        opts={{ direction: getDirectionClass(locale) as "rtl" | "ltr" }}
       >
         <CarouselContent className="w-full h-full items-center gap-7">
           {Array.from({ length: 6 }).map((_, i) => (

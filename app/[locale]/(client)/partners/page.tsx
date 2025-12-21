@@ -8,6 +8,7 @@ import { CallToAction } from "./components/CallToAction";
 import { Projects } from "./components/Projects";
 import { Clients } from "./components/Clients";
 import { CallToAction as CallToActionHome } from "../../../../components/CallToAction";
+import { useLocale } from "next-intl";
 
 const barlow = Barlow({
   subsets: ["latin"],
@@ -16,8 +17,9 @@ const barlow = Barlow({
 });
 
 export default function page() {
+  const locale = useLocale();
   return (
-    <main className={cn(barlow.className)}>
+    <main className={cn(locale == "en" && barlow.className)}>
       <Hero />
       <Partners className="z-0" />
       <WhyUs />

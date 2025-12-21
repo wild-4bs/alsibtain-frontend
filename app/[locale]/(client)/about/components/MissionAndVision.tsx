@@ -5,14 +5,47 @@ import { BluryBall } from "@/components/ui/BluryBall";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useTranslations, useLocale } from "next-intl";
+
+// Data with translations
+const sectionsData = {
+  vision: {
+    title: { en: "Our Vision", ar: "رؤيتنا" },
+    headline: {
+      en: "Shaping Tomorrow's Communities",
+      ar: "نشكّل مجتمعات الغد",
+    },
+    description: {
+      en: "Our vision is to set a new standard for real estate development in Iraq creating sustainable, modern, and people-focused environments that support families and future generations.",
+      ar: "رؤيتنا هي وضع معيار جديد لتطوير العقارات في العراق من خلال إنشاء بيئات مستدامة، حديثة، وتركز على الناس تدعم العائلات والأجيال القادمة.",
+    },
+  },
+  mission: {
+    title: { en: "Our Mission", ar: "مهمتنا" },
+    headline: { en: "Building With Purpose", ar: "البناء بهدف" },
+    description: {
+      en: "Our mission is to transform development into a meaningful experience by combining thoughtful design, engineering excellence, and practical solutions that elevate everyday living.",
+      ar: "مهمتنا هي تحويل التطوير إلى تجربة ذات معنى من خلال الجمع بين التصميم المدروس، التميز الهندسي، والحلول العملية التي ترتقي بحياة الناس اليومية.",
+    },
+  },
+  values: {
+    title: { en: "Our Values", ar: "قيمنا" },
+    headline: { en: "Guided by Principles That Last", ar: "مرشدنا مبادئ تدوم" },
+    description: {
+      en: "Integrity, quality, innovation, sustainability, and community—these values shape every project we deliver and define who we are as a company.",
+      ar: "النزاهة، الجودة، الابتكار، الاستدامة، والمجتمع—هذه القيم تشكل كل مشروع نقدمه وتحدد من نحن كشركة.",
+    },
+  },
+};
 
 export const MissionAndVision = () => {
   const section = useRef(null);
-  const vision = useRef(null);
-  const mission = useRef(null);
-  const values = useRef(null);
+  const visionRef = useRef(null);
+  const missionRef = useRef(null);
+  const valuesRef = useRef(null);
   const title = useRef(null);
   const caption = useRef(null);
+  const locale = useLocale() as "ar" | "en";
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -22,48 +55,14 @@ export const MissionAndVision = () => {
         end: "top 10%",
       },
     });
-    tl.from(
-      title.current,
-      {
-        x: "-50%",
-        opacity: 0,
-      },
-      "<"
-    );
-    tl.from(
-      caption.current,
-      {
-        x: "-50%",
-        opacity: 0,
-        delay: 0.2,
-      },
-      "<"
-    );
-    tl.from(
-      vision.current,
-      {
-        x: "50%",
-        opacity: 0,
-      },
-      "<"
-    );
-    tl.from(
-      mission.current,
-      {
-        y: "-50%",
-        opacity: 0,
-      },
-      "<"
-    );
-    tl.from(
-      values.current,
-      {
-        x: "-50%",
-        opacity: 0,
-      },
-      "<"
-    );
+
+    tl.from(title.current, { x: "-50%", opacity: 0 });
+    tl.from(caption.current, { x: "-50%", opacity: 0, delay: 0.2 }, "<");
+    tl.from(visionRef.current, { x: "50%", opacity: 0 }, "<");
+    tl.from(missionRef.current, { y: "-50%", opacity: 0 }, "<");
+    tl.from(valuesRef.current, { x: "-50%", opacity: 0 }, "<");
   }, []);
+  const t = useTranslations("about.missionAndVision");
   return (
     <section className="my-32 leading-[150%] relative" ref={section}>
       <Image
@@ -78,60 +77,36 @@ export const MissionAndVision = () => {
         <BluryBall className="bottom-0 -right-[70%] left-[unest] w-[900px] h-[700px]" />
         <header className="mb-12 relative z-10">
           <h2 className="font-semibold text-5xl mb-2" ref={title}>
-            Our Vision & Mission
+            {t("title")}
           </h2>
           <p className="text-subtitle-color font-medium text-lg" ref={caption}>
-            Our purpose has always been clear: to build communities that last,
-            serve, and inspire, Every decision we make — from planning to
-            execution — reflects our long-term commitment to people, quality,
-            and the future of Iraq.
+            {t("caption")}
           </p>
         </header>
         <div className="flex gap-10 flex-wrap relative z-10">
-          <article
-            className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
-            ref={vision}
-          >
-            <h2 className="mb-6 font-semibold text-3xl">Our Vision</h2>
-            <h3 className="font-bold mb-5 text-lg text-subtitle-color">
-              Shaping Tomorrow's Communities
-            </h3>
-            <p className="font-medium text-lg text-subtitle-color">
-              Our vision is to set a new standard for real estate development in
-              Iraq creating sustainable, modern, and people-focused environments
-              that support families and future generations.
-            </p>
-          </article>
-
-          <article
-            className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
-            ref={mission}
-          >
-            <h2 className="mb-6 font-semibold text-3xl">Our Mission</h2>
-            <h3 className="font-bold mb-5 text-lg text-subtitle-color">
-              Building With Purpose
-            </h3>
-            <p className="font-medium text-lg text-subtitle-color">
-              Our mission is to transform development into a meaningful
-              experience by combining thoughtful design, engineering excellence,
-              and practical solutions that elevate everyday living.
-            </p>
-          </article>
-
-          <article
-            className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
-            ref={values}
-          >
-            <h2 className="mb-6 font-semibold text-3xl">Our Values</h2>
-            <h3 className="font-bold mb-5 text-lg text-subtitle-color">
-              Guided by Principles That Last
-            </h3>
-            <p className="font-medium text-lg text-subtitle-color">
-              Integrity, quality, innovation, sustainability, and
-              community—these values shape every project we deliver and define
-              who we are as a company.
-            </p>
-          </article>
+          {["vision", "mission", "values"].map((key) => (
+            <article
+              key={key}
+              className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
+              ref={
+                key === "vision"
+                  ? visionRef
+                  : key === "mission"
+                  ? missionRef
+                  : valuesRef
+              }
+            >
+              <h2 className="mb-6 font-semibold text-3xl">
+                {sectionsData[key].title[locale]}
+              </h2>
+              <h3 className="font-bold mb-5 text-lg text-subtitle-color">
+                {sectionsData[key].headline[locale]}
+              </h3>
+              <p className="font-medium text-lg text-subtitle-color">
+                {sectionsData[key].description[locale]}
+              </p>
+            </article>
+          ))}
         </div>
       </Container>
       <Image

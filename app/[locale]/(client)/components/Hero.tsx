@@ -10,7 +10,13 @@ import {
 } from "@/components/ui/carousel";
 import { GlassCard } from "@/components/ui/GlassCard";
 import Image from "next/image";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Autoplay from "embla-carousel-autoplay";
 import clsx from "clsx";
 
@@ -18,43 +24,70 @@ import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useLocale, useTranslations } from "next-intl";
+import { getDirectionClass } from "@/lib/TextDirection";
 
 gsap.registerPlugin(SplitText);
 
 const carouselData = [
   {
     id: 1,
-    title: "Two Decades of Excellence in Development",
-    description:
-      "Across residential, healthcare, and commercial projects Al-Subtain continues to redefine what modern living means in Iraq.",
+    title: {
+      en: "Two Decades of Excellence in Development",
+      ar: "عقدان من التميز في التطوير",
+    },
+    description: {
+      en: "Across residential, healthcare, and commercial projects Al-Subtain continues to redefine what modern living means in Iraq.",
+      ar: "في المشاريع السكنية والصحية والتجارية، تواصل شركة السبطين إعادة تعريف مفهوم الحياة الحديثة في العراق.",
+    },
     image: "/home/uruk.png",
   },
   {
     id: 2,
-    title: "Transforming Urban Landscapes",
-    description:
-      "From innovative residential communities to state-of-the-art facilities, we create spaces that inspire and endure.",
+    title: {
+      en: "Transforming Urban Landscapes",
+      ar: "تحويل المشهد الحضري",
+    },
+    description: {
+      en: "From innovative residential communities to state-of-the-art facilities, we create spaces that inspire and endure.",
+      ar: "من المجتمعات السكنية المبتكرة إلى المرافق الحديثة، نخلق مساحات تلهم وتستمر.",
+    },
     image: "/home/uruk.png",
   },
   {
     id: 3,
-    title: "Building Iraq's Future",
-    description:
-      "With over 21 years of expertise, we deliver projects that combine architectural excellence with sustainable development.",
+    title: {
+      en: "Building Iraq's Future",
+      ar: "بناء مستقبل العراق",
+    },
+    description: {
+      en: "With over 21 years of expertise, we deliver projects that combine architectural excellence with sustainable development.",
+      ar: "مع أكثر من 21 عامًا من الخبرة، نقدم مشاريع تجمع بين التميز المعماري والتنمية المستدامة.",
+    },
     image: "/home/uruk.png",
   },
   {
     id: 4,
-    title: "Quality in Every Detail",
-    description:
-      "Our commitment to superior craftsmanship and attention to detail ensures every project exceeds expectations.",
+    title: {
+      en: "Quality in Every Detail",
+      ar: "الجودة في كل تفصيلة",
+    },
+    description: {
+      en: "Our commitment to superior craftsmanship and attention to detail ensures every project exceeds expectations.",
+      ar: "التزامنا بالحرفية العالية والانتباه للتفاصيل يضمن أن كل مشروع يفوق التوقعات.",
+    },
     image: "/home/uruk.png",
   },
   {
     id: 5,
-    title: "A Legacy of Trust",
-    description:
-      "Trusted by thousands of families and businesses, Al-Subtain stands as a pillar of reliability in Iraq's real estate sector.",
+    title: {
+      en: "A Legacy of Trust",
+      ar: "إرث من الثقة",
+    },
+    description: {
+      en: "Trusted by thousands of families and businesses, Al-Subtain stands as a pillar of reliability in Iraq's real estate sector.",
+      ar: "موثوق به من قبل آلاف العائلات والشركات، تقف شركة السبطين كعمود من الموثوقية في قطاع العقارات العراقي.",
+    },
     image: "/home/uruk.png",
   },
 ];
@@ -93,7 +126,10 @@ OdometerDigit.displayName = "OdometerDigit";
 
 export const Hero = () => {
   // Memoize plugin to prevent recreation on every render
-  const plugin = useMemo(() => Autoplay({ delay: 3000, stopOnInteraction: true }), []);
+  const plugin = useMemo(
+    () => Autoplay({ delay: 3000, stopOnInteraction: true }),
+    []
+  );
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -111,10 +147,10 @@ export const Hero = () => {
 
   useEffect(() => {
     if (!api) return;
-    
+
     updateSlide();
     api.on("select", updateSlide);
-    
+
     return () => {
       api.off("select", updateSlide);
     };
@@ -122,8 +158,14 @@ export const Hero = () => {
 
   // Optimize GSAP animation to run only once
   useGSAP(() => {
-    if (hasAnimated.current || !title.current || !caption.current || !tagline.current) return;
-    
+    if (
+      hasAnimated.current ||
+      !title.current ||
+      !caption.current ||
+      !tagline.current
+    )
+      return;
+
     hasAnimated.current = true;
     const tl = gsap.timeline();
     const splitTitle = SplitText.create(title.current, { type: "words" });
@@ -153,58 +195,69 @@ export const Hero = () => {
         duration: 0.8,
       });
 
-    // Cleanup function
     return () => {
       splitTitle.revert();
       splitCaption.revert();
     };
   }, []);
 
-  // Memoize calculated values
   const slideNumber = useMemo(() => currentSlide + 1, [currentSlide]);
   const tens = useMemo(() => Math.floor(slideNumber / 10), [slideNumber]);
   const ones = useMemo(() => slideNumber % 10, [slideNumber]);
 
-  // Memoize slide change handler
-  const handleSlideChange = useCallback((index: number) => {
-    setCurrentSlide(index);
-    api?.scrollTo(index);
-  }, [api]);
+  const handleSlideChange = useCallback(
+    (index: number) => {
+      setCurrentSlide(index);
+      api?.scrollTo(index);
+    },
+    [api]
+  );
+
+  const locale = useLocale() as "ar" | "en";
+  const t = useTranslations("home.hero");
 
   return (
     <section className="sm:h-[calc(100vh-var(--header-height))] h-[80vh] relative overflow-hidden flex flex-col rounded-b-[165px] max-md:rounded-b-[100px]">
       <Container className="pt-20 relative z-10">
         <h1 ref={tagline} className="text-xs font-light mb-2">
-          Al-Subtain REAL ESTATE
+          {t("tagline")}
         </h1>
 
         <GlassCard className="p-5 w-fit overflow-hidden">
           <h2
             ref={title}
-            className="text-7xl max-md:text-5xl max-sm:text-4xl font-medium mb-2 leading-[108%]"
-          >
-            We Build Life, Not <br /> Just Buildings
-          </h2>
-          <p ref={caption} className="text-sm font-light">
-            Over 21 years of shaping Iraq's urban future — <br />
-            where architecture meets human vision
-          </p>
+            className="text-7xl max-md:text-5xl max-sm:text-4xl font-medium mb-2 leading-[108%] rtl:leading-[130%]"
+            dangerouslySetInnerHTML={{ __html: t("title") }}
+          ></h2>
+
+          <p
+            ref={caption}
+            className="text-sm font-light"
+            dangerouslySetInnerHTML={{ __html: t("caption") }}
+          ></p>
         </GlassCard>
       </Container>
 
       <article className="mt-8 relative self-end w-full max-w-md ps-4 z-20">
         <BluryBall className="w-[462px] h-[111px]" />
-        <GlassCard className="px-4 py-5">
-          <Carousel plugins={[plugin]} setApi={setApi}>
+        <GlassCard className="px-4 py-5 rounded-e-none">
+          <Carousel
+            plugins={[plugin]}
+            setApi={setApi}
+            opts={{ direction: getDirectionClass(locale) as "rtl" | "ltr" }}
+          >
             <CarouselContent>
               {carouselData.map((item, i) => (
                 <CarouselItem key={item.id}>
                   <h3 className="font-bold text-base mb-2 max-sm:text-sm">
-                    {item.title}
+                    {item.title[locale]}
                   </h3>
                   <ScrollArea className="h-12">
-                    <p className="text-xs max-sm:text-white/90">
-                      {item.description}
+                    <p
+                      className="text-xs max-sm:text-white/90"
+                      dir={getDirectionClass(locale)}
+                    >
+                      {item.description[locale]}
                     </p>
                   </ScrollArea>
                 </CarouselItem>
@@ -212,7 +265,7 @@ export const Hero = () => {
             </CarouselContent>
           </Carousel>
         </GlassCard>
-        <div className="flex items-center gap-2 mt-4 relative z-10 w-fit float-right me-10">
+        <div className="flex items-center gap-2 mt-4 relative z-10 w-fit rtl:float-left ltr:float-right me-10">
           {carouselData.map((item, i) => (
             <button
               key={item.id}
@@ -234,8 +287,8 @@ export const Hero = () => {
           <div className="flex flex-col font-semibold text-lg">
             <div className="flex items-center leading-0">
               <span className="text-primary">#</span>
-              <OdometerDigit value={tens} />
-              <OdometerDigit value={ones} />
+              <OdometerDigit value={locale == "ar" ? ones : tens} />
+              <OdometerDigit value={locale == "ar" ? tens : ones} />
             </div>
             <span className="text-sm font-light">Al-Salam City</span>
           </div>
@@ -244,7 +297,7 @@ export const Hero = () => {
       {carouselData.map((item, i) => (
         <div
           key={item.id}
-          className="absolute bottom-0 right-[10%]! md:right-[30%] w-fit z-10!"
+          className="absolute bottom-0 right-[10%] md:right-[30%] rtl:left-[10%] rtl:md:left-[30%] w-fit z-10!"
         >
           <Image
             src={item.image}

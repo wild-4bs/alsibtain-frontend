@@ -3,7 +3,6 @@ import Container from "@/components/Container";
 import PurpleLargeComet from "@/assets/objects/purple-large-comet.svg";
 import Image from "next/image";
 import AssistantNavigation from "@/assets/icons/assistant_navigation.svg";
-import Apartment from "@/assets/icons/apartment.svg";
 import CorporateFare from "@/assets/icons/corporate_fare.svg";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -14,17 +13,10 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
-
-const features = [
-  { name: "غـرفـة 2", scene: "room2" },
-  { name: "غـرفـة 3", scene: "room3" },
-  { name: "الـمـطـبـخ", scene: "kitchen" },
-  { name: "الـبـالـكـون", scene: "balcony" },
-  { name: "حـمـام 1", scene: "bath1" },
-  { name: "حـمـام 2", scene: "bath2" },
-  { name: "حـمـام 3", scene: "bath3" },
-  { name: "غـرفـة 1", scene: "room1" },
-];
+import { Building2 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { projectData, type Locale } from "@/lib/data";
+import { VirtualTour } from "./VirtualTour";
 
 const alexandria = Alexandria({
   subsets: ["latin"],
@@ -35,14 +27,16 @@ const alexandria = Alexandria({
 export const Player360 = () => {
   const title = useRef<HTMLHeadingElement>(null);
   const section = useRef<HTMLElement>(null);
+  const locale = useLocale() as Locale;
+  const t = useTranslations("projects.singleProject");
 
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current!, {
-      type: "chars",
+      type: locale == "en" ? "chars" : "words",
       smartWrap: true,
     });
 
-    gsap.from(splitTitle.chars, {
+    gsap.from(locale == "en" ? splitTitle.chars : splitTitle.words, {
       opacity: 0,
       stagger: {
         amount: 0.03,
@@ -63,7 +57,7 @@ export const Player360 = () => {
         className="text-center max-sm:mb-5 font-medium text-5xl mb-12 px-10 max-md:text-4xl"
         ref={title}
       >
-        Uruk City - <span className="font-light">Virtual 360</span>
+        {t("360Viewer.title")}
       </h2>
 
       <PurpleLargeComet className="w-full scale-120 absolute rotate-155 duration-300 z-0 origin-center top-0 left-0" />
@@ -75,18 +69,14 @@ export const Player360 = () => {
         )}
         style={{ boxShadow: "0 0 10px 10px #00000026" }}
       >
-        <Image
-          src={"/projects/12.png"}
-          width={10000}
-          height={10000}
-          alt="project"
-          className="w-[800px] max-2xl:w-[700px] max-xl:w-full max-xl:rounded-4xl max-xl:h-[400px] object-cover rounded-tl-[5rem] rounded-bl-[5rem]"
-        />
+        <div className="w-[800px] max-2xl:w-[700px] max-xl:w-full max-xl:rounded-4xl max-xl:h-[400px] object-cover rounded-s-[5rem] overflow-hidden">
+          <VirtualTour />
+        </div>
 
-        <div className="content w-full flex-1 py-8 px-10" dir="rtl">
+        <div className="content w-full flex-1 py-8 px-10">
           <header className="flex gap-12 max-sm:flex-col max-sm:justify-start max-md:gap-4 justify-between pb-4 border-b border-b-[#BCBCBC] mb-6">
             <h3 className="font-semibold text-2xl">
-              مديـــنـــة أوروك <br /> الســــــــكنيـــــــــة
+              {projectData.title[locale]}
             </h3>
 
             <dl className="flex flex-col gap-1 font-light text-base whitespace-nowrap">
@@ -94,19 +84,25 @@ export const Player360 = () => {
                 <dt>
                   <AssistantNavigation />
                 </dt>
-                <dd>كربـــلاء المقدســـة</dd>
+                <dd>{projectData.location[locale]}</dd>
               </div>
               <div className="flex items-center gap-2">
                 <dt>
-                  <Apartment />
+                  <Building2 size={14} />
                 </dt>
-                <dd>1,370,500 متر مربع</dd>
+                <dd>
+                  {projectData.totalArea.value}{" "}
+                  {projectData.totalArea.unit[locale]}
+                </dd>
               </div>
               <div className="flex items-center gap-2">
                 <dt>
                   <CorporateFare />
                 </dt>
-                <dd>1,348 وحدة سكنيـــة</dd>
+                <dd>
+                  {projectData.totalUnits.value}{" "}
+                  {projectData.totalUnits.label[locale]}
+                </dd>
               </div>
             </dl>
           </header>
@@ -114,27 +110,35 @@ export const Player360 = () => {
           <div className="mb-8">
             <header className="flex gap-12 max-md:flex-col">
               <h2 className="font-semibold text-4xl leading-[140%]">
-                جولة افتراضيــة <br className="max-md:hidden" />
-                النمـــوذج الأول
+                {projectData.virtualTour.title[locale]}{" "}
+                <br className="max-md:hidden" />
+                {projectData.virtualTour.subtitle[locale]}
               </h2>
 
               <div className="w-full flex-1 flex flex-col gap-3">
                 <div className="flex flex-col w-full flex-1 items-end">
-                  <span className="w-full inline-block text-end">المساحة</span>
-                  <span className="text-6xl" dir="ltr">
-                    200 <span className="text-2xl">m²</span>
+                  <span className="w-full inline-block text-end">
+                    {projectData.unitDetails.area.label[locale]}
                   </span>
-                  <span className="w-full inline-block text-end">مربع</span>
+                  <span className="text-6xl">
+                    {projectData.unitDetails.area.value}{" "}
+                    <span className="text-2xl">
+                      {projectData.unitDetails.area.unit}
+                    </span>
+                  </span>
+                  <span className="w-full inline-block text-end">
+                    {projectData.unitDetails.area.suffix[locale]}
+                  </span>
                 </div>
 
                 <dl className="flex flex-col w-full flex-1 items-end [&_dt]:min-w-[140px] font-bold text-lg">
                   <div className="flex items-center gap-2">
-                    <dt>عدد الغرف:</dt>
-                    <dd>3</dd>
+                    <dt>{projectData.unitDetails.rooms.label[locale]}:</dt>
+                    <dd>{projectData.unitDetails.rooms.value}</dd>
                   </div>
                   <div className="flex items-center gap-2">
-                    <dt>عدد الحمامات:</dt>
-                    <dd>4</dd>
+                    <dt>{projectData.unitDetails.bathrooms.label[locale]}:</dt>
+                    <dd>{projectData.unitDetails.bathrooms.value}</dd>
                   </div>
                 </dl>
               </div>
@@ -147,7 +151,7 @@ export const Player360 = () => {
                 className="grid grid-cols-2 max-sm:grid-cols-1"
                 style={{ rowGap: "0.5rem", columnGap: "1.25rem" }}
               >
-                {features.map((feature, i) => (
+                {projectData.features.map((feature, i) => (
                   <Button
                     key={i}
                     className="h-10 text-start justify-start rounded-full border border-[#19499F] bg-[#00153B] font-medium text-base relative pe-10"
@@ -156,7 +160,7 @@ export const Player360 = () => {
                     <div className="size-10 rounded-full flex items-center justify-center border border-[#19499F] absolute top-1/2 end-0 -translate-y-1/2">
                       <ArrowInsert />
                     </div>
-                    {feature.name}
+                    {feature.name[locale]}
                   </Button>
                 ))}
               </div>

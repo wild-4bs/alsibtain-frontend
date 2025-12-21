@@ -2,38 +2,66 @@
 import Container from "@/components/Container";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRef } from "react";
 
 export const teamMembers = [
   {
     id: 1,
-    name: "Abdulsattar",
-    role: "Founder",
+    name: {
+      en: "Abdulsattar",
+      ar: "عبد الستار",
+    },
+    role: {
+      en: "Founder",
+      ar: "المؤسس",
+    },
     image: "/team/1.png",
   },
   {
     id: 2,
-    name: "Abdulsattar",
-    role: "Chief Real Estate Officer",
+    name: {
+      en: "Abdulsattar",
+      ar: "عبد الستار",
+    },
+    role: {
+      en: "Chief Real Estate Officer",
+      ar: "مدير العقارات الرئيسي",
+    },
     image: "/team/2.png",
   },
   {
     id: 3,
-    name: "Abdulsattar",
-    role: "Head of Property",
+    name: {
+      en: "Abdulsattar",
+      ar: "عبد الستار",
+    },
+    role: {
+      en: "Head of Property",
+      ar: "رئيس الممتلكات",
+    },
     image: "/team/3.png",
   },
   {
     id: 4,
-    name: "Abdulsattar",
-    role: "Legal Counsel",
+    name: {
+      en: "Abdulsattar",
+      ar: "عبد الستار",
+    },
+    role: {
+      en: "Legal Counsel",
+      ar: "المستشار القانوني",
+    },
     image: "/team/4.png",
   },
 ];
 
 export const Team = () => {
   const section = useRef<HTMLElement>(null);
+  const locale = useLocale() as "en" | "ar";
+  const t = useTranslations("about.team");
+
   useGSAP(() => {
     const teamMembers = section?.current?.querySelectorAll(
       ".about-page-team-member"
@@ -55,17 +83,14 @@ export const Team = () => {
       },
     });
   }, []);
+
   return (
     <section className="mb-32" ref={section}>
       <Container>
         <header className="leading-[150%] mb-8">
-          <h2 className="mb-1 font-semibold text-4xl">
-            The Minds and Hands Behind Our Success
-          </h2>
+          <h2 className="mb-1 font-semibold text-4xl">{t("title")}</h2>
           <p className="text-subtitle-color font-semibold text-lg">
-            At Al-Subtain, our success is driven by the dedication and expertise
-            of our team. Get to know the people behind our mission to make your
-            real estate dreams a reality.
+            {t("caption")}
           </p>
         </header>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
@@ -76,16 +101,16 @@ export const Team = () => {
             >
               <Image
                 src={member.image}
-                alt={member.name}
+                alt={member.name[locale]}
                 width={1000}
                 height={1000}
                 className="w-[235px] h-[253px] object-cover object-center rounded-xl mx-auto mb-12"
               />
               <h3 className="font-semibold text-2xl leading-6 mb-2">
-                {member.name}
+                {member.name[locale]}
               </h3>
               <h4 className="font-medium text-lg leading-6 text-subtitle-color">
-                {member.role}
+                {member.role[locale]}
               </h4>
             </article>
           ))}

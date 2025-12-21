@@ -1,5 +1,4 @@
 "use client";
-
 import Container from "@/components/Container";
 import Users2 from "@/assets/icons/users2.svg";
 import Reload from "@/assets/icons/reload.svg";
@@ -9,32 +8,53 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(SplitText);
 
 const reasons = [
   {
-    title: "Team work",
-    caption:
-      "Work within a supportive team that values cooperation, respect, and shared success.",
+    title: {
+      en: "Team work",
+      ar: "العمل الجماعي",
+    },
+    caption: {
+      en: "Work within a supportive team that values cooperation, respect, and shared success.",
+      ar: "العمل ضمن فريق داعم يقدر التعاون والاحترام والنجاح المشترك.",
+    },
     icon: <Users2 />,
   },
   {
-    title: "Secured Future",
-    caption:
-      "We provide clear paths for professional advancement and long-term development.",
+    title: {
+      en: "Secured Future",
+      ar: "مستقبل آمن",
+    },
+    caption: {
+      en: "We provide clear paths for professional advancement and long-term development.",
+      ar: "نقدم مسارات واضحة للتقدم المهني والتطوير طويل الأجل.",
+    },
     icon: <Reload />,
   },
   {
-    title: "Learning Opportunity",
-    caption:
-      "Access training, workshops, and real-world project experience to sharpen your skills.",
+    title: {
+      en: "Learning Opportunity",
+      ar: "فرصة التعلم",
+    },
+    caption: {
+      en: "Access training, workshops, and real-world project experience to sharpen your skills.",
+      ar: "الوصول إلى التدريب وورش العمل وخبرة المشاريع الواقعية لصقل مهاراتك.",
+    },
     icon: <Education />,
   },
   {
-    title: "Upgrate Skills",
-    caption:
-      "Join an established Iraqi developer with a strong reputation and long-standing market presence.",
+    title: {
+      en: "Upgrade Skills",
+      ar: "تطوير المهارات",
+    },
+    caption: {
+      en: "Join an established Iraqi developer with a strong reputation and long-standing market presence.",
+      ar: "انضم إلى مطور عراقي راسخ يتمتع بسمعة قوية وحضور طويل الأمد في السوق.",
+    },
     icon: <BarChart />,
   },
 ];
@@ -44,32 +64,29 @@ export const WhyWorkWithUs = () => {
   const tagline = useRef<HTMLHeadingElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const caption = useRef<HTMLDivElement>(null);
+  const locale = useLocale() as "en" | "ar";
+  const t = useTranslations("careers.benefits");
 
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current!, {
-      type: "words",
+      type: locale === "ar" ? "words" : "words",
       smartWrap: true,
     });
-
     const splitTagline = SplitText.create(tagline.current!, {
       type: "words",
       smartWrap: true,
     });
-
     const splitCaption = SplitText.create(caption.current!, {
       type: "words",
       smartWrap: true,
     });
-
     const cards = section.current?.querySelectorAll(".benefit-card");
-
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section.current,
         start: "top 70%",
       },
     });
-
     // TITLE
     tl.from(splitTitle.words, {
       x: -100,
@@ -80,7 +97,6 @@ export const WhyWorkWithUs = () => {
       },
       ease: "power3.out",
     });
-
     // TAGLINE (2nd stage)
     tl.from(
       splitTagline.words,
@@ -95,7 +111,6 @@ export const WhyWorkWithUs = () => {
       },
       "-=0.2"
     );
-
     // CAPTION
     tl.from(
       splitCaption.words,
@@ -110,7 +125,6 @@ export const WhyWorkWithUs = () => {
       },
       "-=0.15"
     );
-
     // BENEFITS (FROM BOTTOM + RANDOM STAGGER)
     tl.from(
       cards!,
@@ -125,41 +139,32 @@ export const WhyWorkWithUs = () => {
       },
       "-=0.2"
     );
-  }, []);
+  }, [locale]);
 
   return (
     <section className="mt-48" ref={section}>
       <Container className="flex md:justify-between gap-10 max-md:flex-col">
         <div>
           <h2 className="mb-4 font-medium text-lg" ref={tagline}>
-            Benefits
+            {t("tagline")}
           </h2>
-
           <h3 className="mb-6 font-bold text-4xl" ref={title}>
-            Why you Should Join Our Awesome Team
+            {t("title")}
           </h3>
-
-          <div className="text-sm" ref={caption}>
-            <p className="mb-2">
-              At Al-Subtain, we believe that great projects start with great
-              people.
-            </p>
-            <p>
-              We provide a supportive, professional environment where every team
-              member can grow, contribute, and build a meaningful career in real
-              estate development.
-            </p>
+          <div className="text-sm [&_p]:not-last:mb-2" ref={caption}>
+            {t.rich("caption", {
+              p: (chunks) => <p>{chunks}</p>,
+            })}
           </div>
         </div>
-
         <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
           {reasons.map((reason, i) => (
             <div className="benefit-card flex flex-col" key={i}>
               <div className="size-16 mb-8 rounded-sm bg-primary flex items-center justify-center">
                 {reason.icon}
               </div>
-              <h4 className="font-bold text-lg mb-3">{reason.title}</h4>
-              <p className="font-light text-sm">{reason.caption}</p>
+              <h4 className="font-bold text-lg mb-3">{reason.title[locale]}</h4>
+              <p className="font-light text-sm">{reason.caption[locale]}</p>
             </div>
           ))}
         </div>

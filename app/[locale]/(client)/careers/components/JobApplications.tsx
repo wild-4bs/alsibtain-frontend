@@ -7,33 +7,49 @@ import clsx from "clsx";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ArrowRight } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { Rubik } from "next/font/google";
 import { useRef } from "react";
 
 const jobCategories = [
   {
     id: 1,
-    title: "ENGINEERING & PLANNING",
+    title: {
+      en: "ENGINEERING & PLANNING",
+      ar: "الهندسة والتخطيط",
+    },
     openings: null,
   },
   {
     id: 2,
-    title: "PROJECT MANAGEMENT",
+    title: {
+      en: "PROJECT MANAGEMENT",
+      ar: "إدارة المشاريع",
+    },
     openings: 20,
   },
   {
     id: 3,
-    title: "REAL ESTATE & SALES",
+    title: {
+      en: "REAL ESTATE & SALES",
+      ar: "العقارات والمبيعات",
+    },
     openings: null,
   },
   {
     id: 4,
-    title: "ADMINISTRATION & OPERATIONS",
+    title: {
+      en: "ADMINISTRATION & OPERATIONS",
+      ar: "الإدارة والعمليات",
+    },
     openings: null,
   },
   {
     id: 5,
-    title: "FINANCE & INVESTMENT",
+    title: {
+      en: "FINANCE & INVESTMENT",
+      ar: "المالية والاستثمار",
+    },
     openings: null,
   },
 ];
@@ -46,32 +62,62 @@ const rubik = Rubik({
 const jobs = [
   {
     id: 1,
-    title: "Wordpress Developer",
-    experience: "2 Years",
+    title: {
+      en: "Wordpress Developer",
+      ar: "مطور ووردبريس",
+    },
+    experience: {
+      en: "2 Years",
+      ar: "سنتان",
+    },
     deadline: "2025-11-11",
   },
   {
     id: 2,
-    title: "Javascript",
-    experience: "1 Years",
+    title: {
+      en: "Javascript",
+      ar: "جافا سكريبت",
+    },
+    experience: {
+      en: "1 Years",
+      ar: "سنة واحدة",
+    },
     deadline: "2025-11-11",
   },
   {
     id: 3,
-    title: "Apps Developer",
-    experience: "3 Years",
+    title: {
+      en: "Apps Developer",
+      ar: "مطور تطبيقات",
+    },
+    experience: {
+      en: "3 Years",
+      ar: "3 سنوات",
+    },
     deadline: "2025-11-11",
   },
   {
     id: 4,
-    title: "IOS Developer",
-    experience: "2 Years",
+    title: {
+      en: "IOS Developer",
+      ar: "مطور IOS",
+    },
+    experience: {
+      en: "2 Years",
+      ar: "سنتان",
+    },
     deadline: "2025-11-11",
   },
   {
     id: 5,
-    title: "Node JS Developer",
-    experience: "3 Years",
+    title: {
+      en: "Node JS Developer",
+      ar: "مطور Node JS",
+    },
+    experience: {
+      en: "3 Years",
+      ar: "3 سنوات",
+    },
     deadline: "2025-11-11",
   },
 ];
@@ -81,10 +127,12 @@ export const JobApplications = () => {
   const title = useRef(null);
   const caption = useRef(null);
   const section = useRef<HTMLElement>(null);
+  const locale = useLocale() as "en" | "ar";
+  const t = useTranslations("careers.jobs");
 
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current, {
-      type: "words",
+      type: locale === "ar" ? "words" : "words",
       smartWrap: true,
     });
 
@@ -148,22 +196,23 @@ export const JobApplications = () => {
       },
       "<"
     );
-  }, []);
+  }, [locale]);
+
   return (
     <section className={`mt-22 ${rubik.className}`} id="jobs" ref={section}>
       <Container>
         <header className="text-center">
           <h2 className="mb-2 text-lg font-medium" ref={tagline}>
-            Come join us
+            {t("tagline")}
           </h2>
           <h3 className="mb-5 font-bold text-4xl" ref={title}>
-            Career Openings
+            {t("title")}
           </h3>
-          <p className="mb-11 text-sm" ref={caption}>
-            We’re always looking for creative, talented self-starters to join
-            the Al-sabtain family. <br /> Check out our open roles below and
-            fill out an application.
-          </p>
+          <p
+            className="mb-11 text-sm"
+            ref={caption}
+            dangerouslySetInnerHTML={{ __html: t("caption") }}
+          ></p>
         </header>
         <div className="flex gap-12 max-xl:flex-col">
           <ul>
@@ -178,7 +227,7 @@ export const JobApplications = () => {
                     }
                   )}
                 >
-                  {category.title}{" "}
+                  {category.title[locale]}{" "}
                   {category.openings && <>({category.openings})</>}
                 </button>
               </li>
@@ -193,18 +242,20 @@ export const JobApplications = () => {
               >
                 <div className="flex items-center w-full max-md:flex-col max-md:items-start gap-2">
                   <h3 className="font-medium text-xl md:w-[40%]">
-                    {job.title}
+                    {job.title[locale]}
                   </h3>
                   <dl className="flex items-center md:gap-28 max-md:gap-10">
                     <div className="flex flex-col gap-1">
                       <dt className="font-medium text-base text-subtitle-color">
-                        Experience
+                        {t("experience")}
                       </dt>
-                      <dd className="font-medium text-lg">{job.experience}</dd>
+                      <dd className="font-medium text-lg">
+                        {job.experience[locale]}
+                      </dd>
                     </div>
                     <div className="flex flex-col gap-1">
                       <dt className="font-medium text-base text-subtitle-color">
-                        Deadline
+                        {t("deadline")}
                       </dt>
                       <dd className="font-medium text-lg">{job.deadline}</dd>
                     </div>
@@ -214,7 +265,7 @@ export const JobApplications = () => {
                   variant={"ghost"}
                   className="text-subtitle-color duration-300 hover:bg-black/20"
                 >
-                  <ArrowRight className="size-5" />
+                  <ArrowRight className="size-5 rtl:rotate-180" />
                 </Button>
               </Link>
             ))}

@@ -5,16 +5,17 @@ import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
 import { GlassCard } from "./ui/GlassCard";
 import { BluryBall } from "./ui/BluryBall";
-import { Link, usePathname } from "@/i18n/routing";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
 import clsx from "clsx";
 import { Sidebar } from "./Sidebar";
 import Languages from "@/assets/icons/languages.svg";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import SplitText from "gsap/SplitText";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { cn } from "@/lib/utils";
-import { Poppins } from "next/font/google";
+import { Alexandria, Poppins } from "next/font/google";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(SplitText);
@@ -24,27 +25,51 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-poppins",
 });
+const alexandria = Alexandria({
+  subsets: ["latin", "arabic"], // Add arabic subset
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-alexandria",
+});
 
 export const navLinks = [
-  { name: "Home", path: "/" },
-  { name: "About Us", path: "/about" },
-  { name: "Projects", path: "/projects" },
-  { name: "Services", path: "/services" },
-  { name: "Partners", path: "/partners" },
-  { name: "News & Media", path: "/news&media" },
-  { name: "Careers", path: "/careers" },
-  { name: "Contact Us", path: "/contact" },
+  { name: "links.home", path: "/" },
+  { name: "links.about", path: "/about" },
+  { name: "links.projects", path: "/projects" },
+  { name: "links.services", path: "/services" },
+  { name: "links.partners", path: "/partners" },
+  { name: "links.news", path: "/news&media" },
+  { name: "links.careers", path: "/careers" },
+  { name: "links.contact", path: "/contact" },
 ];
 
 export const Header = () => {
   const pathname = usePathname();
+  const t = useTranslations("header");
+
   useEffect(() => {
     window.addEventListener("load", () => {
       ScrollTrigger.refresh();
     });
   }, []);
+
+  const locale = useLocale();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const selectLang = (locale: string) => {
+    startTransition(() => {
+      router.replace(pathname, { locale });
+    });
+  };
+
   return (
-    <header className={cn("relative z-50 bg-transparent", poppins.className)}>
+    <header
+      className={cn(
+        "relative z-50 bg-transparent",
+        poppins.className,
+        alexandria.className
+      )}
+    >
       <Container className="flex items-center gap-8 justify-between h-(--header-height) max-xl:px-2">
         <Link className="relative" href={"/"}>
           <BluryBall className="w-[500px] h-[500px]" />
@@ -59,7 +84,7 @@ export const Header = () => {
                   <Link
                     href={link.path}
                     className={clsx(
-                      "px-2 py-2 inline-block hover:scale-105 hover:underline duration-100",
+                      "px-2 py-2 inline-block group duration-100",
                       {
                         "font-black":
                           pathname == link.path ||
@@ -67,7 +92,10 @@ export const Header = () => {
                       }
                     )}
                   >
-                    {link.name}
+                    <div className="flex flex-col gap-px">
+                      {t(link.name)}
+                      <span className="w-[0%] group-hover:w-full duration-200 ease-out h-0.5 bg-white"></span>
+                    </div>
                   </Link>
                 </li>
               ))}
@@ -75,7 +103,10 @@ export const Header = () => {
           </GlassCard>
         </div>
         <div className="flex items-center gap-2">
-          <button className="bg-transparent hover:bg-primary/30 size-10 flex items-center justify-center rounded-lg cursor-pointer duration-300">
+          <button
+            className="bg-transparent hover:bg-primary/30 size-10 flex items-center justify-center rounded-lg cursor-pointer duration-300"
+            onClick={() => selectLang(locale == "ar" ? "en" : "ar")}
+          >
             <Languages />
           </button>
           <Link href={"/contact"}>
@@ -83,8 +114,8 @@ export const Header = () => {
               variant={"outline"}
               className="rounded-full relative z-10 p-2 max-lg:hidden"
             >
-              <span className="px-2 py-3 inline-block">Get in touch</span>
-              <div className="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+              <span className="px-2 py-3 inline-block">{t("button")}</span>
+              <div className="size-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center rtl:rotate-180">
                 <ArrowRight />
               </div>
             </Button>

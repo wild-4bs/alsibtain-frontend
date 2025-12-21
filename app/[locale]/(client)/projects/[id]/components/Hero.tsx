@@ -26,7 +26,7 @@ export const Hero = () => {
 
   useGSAP(() => {
     gsap.to(image.current, {
-      clipPath: "circle(70.7% at 50% 50%)",
+      clipPath: "circle(200% at 50% 50%)",
       duration: 1,
       onComplete: () => {
         gsap.to(detailsList.current, {

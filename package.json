@@ -27,6 +27,7 @@
     "marzipano": "^0.10.2",
     "next": "^16.0.10",
     "next-intl": "^4.5.6",
+    "nextjs-toploader": "^3.9.17",
     "nuqs": "^2.8.1",
     "odometer": "^0.4.8",
     "panolens": "^0.12.1",

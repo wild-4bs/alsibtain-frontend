@@ -64,7 +64,7 @@ export const Footer = () => {
             {t("headquarters.title")}
           </h3>
           <li className="font-medium leading-5">{t("headquarters.address")}</li>
-          <li className="font-light text-base leading-6" dir="ltr">
+          <li className="font-light text-base leading-6 text-end!" dir="ltr">
             {t("headquarters.phone")}
           </li>
           <li className="font-light text-base leading-6">

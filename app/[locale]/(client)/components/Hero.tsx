@@ -299,7 +299,7 @@ export const Hero = () => {
       {carouselData.map((item, i) => (
         <div
           key={item.id}
-          className="absolute bottom-0 right-[10%] md:right-[30%] rtl:left-[10%] rtl:md:left-[30%] xl:w-[55%] z-10!"
+          className="absolute bottom-0 right-[10%] md:right-[30%] rtl:left-[10%] rtl:md:left-[30%] xl:w-[60%] z-10!"
         >
           <Image
             src={item.image}

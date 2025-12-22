@@ -175,6 +175,23 @@
       "label": "Last Name",
       "placeholder": "Enter last name"
     },
+    "phoneNumber": {
+      "label": "Phone Number",
+      "placeholder": "+964"
+    },
+    "subject": {
+      "label": "Select Subject?",
+      "options": {
+        "generalInquiry": "General Inquiry",
+        "projectInformation": "Project Information",
+        "partnershipRequest": "Partnership Request",
+        "salesAvailability": "Sales & Availability"
+      }
+    },
+    "message": {
+      "label": "Message",
+      "placeholder": "Write your message..."
+    },
     "jobRole": {
       "label": "Job Role",
       "placeholder": "Select job role"
@@ -202,6 +219,21 @@
     "startDate": {
       "label": "Start Date",
       "placeholder": "mm / dd / yyyy"
+    },
+    "coverLetter": {
+      "label": "Cover Letter",
+      "placeholder": "Upload your cover letter"
+    }
+  },
+
+  "contact": {
+    "title": "Contact Us",
+    "subTitle": "We're Here to assist You",
+    "caption": "Whether you’re interested in our projects, partnership opportunities, or have general questions, our team is ready to support you. Fill in the form below and we’ll get back to you shortly.",
+    "contactInfo": {
+      "title": "Contact Information",
+      "caption1": "Fill in the form below and we’ll get back to you shortly.",
+      "caption2": "We value your time. A member of our team will contact you within 24–48 hours."
     }
   },
 
@@ -227,6 +259,7 @@
     "tech": "Tech",
     "technology": "Technology",
     "seeMore": "See More",
+    "sendMessage": "Send Message",
     "partners": {
       "title": "Trusted by Leading Brands in the Industry"
     },

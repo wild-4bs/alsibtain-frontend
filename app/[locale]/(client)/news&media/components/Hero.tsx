@@ -45,7 +45,7 @@ export const Hero = () => {
       {
         opacity: 0,
         stagger: {
-          each: 0.015,
+          each: 0.05,
           from: "random",
         },
         ease: "power3.out",
@@ -70,7 +70,7 @@ export const Hero = () => {
       imageWrapper.current,
       {
         clipPath: "circle(70.7% at 50% 50%)",
-        duration: 1.2,
+        duration: 2.5,
         ease: "power3.out",
       },
       "<"

@@ -88,8 +88,11 @@ export const ApplicationForm = ({ className }: ComponentProps<"section">) => {
               <Input placeholder={inputsT("city.placeholder")} />
             </div>
             <div className="grid gap-3">
-              <Label className="text-lg">{inputsT("street.label")}</Label>
-              <Input placeholder={inputsT("street.placeholder")} />
+              <Label className="text-lg">{inputsT("coverLetter.label")}</Label>
+              <Input
+                type="file"
+                placeholder={inputsT("cvUpload.placeholder")}
+              />
             </div>
             <div className="grid gap-3">
               <Label className="text-lg">{inputsT("startDate.label")}</Label>

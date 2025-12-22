@@ -106,7 +106,10 @@ export const Hero = () => {
   }, []);
 
   return (
-    <section className="min-h-[calc(100vh-var(--header-height))]" ref={section}>
+    <section
+      className="mb-0 min-h-[calc(100vh-var(--header-height))] 2xl:min-h-[unset] 2xl:mb-40"
+      ref={section}
+    >
       <Container className="flex gap-12 pt-28 max-md:pt-4">
         <div className="relative">
           <BluryBall className="-left-1/6" />
@@ -163,11 +166,11 @@ export const Hero = () => {
             style={{ width: "200%" }}
           >
             <AbstractDesign
-              className="w-1/2 h-full opacity-30 shrink-0 rotate-y-180"
+              className="w-full h-full opacity-30 shrink-0 rotate-y-180"
               style={{ height: "450px" }}
             />
             <AbstractDesign
-              className="w-1/2 h-full opacity-30 shrink-0"
+              className="w-full h-full opacity-30 shrink-0"
               style={{ height: "450px" }}
             />
           </div>

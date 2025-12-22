@@ -94,7 +94,17 @@ export const Header = () => {
                   >
                     <div className="flex flex-col gap-px">
                       {t(link.name)}
-                      <span className="w-[0%] group-hover:w-full duration-200 ease-out h-0.5 bg-white"></span>
+                      <span
+                        className={clsx(
+                          "w-[0%] group-hover:w-full duration-200 ease-out h-0.5 bg-white",
+                          {
+                            "w-full":
+                              pathname == link.path ||
+                              (pathname.includes(link.path) &&
+                                link.path != "/"),
+                          }
+                        )}
+                      ></span>
                     </div>
                   </Link>
                 </li>

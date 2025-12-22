@@ -59,10 +59,21 @@ export const Player360 = () => {
       >
         {t("360Viewer.title")}
       </h2>
-
+      <Container className="z-10">
+        <div className="w-full z-10 relative rounded-4xl overflow-hidden bg-[#0b0b0b] shadow-[0_10px_30px_rgba(0,0,0,0.18)] border border-white/10 max-lg:h-[500px] h-[700px] outline-none">
+          <iframe
+            src="https://tour.panoee.net/694696954190f11272692b47/6946b2b2bd8854781f170106"
+            title="360 Virtual Tour"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; xr-spatial-tracking; fullscreen"
+            allowFullScreen
+            className="w-full h-full border-0 block"
+          ></iframe>
+        </div>
+      </Container>
       <PurpleLargeComet className="w-full scale-120 absolute rotate-155 duration-300 z-0 origin-center top-0 left-0" />
-
-      <Container
+      {/* <Container
         className={cn(
           "py-6 rounded-[3rem] relative z-10 flex gap-5 max-xl:flex-col max-md:px-6",
           alexandria.className
@@ -167,7 +178,7 @@ export const Player360 = () => {
             </ScrollArea>
           </div>
         </div>
-      </Container>
+      </Container> */}
     </section>
   );
 };

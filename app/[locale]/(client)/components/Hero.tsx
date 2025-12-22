@@ -26,6 +26,7 @@ import gsap from "gsap";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLocale, useTranslations } from "next-intl";
 import { getDirectionClass } from "@/lib/TextDirection";
+import StarsLayer from "@/components/StarrySky";
 
 gsap.registerPlugin(SplitText);
 
@@ -218,6 +219,7 @@ export const Hero = () => {
 
   return (
     <section className="sm:h-[calc(100vh-var(--header-height))] h-[80vh] relative overflow-hidden flex flex-col rounded-b-[165px] max-md:rounded-b-[100px]">
+      <StarsLayer />
       <Container className="pt-20 relative z-10">
         <h1 ref={tagline} className="text-xs font-light mb-2">
           {t("tagline")}
@@ -297,7 +299,7 @@ export const Hero = () => {
       {carouselData.map((item, i) => (
         <div
           key={item.id}
-          className="absolute bottom-0 right-[10%] md:right-[30%] rtl:left-[10%] rtl:md:left-[30%] w-fit z-10!"
+          className="absolute bottom-0 right-[10%] md:right-[30%] rtl:left-[10%] rtl:md:left-[30%] xl:w-[55%] z-10!"
         >
           <Image
             src={item.image}
@@ -305,7 +307,7 @@ export const Hero = () => {
             width={1000}
             height={1000}
             className={clsx(
-              "object-cover md:min-w-[900px] duration-900",
+              "object-cover md:min-w-[900px] w-full duration-900",
               currentSlide === i
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-full"

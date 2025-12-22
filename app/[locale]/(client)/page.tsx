@@ -9,26 +9,18 @@ import { CallToAction } from "../../../components/CallToAction";
 import { Alexandria, Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Intro } from "./components/Intro";
+import { useLocale } from "next-intl";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-poppins",
 });
-const alexandria = Alexandria({
-  subsets: ["latin", "arabic"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-alexandria",
-});
 
 export default function Home() {
+  const locale = useLocale() as "ar" | "en";
   return (
-    <main
-      className={cn(
-        "relative z-10",
-        `ltr:${poppins.className} rtl:${alexandria.className}`
-      )}
-    >
+    <main className={cn("relative z-10", locale == "en" && poppins.className)}>
       <Hero />
       <Container>
         <Intro />

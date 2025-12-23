@@ -45,7 +45,7 @@ export const Hero = () => {
       {
         opacity: 0,
         stagger: {
-          each: 0.05,
+          each: locale == "en" ? 0.005 : 0.05,
           from: "random",
         },
         ease: "power3.out",

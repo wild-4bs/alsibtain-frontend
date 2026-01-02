@@ -21,7 +21,7 @@ export const TabContentWrapper = memo(
         style={{ display: isActive ? "block" : "none" }}
       >
         <Suspense fallback={<div className="animate-pulse">Loading...</div>}>
-          <tab.content />
+          {tab.content}
         </Suspense>
       </div>
     );

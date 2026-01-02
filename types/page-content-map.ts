@@ -3,10 +3,7 @@ import {
   AboutPageContent,
   ProjectsPageContent,
   ServicesPageContent,
-  PortfolioPageContent,
   ContactPageContent,
-  StudioRentalPageContent,
-  PropsRentalPageContent,
 } from "./pages";
 
 export type PageContentMap = {
@@ -14,10 +11,7 @@ export type PageContentMap = {
   about: AboutPageContent;
   projects: ProjectsPageContent;
   services: ServicesPageContent;
-  partners: PortfolioPageContent;
   "news & media": ContactPageContent;
-  careers: StudioRentalPageContent;
-  contact: PropsRentalPageContent;
 };
 
 /**

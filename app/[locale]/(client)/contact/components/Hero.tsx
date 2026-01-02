@@ -1,4 +1,3 @@
-import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
 import Image from "next/image";
 

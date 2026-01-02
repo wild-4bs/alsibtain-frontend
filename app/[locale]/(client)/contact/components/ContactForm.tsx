@@ -8,13 +8,12 @@ import Instagram from "@/assets/social/instagram.svg";
 import Linkedin from "@/assets/social/linkedin.svg";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Form } from "./Form";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { useGetPageContents } from "@/services/pages";
 import { ContactPageContent } from "@/types/pages";
 import { Link } from "@/i18n/routing";
 
 export const ContactForm = () => {
-  const t = useTranslations("contact");
   const { data } = useGetPageContents("contact");
   const sections = (data as ContactPageContent)?.sections;
   const locale = useLocale() as "ar" | "en";
@@ -61,7 +60,9 @@ export const ContactForm = () => {
 
               <li className="flex items-center gap-2 mb-4">
                 <MapPin />
-                <span>{sections?.contactInformation?.location?.value[locale]}</span>
+                <span>
+                  {sections?.contactInformation?.location?.value[locale]}
+                </span>
               </li>
 
               <li className="flex items-center gap-2">

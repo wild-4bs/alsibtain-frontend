@@ -12,7 +12,9 @@ import { useGSAP } from "@gsap/react";
 import SplitText from "gsap/src/SplitText";
 import gsap from "gsap";
 import { useTranslations } from "next-intl";
-export const IntroProject = () => {
+import { Project } from "@/services/projects";
+
+export const IntroProject = ({ project }: { project?: Project }) => {
   const [isOpen, setIsOpen] = useState(false);
   const title = useRef(null);
   const section = useRef(null);
@@ -45,7 +47,7 @@ export const IntroProject = () => {
       {isOpen && (
         <MediaViewer
           type="video"
-          src="/projects/1.mp4"
+          src={project?.introduction?.video?.url}
           onClose={() => setIsOpen(false)}
           autoPlay
         />
@@ -61,12 +63,12 @@ export const IntroProject = () => {
       <BluryBall className="top-0 left-0 translate-x-0 translate-y-0 blur-[120px]" />
       <PurpleLargeComet className="absolute bottom-0 w-full right-0" />
       <h2 className="text-center font-medium text-lg px-10" ref={title}>
-        {t("caption")}
+        {project?.description}
       </h2>
       <Container className="max-w-[90%] w-full select-none bg-primary relative max-h-[750px] h-[90vh] f p-0! z-10 rounded-4xl  not-last:overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full">
           <Image
-            src={"/projects/11.png"}
+            src={project?.introduction?.thumbnail?.url as string}
             alt="project"
             width={10000}
             height={10000}

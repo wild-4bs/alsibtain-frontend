@@ -3,14 +3,19 @@ import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
+import { CareersPageContent } from "@/types/pages";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRef } from "react";
 
-export const Hero = () => {
+export const Hero = ({
+  data,
+}: {
+  data: CareersPageContent["sections"]["hero"];
+}) => {
   const title = useRef(null);
   const caption = useRef(null);
   const button1 = useRef(null);
@@ -59,6 +64,7 @@ export const Hero = () => {
     );
   }, []);
   const t = useTranslations("careers.hero");
+  const locale = useLocale() as "ar" | "en";
   return (
     <section className="relative z-10 -mt-(--header-height) bg-primary">
       <BluryBall className="top-0 z-10" />
@@ -73,10 +79,10 @@ export const Hero = () => {
         <h1
           className="uppercase text-4xl font-medium"
           ref={title}
-          dangerouslySetInnerHTML={{ __html: t("title") }}
+          dangerouslySetInnerHTML={{ __html: data?.headline?.value[locale] }}
         ></h1>
         <p className="mb-6 mt-3 w-full lg:max-w-2xl" ref={caption}>
-          {t("caption")}
+          {data?.subheadline?.value[locale]}
         </p>
         <div className="flex gap-2">
           <Link href={"#jobs"} ref={button1}>

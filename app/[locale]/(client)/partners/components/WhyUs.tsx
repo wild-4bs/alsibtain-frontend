@@ -1,12 +1,14 @@
 "use client";
 import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
+import { PartnersPageContent } from "@/types/pages";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { Hammer, Workflow, Landmark, Network, TrendingUp } from "lucide-react";
 import { useRef } from "react";
 import { useLocale, useTranslations } from "use-intl";
+import * as LucideIcons from "lucide-react";
 
 export const whyUsList = [
   {
@@ -66,7 +68,11 @@ export const whyUsList = [
   },
 ];
 
-export const WhyUs = () => {
+export const WhyUs = ({
+  data,
+}: {
+  data: PartnersPageContent["sections"]["whyPartnerWithUs"];
+}) => {
   const title = useRef(null);
   const section = useRef<HTMLElement>(null);
   const locale = useLocale() as "ar" | "en";
@@ -76,7 +82,6 @@ export const WhyUs = () => {
       scrollTrigger: {
         trigger: section.current,
         end: "+=100%",
-        pin: true,
         scrub: true,
       },
     });
@@ -119,22 +124,24 @@ export const WhyUs = () => {
           {t("title")}
         </h2>
         <div className="flex justify-center text-center flex-wrap gap-10">
-          {whyUsList.map((reason, i) => (
-            <article
-              key={i}
-              className="w-full md:max-w-md flex-col flex items-center justify-center partners-page-reason"
-            >
-              <div className="size-32 rounded-full bg-[#55B2FF]/12 flex items-center justify-center mb-5">
-                {reason.icon}
-              </div>
-              <h3 className="font-semibold text-xl leading-[126%] mb-2">
-                {reason.title[locale]}
-              </h3>
-              <p className="text-sm text-subtitle-color">
-                {reason.description[locale]}
-              </p>
-            </article>
-          ))}
+          {data?.reasons?.value[locale].map((reason, i) => {
+            const IconComponent =
+              (LucideIcons as any)[reason?.icon] || LucideIcons.HelpCircle;
+            return (
+              <article
+                key={i}
+                className="w-full md:max-w-md flex-col flex items-center justify-center partners-page-reason"
+              >
+                <div className="size-32 rounded-full bg-[#55B2FF]/12 flex items-center justify-center mb-5">
+                  <IconComponent />
+                </div>
+                <h3 className="font-semibold text-xl leading-[126%] mb-2">
+                  {reason.title}
+                </h3>
+                <p className="text-sm text-subtitle-color">{reason.caption}</p>
+              </article>
+            );
+          })}
         </div>
       </Container>
     </section>

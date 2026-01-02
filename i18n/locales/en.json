@@ -160,7 +160,7 @@
       "applyNow": "Apply Now",
       "apply": {
         "title": "Your Career. Our Next Landmark.",
-        "jobName": "Web application",
+        "jobName": "Job application",
         "button": "Apply Now"
       }
     }
@@ -255,8 +255,9 @@
     }
   },
   "common": {
-    "stories": "Stories",
+    "stories": "Projects Updates",
     "tech": "Tech",
+    "latest-news": "Latest News",
     "technology": "Technology",
     "seeMore": "See More",
     "sendMessage": "Send Message",

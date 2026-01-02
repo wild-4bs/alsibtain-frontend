@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
+import * as LucideIcons from "lucide-react";
 import {
   Film,
   Laptop,
@@ -16,6 +17,7 @@ import {
 import { Space_Grotesk } from "next/font/google";
 import { useRef } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { ServicesPageContent } from "@/types/pages";
 
 const space_grotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -98,7 +100,11 @@ const services = [
   },
 ];
 
-export const Services = () => {
+export const Services = ({
+  data,
+}: {
+  data: ServicesPageContent["sections"]["services"];
+}) => {
   const title = useRef(null);
   const section = useRef<HTMLElement>(null);
   const locale = useLocale() as "en" | "ar";
@@ -157,20 +163,23 @@ export const Services = () => {
           {t("title")}
         </h2>
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service, i) => (
-            <article
-              key={i}
-              className="p-8 rounded-xl border border-[#737373] services-page-service"
-            >
-              <div className="size-16 bg-[#5535E61A] rounded-xl flex items-center justify-center mb-5 ">
-                {service.icon}
-              </div>
-              <h3 className="font-normal text-lg">{service.title[locale]}</h3>
-              <p className="text-subtitle-color mt-2">
-                {service.description[locale]}
-              </p>
-            </article>
-          ))}
+          {data?.items?.value[locale].map((service, i) => {
+            const IconComponent =
+              (LucideIcons as any)[service?.icon] || LucideIcons.HelpCircle;
+
+            return (
+              <article
+                key={i}
+                className="p-8 rounded-xl border border-[#737373] services-page-service"
+              >
+                <div className="size-16 bg-[#5535E61A] rounded-xl flex items-center justify-center mb-5 ">
+                  <IconComponent />
+                </div>
+                <h3 className="font-normal text-lg">{service.title}</h3>
+                <p className="text-subtitle-color mt-2">{service.caption}</p>
+              </article>
+            );
+          })}
         </div>
       </Container>
     </section>

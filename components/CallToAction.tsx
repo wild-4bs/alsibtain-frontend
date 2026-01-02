@@ -14,7 +14,9 @@ import Roofing from "@/assets/icons/roofing.svg";
 import HomeWork from "@/assets/icons/home_work.svg";
 import Apartment from "@/assets/icons/apartment.svg";
 import { Link } from "@/i18n/routing";
-import { useTranslations } from "use-intl";
+import { useLocale, useTranslations } from "use-intl";
+import { useGetPageContents } from "@/services/pages";
+import { HomePageContent } from "@/types/pages";
 /* ------------------------------------------------------------------ */
 /*  Icon layout (same spread as before)                                */
 /* ------------------------------------------------------------------ */
@@ -91,6 +93,7 @@ const floatingIcons = [
 /* ------------------------------------------------------------------ */
 
 export const CallToAction = () => {
+  const { data } = useGetPageContents("home");
   const iconsRef = useRef<HTMLDivElement[]>([]);
   const tweensRef = useRef<gsap.core.Tween[]>([]);
 
@@ -121,6 +124,7 @@ export const CallToAction = () => {
 
   const pauseAll = () => tweensRef.current.forEach((t) => t?.pause());
   const resumeAll = () => tweensRef.current.forEach((t) => t?.resume());
+  const locale = useLocale() as "ar" | "en";
   const t = useTranslations("common.cta");
   return (
     <section>
@@ -176,13 +180,20 @@ export const CallToAction = () => {
 
         {/* Content */}
         <h2
-          className="relative z-10 text-2xl font-semibold mb-4 leading-tight"
-          dangerouslySetInnerHTML={{ __html: t("title") }}
+          className="relative z-10 font-semibold mb-4 leading-tight"
+          dangerouslySetInnerHTML={{
+            __html: (data as HomePageContent)?.sections?.callToAction?.title
+              ?.value[locale],
+          }}
         ></h2>
 
-        <p className="relative z-10 max-w-md text-sm text-white/80">
-          {t("caption")}
-        </p>
+        <p
+          className="relative z-10 max-w-md text-sm text-white/80"
+          dangerouslySetInnerHTML={{
+            __html: (data as HomePageContent)?.sections?.callToAction?.caption
+              ?.value[locale],
+          }}
+        ></p>
         <Link href={"/projects"}>
           <Button
             className="

@@ -5,14 +5,18 @@ import { BluryBall } from "@/components/ui/BluryBall";
 import { Button } from "@/components/ui/button";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRef } from "react";
 import { useLocale } from "next-intl";
+import { HomePageContent } from "@/types/pages";
 
-export const About = () => {
+export const About = ({
+  data,
+}: {
+  data: HomePageContent["sections"]["about"];
+}) => {
   const imageWrapper = useRef<HTMLDivElement | null>(null);
   const whiteBall = useRef<HTMLDivElement | null>(null);
   const title = useRef(null);
@@ -111,11 +115,11 @@ export const About = () => {
           </span>
 
           <h2 className="font-light text-3xl mb-4" ref={title}>
-            {t("title")}
+            {data?.title?.value[locale]}
           </h2>
 
           <p className="mb-10 leading-relaxed text-white/80" ref={caption}>
-            {t("caption")}
+            {data?.caption?.value[locale]}
           </p>
 
           <Button
@@ -142,16 +146,15 @@ export const About = () => {
 
           <div
             ref={imageWrapper}
-            className="relative w-full h-full p-1 overflow-hidden rounded-bl-[141px] will-change-transform"
+            className="relative w-full h-full max-w-xl p-1 overflow-hidden rounded-bl-[141px] will-change-transform"
           >
-            {/* WHITE BALL */}
             <div
               ref={whiteBall}
               className="absolute top-1/2 left-1/2 w-[60%] h-[60%] -translate-x-1/2 -translate-y-1/2 bg-white rounded-full blur-xl pointer-events-none will-change-transform z-0"
             />
 
             <Image
-              src="/home/about.jpg"
+              src={data?.image?.value?.url || "/home/about.jpg"}
               width={1000}
               height={1000}
               alt="About image"

@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
+import { timeAgo } from "@/lib/date";
+import { Job } from "@/services/jobs";
 import {
   MapPin,
   Briefcase,
@@ -11,15 +13,17 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import { useParams } from "next/navigation";
 
-export const Requirements = () => {
+export const Requirements = ({ data }: { data?: Job }) => {
   const t = useTranslations("careers.singleCareer");
   const locale = useLocale() as "ar" | "en";
+  const { id } = useParams();
 
   return (
-    <div className="px-8 py-11 border border-white rounded-3xl space-y-10 h-fit">
+    <div className="px-8 py-11 border border-white rounded-3xl space-y-10 h-fit md:min-w-xs">
       <div className="flex justify-center">
-        <Link href={"/careers/id/apply"}>
+        <Link href={`/careers/${id}/apply`}>
           <Button className="h-[52px] w-[180px] bg-[#19499F] hover:bg-[#163e87]">
             {t("applyNow") || { ar: "قدم الآن", en: "Apply Now" }[locale]}
           </Button>
@@ -35,62 +39,74 @@ export const Requirements = () => {
           <li className="flex items-start gap-4">
             <MapPin className="size-10 shrink-0" strokeWidth={2} />
             <dl>
-              <dt>{t("location") || { ar: "الموقع", en: "Location" }[locale]}</dt>
-              <dd>
-                {{
-                  ar: "مركز ساوث بريز، باناني11",
-                  en: "Shouth Breeze Center, Banani11",
-                }[locale]}
-              </dd>
+              <dt>
+                {t("location") || { ar: "الموقع", en: "Location" }[locale]}
+              </dt>
+              <dd>{data?.location}</dd>
             </dl>
           </li>
 
           <li className="flex items-start gap-4">
             <Briefcase className="size-10 shrink-0" strokeWidth={2} />
             <dl>
-              <dt>{t("jobType") || { ar: "نوع الوظيفة", en: "Job Type" }[locale]}</dt>
-              <dd>{{ ar: "دوام كامل", en: "Full Time" }[locale]}</dd>
+              <dt>
+                {t("jobType") || { ar: "نوع الوظيفة", en: "Job Type" }[locale]}
+              </dt>
+              <dd>{data?.jobType}</dd>
             </dl>
           </li>
 
           <li className="flex items-start gap-4">
             <Calendar className="size-10 shrink-0" strokeWidth={2} />
             <dl>
-              <dt>{t("datePosted") || { ar: "تاريخ النشر", en: "Date Posted" }[locale]}</dt>
-              <dd>{{ ar: "منذ شهر", en: "Posted 1 month ago" }[locale]}</dd>
+              <dt>
+                {t("datePosted") ||
+                  { ar: "تاريخ النشر", en: "Date Posted" }[locale]}
+              </dt>
+              <dd>{timeAgo(data?.createdAt as string)}</dd>
             </dl>
           </li>
 
           <li className="flex items-start gap-4">
             <BookOpen className="size-10 shrink-0" strokeWidth={2} />
             <dl>
-              <dt>{t("experience") || { ar: "الخبرة", en: "Experience" }[locale]}</dt>
-              <dd>{{ ar: "1–3 سنوات", en: "1–3 Years" }[locale]}</dd>
+              <dt>
+                {t("experience") || { ar: "الخبرة", en: "Experience" }[locale]}
+              </dt>
+              <dd>{data?.experience}</dd>
             </dl>
           </li>
 
           <li className="flex items-start gap-4">
             <Clock className="size-10 shrink-0" strokeWidth={2} />
             <dl>
-              <dt>{t("workingHours") || { ar: "ساعات العمل", en: "Working Hours" }[locale]}</dt>
-              <dd>{{ ar: "9 ص – 6 م", en: "9 AM – 6 PM" }[locale]}</dd>
+              <dt>
+                {t("workingHours") ||
+                  { ar: "ساعات العمل", en: "Working Hours" }[locale]}
+              </dt>
+              <dd>{data?.workingHours}</dd>
             </dl>
           </li>
 
           <li className="flex items-start gap-4">
             <CalendarDays className="size-10 shrink-0" strokeWidth={2} />
             <dl>
-              <dt>{t("workingDays") || { ar: "أيام العمل", en: "Working Days" }[locale]}</dt>
-              <dd>{{ ar: "أسبوعياً: 5 أيام", en: "Weekly: 5 Days" }[locale]}</dd>
-              <dd>{{ ar: "عطلة نهاية الأسبوع: الجمعة والسبت", en: "Weekend: Saturday, Sunday" }[locale]}</dd>
+              <dt>
+                {t("workingDays") ||
+                  { ar: "أيام العمل", en: "Working Days" }[locale]}
+              </dt>
+              <dd>{data?.workingDays}</dd>
             </dl>
           </li>
 
           <li className="flex items-start gap-4">
             <Armchair className="size-10 shrink-0" strokeWidth={2} />
             <dl>
-              <dt>{t("vacancy") || { ar: "الوظائف الشاغرة", en: "Vacancy" }[locale]}</dt>
-              <dd>{{ ar: "عدد الوظائف: 3", en: "No. of Vacancy: 3" }[locale]}</dd>
+              <dt>
+                {t("vacancy") ||
+                  { ar: "الوظائف الشاغرة", en: "Vacancy" }[locale]}
+              </dt>
+              <dd>No.of Vacancy: {data?.vacancy}</dd>
             </dl>
           </li>
         </ul>
@@ -101,7 +117,8 @@ export const Requirements = () => {
           href="/careers"
           className="text-white underline underline-offset-4 text-sm"
         >
-          {t("viewAllJobs") || { ar: "عرض كل الوظائف", en: "View all Jobs" }[locale]}
+          {t("viewAllJobs") ||
+            { ar: "عرض كل الوظائف", en: "View all Jobs" }[locale]}
         </Link>
       </div>
     </div>

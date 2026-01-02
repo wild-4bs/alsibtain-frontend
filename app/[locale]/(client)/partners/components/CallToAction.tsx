@@ -3,12 +3,17 @@ import Container from "@/components/Container";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
+import { PartnersPageContent } from "@/types/pages";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useRef } from "react";
 
-export const CallToAction = () => {
+export const CallToAction = ({
+  data,
+}: {
+  data: PartnersPageContent["sections"]["callToAction"];
+}) => {
   const section = useRef(null);
   const questionMark = useRef(null);
   const button = useRef(null);
@@ -24,18 +29,19 @@ export const CallToAction = () => {
     });
   }, []);
   const t = useTranslations("partners.cta");
+  const locale = useLocale() as "ar" | "en";
   return (
     <section className="my-32" ref={section}>
       <Container className="flex flex-col items-center gap-4 text-center">
-        <Badge variant={"dark"}>{t("badge")}</Badge>
+        <Badge variant={"dark"}>{t('badge')}</Badge>
         <h2 className="font-bold text-4xl">
-          {t("title")}
+          {data?.title?.value[locale]}
           <span className="inline-block" ref={questionMark}>
             ?
           </span>
         </h2>
         <p className="font-medium text-base text-subtitle-color">
-          {t("caption")}
+          {data?.caption?.value[locale]}
         </p>
         <Link href={"/contact"}>
           <Button

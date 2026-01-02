@@ -10,6 +10,7 @@ import gsap from "gsap";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import { AboutPageContent } from "@/types/pages";
 
 export const countersData = [
   {
@@ -30,7 +31,11 @@ export const countersData = [
   },
 ];
 
-export const Hero = () => {
+export const Hero = ({
+  data,
+}: {
+  data: AboutPageContent["sections"]["hero"];
+}) => {
   const title = useRef<HTMLHeadingElement>(null);
   const caption = useRef<HTMLParagraphElement>(null);
   const section = useRef<HTMLElement>(null);
@@ -111,18 +116,18 @@ export const Hero = () => {
       ref={section}
     >
       <Container className="flex gap-12 pt-28 max-md:pt-4">
-        <div className="relative">
+        <div className="relative w-full flex-1">
           <BluryBall className="-left-1/6" />
           <h1
             className="mb-5 font-semibold text-5xl max-sm:text-4xl leading-[130%] relative z-10"
             ref={title}
-            dangerouslySetInnerHTML={{ __html: t("title") }}
+            dangerouslySetInnerHTML={{ __html: data?.headline?.value[locale] }}
           />
           <p
             className="font-medium text-lg max-sm:text-base text-subtitle-color mb-6 relative z-10"
             ref={caption}
           >
-            {t("caption")}
+            {data?.subheadline?.value[locale]}
           </p>
           <div className="flex gap-4 mb-10 relative z-10">
             <Link href={"/contact"}>
@@ -140,7 +145,7 @@ export const Hero = () => {
             </Link>
           </div>
           <div className="flex items-center gap-5 flex-wrap relative z-10">
-            {countersData.map((counter, i) => (
+            {data?.counters?.value[locale].map((counter, i) => (
               <div
                 key={i}
                 className="px-6 py-4 bg-[#1A1A1A] border border-[#262626] rounded-2xl lg:min-w-[200px] sm:min-w-[170px] min-w-full counter"
@@ -149,7 +154,7 @@ export const Hero = () => {
                   {counter.count}
                 </span>
                 <h2 className="font-medium text-sm leading-[130%] max-sm:text-xs">
-                  {counter.title[locale]}
+                  {counter.title}
                 </h2>
               </div>
             ))}
@@ -175,7 +180,7 @@ export const Hero = () => {
             />
           </div>
           <Image
-            src={"/about/hero.png"}
+            src={data?.image?.value?.url || "/about/hero.png"}
             width={1000}
             height={1000}
             className="relative z-20 w-full"

@@ -27,79 +27,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useLocale, useTranslations } from "next-intl";
 import { getDirectionClass } from "@/lib/TextDirection";
 import StarsLayer from "@/components/StarrySky";
+import { HomePageContent } from "@/types/pages";
 
 gsap.registerPlugin(SplitText);
 
-const carouselData = [
-  {
-    id: 1,
-    title: {
-      en: "Two Decades of Excellence in Development",
-      ar: "عقدان من التميز في التطوير",
-    },
-    description: {
-      en: "Across residential, healthcare, and commercial projects Al-Subtain continues to redefine what modern living means in Iraq.",
-      ar: "في المشاريع السكنية والصحية والتجارية، تواصل شركة السبطين إعادة تعريف مفهوم الحياة الحديثة في العراق.",
-    },
-    image: "/home/uruk.png",
-  },
-  {
-    id: 2,
-    title: {
-      en: "Transforming Urban Landscapes",
-      ar: "تحويل المشهد الحضري",
-    },
-    description: {
-      en: "From innovative residential communities to state-of-the-art facilities, we create spaces that inspire and endure.",
-      ar: "من المجتمعات السكنية المبتكرة إلى المرافق الحديثة، نخلق مساحات تلهم وتستمر.",
-    },
-    image: "/home/uruk.png",
-  },
-  {
-    id: 3,
-    title: {
-      en: "Building Iraq's Future",
-      ar: "بناء مستقبل العراق",
-    },
-    description: {
-      en: "With over 21 years of expertise, we deliver projects that combine architectural excellence with sustainable development.",
-      ar: "مع أكثر من 21 عامًا من الخبرة، نقدم مشاريع تجمع بين التميز المعماري والتنمية المستدامة.",
-    },
-    image: "/home/uruk.png",
-  },
-  {
-    id: 4,
-    title: {
-      en: "Quality in Every Detail",
-      ar: "الجودة في كل تفصيلة",
-    },
-    description: {
-      en: "Our commitment to superior craftsmanship and attention to detail ensures every project exceeds expectations.",
-      ar: "التزامنا بالحرفية العالية والانتباه للتفاصيل يضمن أن كل مشروع يفوق التوقعات.",
-    },
-    image: "/home/uruk.png",
-  },
-  {
-    id: 5,
-    title: {
-      en: "A Legacy of Trust",
-      ar: "إرث من الثقة",
-    },
-    description: {
-      en: "Trusted by thousands of families and businesses, Al-Subtain stands as a pillar of reliability in Iraq's real estate sector.",
-      ar: "موثوق به من قبل آلاف العائلات والشركات، تقف شركة السبطين كعمود من الموثوقية في قطاع العقارات العراقي.",
-    },
-    image: "/home/uruk.png",
-  },
-];
-
-// Memoized Odometer component to prevent unnecessary re-renders
 const OdometerDigit = React.memo(({ value }: { value: number }) => {
   const digitRef = useRef<HTMLDivElement>(null);
   const prevValue = useRef(value);
 
   useGSAP(() => {
-    // Only animate if value actually changed
     if (prevValue.current !== value) {
       gsap.to(digitRef.current, {
         y: -value * 24,
@@ -125,8 +61,11 @@ const OdometerDigit = React.memo(({ value }: { value: number }) => {
 
 OdometerDigit.displayName = "OdometerDigit";
 
-export const Hero = () => {
-  // Memoize plugin to prevent recreation on every render
+export const Hero = ({
+  data,
+}: {
+  data: HomePageContent["sections"]["hero"];
+}) => {
   const plugin = useMemo(
     () => Autoplay({ delay: 3000, stopOnInteraction: true }),
     []
@@ -157,7 +96,6 @@ export const Hero = () => {
     };
   }, [api, updateSlide]);
 
-  // Optimize GSAP animation to run only once
   useGSAP(() => {
     if (
       hasAnimated.current ||
@@ -222,20 +160,22 @@ export const Hero = () => {
       <StarsLayer />
       <Container className="pt-20 relative z-10">
         <h1 ref={tagline} className="text-xs font-light mb-2">
-          {t("tagline")}
+          {data?.tagline?.value[locale]}
         </h1>
 
         <GlassCard className="p-5 w-fit overflow-hidden">
           <h2
             ref={title}
             className="text-7xl max-md:text-5xl max-sm:text-4xl font-medium mb-2 leading-[108%] rtl:leading-[130%]"
-            dangerouslySetInnerHTML={{ __html: t("title") }}
+            dangerouslySetInnerHTML={{ __html: data?.headline?.value[locale] }}
           ></h2>
 
           <p
             ref={caption}
             className="text-sm font-light"
-            dangerouslySetInnerHTML={{ __html: t("caption") }}
+            dangerouslySetInnerHTML={{
+              __html: data?.subheadline?.value[locale],
+            }}
           ></p>
         </GlassCard>
       </Container>
@@ -249,17 +189,17 @@ export const Hero = () => {
             opts={{ direction: getDirectionClass(locale) as "rtl" | "ltr" }}
           >
             <CarouselContent>
-              {carouselData.map((item, i) => (
-                <CarouselItem key={item.id}>
+              {data?.sliderItems?.value[locale].map((item, i) => (
+                <CarouselItem key={i}>
                   <h3 className="font-bold text-base mb-2 max-sm:text-sm">
-                    {item.title[locale]}
+                    {item.title}
                   </h3>
                   <ScrollArea className="h-12">
                     <p
                       className="text-xs max-sm:text-white/90"
                       dir={getDirectionClass(locale)}
                     >
-                      {item.description[locale]}
+                      {item.caption}
                     </p>
                   </ScrollArea>
                 </CarouselItem>
@@ -268,9 +208,9 @@ export const Hero = () => {
           </Carousel>
         </GlassCard>
         <div className="flex items-center gap-2 mt-4 relative z-10 w-fit rtl:float-left ltr:float-right me-10">
-          {carouselData.map((item, i) => (
+          {data?.sliderItems.value[locale].map((item, i) => (
             <button
-              key={item.id}
+              key={i}
               onClick={() => handleSlideChange(i)}
               aria-label={`Go to slide ${i + 1}`}
               className={clsx(
@@ -292,22 +232,24 @@ export const Hero = () => {
               <OdometerDigit value={locale == "ar" ? ones : tens} />
               <OdometerDigit value={locale == "ar" ? tens : ones} />
             </div>
-            <span className="text-sm font-light">Al-Salam City</span>
+            <span className="text-sm font-light fade-in animate-in">
+              {data?.sliderItems?.value[locale][currentSlide].label}
+            </span>
           </div>
         </Container>
       </div>
-      {carouselData.map((item, i) => (
+      {data?.sliderItems?.value[locale].map((item, i) => (
         <div
-          key={item.id}
-          className="absolute bottom-0 right-[10%] md:right-[30%] rtl:left-[10%] rtl:md:left-[30%] xl:w-[60%] z-10!"
+          key={i}
+          className="absolute bottom-0 right-[10%] md:right-[30%] rtl:left-[10%] rtl:md:left-[30%] xl:w-[900px] z-10!"
         >
           <Image
-            src={item.image}
+            src={item.image?.url}
             alt=""
             width={1000}
             height={1000}
             className={clsx(
-              "object-cover md:min-w-[900px] w-full duration-900",
+              "object-cover md:min-w-[900px]  w-full duration-900",
               currentSlide === i
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-full"

@@ -9,13 +9,18 @@ import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
 import { Link } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
+import { ProjectsPageContent } from "@/types/pages";
 
-export const Hero = () => {
+export const Hero = ({
+  data,
+}: {
+  data: ProjectsPageContent["sections"]["hero"];
+}) => {
   const title = useRef(null);
   const caption = useRef(null);
   const button = useRef(null);
   const image = useRef(null);
-  const locale = useLocale();
+  const locale = useLocale() as "ar" | "en";
 
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current, {
@@ -62,13 +67,13 @@ export const Hero = () => {
           <h1
             className="font-normal text-7xl leading-[120%] mb-6 max-md:text-6xl"
             ref={title}
-            dangerouslySetInnerHTML={{ __html: t("title") }}
+            dangerouslySetInnerHTML={{ __html: data?.headline?.value[locale] }}
           ></h1>
           <p
             className="font-medium text-base w-full max-w-2xl mb-10"
             ref={caption}
           >
-            {t("caption")}
+            {data?.subheadline?.value[locale]}
           </p>
           <Link href={"#projects"}>
             <Button
@@ -88,7 +93,7 @@ export const Hero = () => {
             width={1000}
             height={1000}
             alt="hero"
-            src="/projects/hero.jpg"
+            src={data?.image?.value?.url || "/projects/hero.jpg"}
             className="w-full h-full object-cover ltr:rounded-bl-[12.375rem] rtl:rounded-br-[12.375rem]"
           />
         </div>

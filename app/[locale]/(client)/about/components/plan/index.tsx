@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useTranslations, useLocale } from "next-intl";
+import { AboutPageContent } from "@/types/pages";
 
 export const stepsData = [
   {
@@ -73,7 +74,11 @@ export const stepsData = [
   },
 ];
 
-export const Plan = () => {
+export const Plan = ({
+  data,
+}: {
+  data: AboutPageContent["sections"]["plan"];
+}) => {
   const title = useRef<HTMLHeadingElement>(null);
   const caption = useRef<HTMLParagraphElement>(null);
   const section = useRef<HTMLElement>(null);
@@ -159,24 +164,24 @@ export const Plan = () => {
       <Container>
         <header className="mb-12">
           <h2 className="font-semibold text-5xl leading-[150%]" ref={title}>
-            {t("title")}
+            {data?.headline?.value[locale]}
           </h2>
           <p
             className="font-medium text-lg text-subtitle-color leading-[150%]"
             ref={caption}
           >
-            {t("caption")}
+            {data?.subheadline?.value[locale]}
           </p>
         </header>
         <div className="flex relative items-start gap-6 flex-wrap">
           <BluryBall className="-left-1/4 h-full w-[800px] z-20 max-lg:w-[200px]" />
           <BluryBall className="-right-1/4 left-[unset] translate-x-1/2 h-full w-[800px] z-20 max-lg:hidden" />
-          {stepsData.map((step, i) => (
+          {data?.steps?.value[locale].map((step, i) => (
             <Step
               key={i}
-              title={step.title[locale]}
-              headline={step.headline[locale]}
-              description={step.description[locale]}
+              title={step.label}
+              headline={step.title}
+              description={step.caption}
               index={i + 1}
             />
           ))}

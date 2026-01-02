@@ -2,6 +2,7 @@
 import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
+import { useGetCategories, useGetCategoryById } from "@/services/categories";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import gsap from "gsap";
@@ -9,6 +10,7 @@ import { SplitText } from "gsap/SplitText";
 import { ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Rubik } from "next/font/google";
+import { useQueryState } from "nuqs";
 import { useRef } from "react";
 
 const jobCategories = [
@@ -123,12 +125,15 @@ const jobs = [
 ];
 
 export const JobApplications = () => {
+  const [activeCategory, setActiveCategory] = useQueryState("active-category");
   const tagline = useRef(null);
   const title = useRef(null);
   const caption = useRef(null);
   const section = useRef<HTMLElement>(null);
   const locale = useLocale() as "en" | "ar";
   const t = useTranslations("careers.jobs");
+  const { data: categories } = useGetCategories({});
+  const { data: cat } = useGetCategoryById(activeCategory || "first");
 
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current, {
@@ -145,16 +150,12 @@ export const JobApplications = () => {
       smartWrap: true,
     });
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: section.current },
+      scrollTrigger: { trigger: section.current, end: "top 80%" },
     });
     const jobsList = section.current?.querySelectorAll(
       ".careers-page-job-list"
     );
-    const applicationsList = section.current?.querySelectorAll(
-      ".careers-page-application-list"
-    );
-
-    if (!jobsList || !applicationsList) return;
+    if (!jobsList) return;
     tl.from(splitTitle.words, {
       y: -100,
       opacity: 0,
@@ -187,15 +188,6 @@ export const JobApplications = () => {
       },
       "<"
     );
-    tl.to(
-      applicationsList,
-      {
-        x: 0,
-        opacity: 1,
-        stagger: 0.1,
-      },
-      "<"
-    );
   }, [locale]);
 
   return (
@@ -215,49 +207,51 @@ export const JobApplications = () => {
           ></p>
         </header>
         <div className="flex gap-12 max-xl:flex-col">
-          <ul>
-            {jobCategories.map((category, i) => (
+          <ul className="lg:min-w-3xs">
+            {categories?.categories?.map((category, i) => (
               <li key={i} className="careers-page-job-list">
                 <button
+                  onClick={() => setActiveCategory(category?._id)}
                   className={clsx(
                     "py-1.5 text-lg hover:text-white/70 duration-200 cursor-pointer font-medium",
                     {
                       "text-primary hover:text-primary!":
-                        category.openings == 20,
+                        cat?._id == category?._id ||
+                        (i == 0 && !activeCategory),
                     }
                   )}
                 >
-                  {category.title[locale]}{" "}
-                  {category.openings && <>({category.openings})</>}
+                  {category.name}{" "}
+                  {category.totalJobs && <>({category.totalJobs})</>}
                 </button>
               </li>
             ))}
           </ul>
           <ul className="w-full flex-1 flex flex-col gap-5">
-            {jobs.map((job, i) => (
+            {cat?.jobs?.map((job, i) => (
               <Link
-                href={`/careers/${job.id}`}
+                href={`/careers/${job._id}`}
                 key={i}
-                className="careers-page-application-list py-6 bg-white px-8 flex rounded-sm items-center text-black hover:bg-white/95 duration-300 hover:[&>button]:text-black opacity-0 translate-x-20"
+                className="careers-page-application-list py-6 bg-white px-8 flex rounded-sm items-center text-black hover:bg-white/95 duration-300 hover:[&>button]:text-black"
               >
                 <div className="flex items-center w-full max-md:flex-col max-md:items-start gap-2">
                   <h3 className="font-medium text-xl md:w-[40%]">
-                    {job.title[locale]}
+                    {job.title}
                   </h3>
                   <dl className="flex items-center md:gap-28 max-md:gap-10">
                     <div className="flex flex-col gap-1">
                       <dt className="font-medium text-base text-subtitle-color">
                         {t("experience")}
                       </dt>
-                      <dd className="font-medium text-lg">
-                        {job.experience[locale]}
-                      </dd>
+                      <dd className="font-medium text-lg">{job.experience}</dd>
                     </div>
                     <div className="flex flex-col gap-1">
                       <dt className="font-medium text-base text-subtitle-color">
                         {t("deadline")}
                       </dt>
-                      <dd className="font-medium text-lg">{job.deadline}</dd>
+                      <dd className="font-medium text-lg">
+                        {new Date(job.deadline).toLocaleDateString()}
+                      </dd>
                     </div>
                   </dl>
                 </div>

@@ -5,45 +5,16 @@ import { BluryBall } from "@/components/ui/BluryBall";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useTranslations, useLocale } from "next-intl";
+import { useLocale } from "next-intl";
+import { AboutPageContent } from "@/types/pages";
 
-// Data with translations
-const sectionsData = {
-  vision: {
-    title: { en: "Our Vision", ar: "رؤيتنا" },
-    headline: {
-      en: "Shaping Tomorrow's Communities",
-      ar: "نشكّل مجتمعات الغد",
-    },
-    description: {
-      en: "Our vision is to set a new standard for real estate development in Iraq creating sustainable, modern, and people-focused environments that support families and future generations.",
-      ar: "رؤيتنا هي وضع معيار جديد لتطوير العقارات في العراق من خلال إنشاء بيئات مستدامة، حديثة، وتركز على الناس تدعم العائلات والأجيال القادمة.",
-    },
-  },
-  mission: {
-    title: { en: "Our Mission", ar: "مهمتنا" },
-    headline: { en: "Building With Purpose", ar: "البناء بهدف" },
-    description: {
-      en: "Our mission is to transform development into a meaningful experience by combining thoughtful design, engineering excellence, and practical solutions that elevate everyday living.",
-      ar: "مهمتنا هي تحويل التطوير إلى تجربة ذات معنى من خلال الجمع بين التصميم المدروس، التميز الهندسي، والحلول العملية التي ترتقي بحياة الناس اليومية.",
-    },
-  },
-  values: {
-    title: { en: "Our Values", ar: "قيمنا" },
-    headline: { en: "Guided by Principles That Last", ar: "مرشدنا مبادئ تدوم" },
-    description: {
-      en: "Integrity, quality, innovation, sustainability, and community—these values shape every project we deliver and define who we are as a company.",
-      ar: "النزاهة، الجودة، الابتكار، الاستدامة، والمجتمع—هذه القيم تشكل كل مشروع نقدمه وتحدد من نحن كشركة.",
-    },
-  },
-} as const;
-
-// Define types for keys and locale
-const sectionKeys = ["vision", "mission", "values"] as const;
-type SectionKey = (typeof sectionKeys)[number]; // "vision" | "mission" | "values"
 type Locale = "en" | "ar";
 
-export const MissionAndVision = () => {
+export const MissionAndVision = ({
+  data,
+}: {
+  data: AboutPageContent["sections"]["overview"];
+}) => {
   const section = useRef<HTMLElement | null>(null);
   const visionRef = useRef<HTMLElement | null>(null);
   const missionRef = useRef<HTMLElement | null>(null);
@@ -68,8 +39,6 @@ export const MissionAndVision = () => {
     tl.from(valuesRef.current, { x: "-50%", opacity: 0 }, "<");
   }, []);
 
-  const t = useTranslations("about.missionAndVision");
-
   return (
     <section className="my-32 leading-[150%] relative" ref={section}>
       <Image
@@ -84,36 +53,54 @@ export const MissionAndVision = () => {
         <BluryBall className="bottom-0 -right-[70%] left-[unest] w-[900px] h-[700px]" />
         <header className="mb-12 relative z-10">
           <h2 className="font-semibold text-5xl mb-2" ref={title}>
-            {t("title")}
+            {data?.headline?.value[locale]}
           </h2>
           <p className="text-subtitle-color font-medium text-lg" ref={caption}>
-            {t("caption")}
+            {data?.subheadline?.value[locale]}
           </p>
         </header>
         <div className="flex gap-10 flex-wrap relative z-10">
-          {sectionKeys.map((key) => (
-            <article
-              key={key}
-              className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
-              ref={
-                key === "vision"
-                  ? visionRef
-                  : key === "mission"
-                  ? missionRef
-                  : valuesRef
-              }
-            >
-              <h2 className="mb-6 font-semibold text-3xl">
-                {sectionsData[key].title[locale]}
-              </h2>
-              <h3 className="font-bold mb-5 text-lg text-subtitle-color">
-                {sectionsData[key].headline[locale]}
-              </h3>
-              <p className="font-medium text-lg text-subtitle-color">
-                {sectionsData[key].description[locale]}
-              </p>
-            </article>
-          ))}
+          {/* Vision */}
+          <article
+            className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
+            ref={visionRef}
+          >
+            <h2 className="mb-6 font-semibold text-3xl">
+              {data?.ourVisionTitle?.value[locale]}
+            </h2>
+            <p className="font-medium text-lg text-subtitle-color">
+              {data?.ourVisionCaption?.value[locale]}
+            </p>
+          </article>
+
+          {/* Mission */}
+          <article
+            className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
+            ref={missionRef}
+          >
+            <h2 className="mb-6 font-semibold text-3xl">
+              {data?.ourMissionTitle?.value[locale]}
+            </h2>
+            <p className="font-medium text-lg text-subtitle-color">
+              {data?.ourMissionCaption?.value[locale]}
+            </p>
+          </article>
+
+          {/* Core Values */}
+          <article
+            className="w-full flex-1 md:min-w-xs max-md:min-w-full ring-8 rounded-xl p-12 bg-[#0f0f0f] ring-[#191919]"
+            ref={valuesRef}
+          >
+            <h2 className="mb-6 font-semibold text-3xl">
+              {data?.coreValuesTitle?.value[locale]}
+            </h2>
+            <div
+              className="font-medium text-lg text-subtitle-color"
+              dangerouslySetInnerHTML={{
+                __html: data?.coreValuesCaption?.value[locale] || "",
+              }}
+            />
+          </article>
         </div>
       </Container>
       <Image

@@ -8,6 +8,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { getDirectionClass } from "@/lib/TextDirection";
+import { useGetTestimonials } from "@/services/testimonials";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
@@ -83,6 +84,7 @@ export const Clients = () => {
   const [canScrollNext, setCanScrollNext] = useState(false);
   const locale = useLocale() as "ar" | "en";
   const isRtl = locale === "ar";
+  const { data } = useGetTestimonials({});
 
   useEffect(() => {
     if (!api) return;
@@ -184,33 +186,33 @@ export const Clients = () => {
             }}
           >
             <CarouselContent className="-ml-6">
-              {clientTestimonials.map((client) => (
+              {data?.payload?.map((client) => (
                 <CarouselItem
-                  key={client.id}
+                  key={client._id}
                   className="pl-6 basis-1/2 max-md:basis-full"
                 >
                   <div className="h-full bg-white/5 border border-white/20 rounded-3xl p-6 lg:p-8 flex flex-col backdrop-blur-2xl">
                     <header className="flex flex-col items-center justify-center">
                       <Image
-                        src={client.image}
+                        src={client?.image?.url}
                         width={1000}
                         height={1000}
-                        alt={client.name[locale]}
+                        alt={client?.clientType}
                         className="size-16 rounded-full object-cover mb-7"
                       />
                       <h3 className="font-medium text-sm lg:text-base text-center mb-2">
-                        {client.name[locale]}
+                        {client.clientType}
                       </h3>
                       <span className="font-normal text-subtitle-color">
-                        {client.role[locale]}
+                        {client.location}
                       </span>
                     </header>
                     <p className="font-light text-subtitle-color text-center mt-8 flex-1 mb-5">
-                      {client.testimonial[locale]}
+                      {client.testimonial}
                     </p>
                     <footer className="flex items-center justify-between gap-5">
                       <div className="flex items-center gap-2">
-                        {Array.from({ length: client.rating }).map((_, i) => (
+                        {Array.from({ length: client.stars }).map((_, i) => (
                           <Star
                             fill="gold"
                             className="text-transparent"

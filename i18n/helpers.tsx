@@ -58,15 +58,6 @@ export const localizeCount = (
   }
 };
 
-console.log(
-  localizeCount(0, "ar", {
-    singular: "يوم",
-    dual: "يومان",
-    few: "أيام",
-    many: "يومًا",
-  })
-);
-console.log(localizeCount(1, "en", { singular: "day", en: ["day", "days"] }));
-console.log(
-  localizeCount(5, "fr", { singular: "jour", fr: ["jour", "jours"] })
-);
+export function formatStr(str: string): string {
+  return str.replace(/([A-Z])/g, " $1").trim();
+}

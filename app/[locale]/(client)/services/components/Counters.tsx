@@ -2,57 +2,65 @@
 
 import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
+import { ServicesPageContent } from "@/types/pages";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const countersData = [
-  {
-    value: 25,
-    suffix: "+",
-    title: {
-      en: "Total Projects",
-      ar: "إجمالي المشاريع",
-    },
-  },
-  {
-    value: 21,
-    suffix: "+",
-    title: {
-      en: "Years of experience",
-      ar: "سنوات من الخبرة",
-    },
-  },
-  {
-    value: 3000,
-    suffix: "+",
-    title: {
-      en: "Happy Customers",
-      ar: "عملاء سعداء",
-    },
-  },
-  {
-    value: 3,
-    suffix: "+",
-    title: {
-      en: "Provinces",
-      ar: "محافظات",
-    },
-  },
-];
-
-export const Counters = () => {
+export const Counters = ({
+  data,
+}: {
+  data: ServicesPageContent["sections"]["overview"];
+}) => {
   const section = useRef<HTMLElement | null>(null);
   const image1 = useRef<HTMLImageElement | null>(null);
   const image2 = useRef<HTMLImageElement | null>(null);
   const locale = useLocale() as "en" | "ar";
   const t = useTranslations("services.counters");
+
+  const countersData = useMemo(
+    () => [
+      {
+        value: data?.totalProjects?.value || 0,
+        suffix: "+",
+        title: {
+          en: "Total Projects",
+          ar: "إجمالي المشاريع",
+        },
+      },
+      {
+        value: data?.yearsOfExperience?.value || 0,
+        suffix: "+",
+        title: {
+          en: "Years of experience",
+          ar: "سنوات من الخبرة",
+        },
+      },
+      {
+        value: data?.happyCustomers?.value || 0,
+        suffix: "+",
+        title: {
+          en: "Happy Customers",
+          ar: "عملاء سعداء",
+        },
+      },
+      {
+        value: data?.provinces?.value || 0,
+        suffix: "+",
+        title: {
+          en: "Provinces",
+          ar: "محافظات",
+        },
+      },
+    ],
+    [data]
+  );
 
   useGSAP(() => {
     if (!section.current) return;
@@ -93,7 +101,7 @@ export const Counters = () => {
         }
       );
     });
-  }, []);
+  }, [countersData]);
 
   return (
     <section ref={section} className="relative mt-24 mb-30">
@@ -136,7 +144,7 @@ export const Counters = () => {
 
             <Image
               ref={image1}
-              src="/services/project-1.jpg"
+              src={'/services/project-1.jpg'}
               width={1000}
               height={1000}
               alt="project"
@@ -146,7 +154,7 @@ export const Counters = () => {
 
           <div className="flex justify-between mt-10 max-sm:flex-col max-sm:items-center gap-3">
             <p className="text-lg w-full max-w-2xl max-sm:text-center">
-              {t("caption")}
+              {data?.caption?.value[locale]}
             </p>
 
             <Button
@@ -160,7 +168,7 @@ export const Counters = () => {
 
         <Image
           ref={image2}
-          src="/services/project-2.jpg"
+          src={'/services/project-2.jpg'}
           width={1000}
           height={1000}
           alt="project"

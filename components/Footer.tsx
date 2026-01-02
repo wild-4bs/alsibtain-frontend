@@ -10,6 +10,8 @@ import Youtube from "@/assets/social/youtube.svg";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
+import { useGetPageContents } from "@/services/pages";
+import { ContactPageContent } from "@/types/pages";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,6 +20,7 @@ const poppins = Poppins({
 });
 
 export const Footer = () => {
+  const { data } = useGetPageContents("contact");
   const tLinks = useTranslations("header");
   const t = useTranslations("footer");
   const locale = useLocale() as "ar" | "en";
@@ -34,8 +37,20 @@ export const Footer = () => {
           <Link href={"/"}>
             <FooterLogo className="mb-6 max-sm:mx-auto" />
           </Link>
-          <h2 className="font-medium mb-2">{t("company.name")}</h2>
-          <p>{t("company.description")}</p>
+          <h2 className="font-medium mb-2">
+            {
+              (data as ContactPageContent)?.sections?.footer?.headline?.value[
+                locale
+              ]
+            }
+          </h2>
+          <p>
+            {
+              (data as ContactPageContent)?.sections?.footer?.caption?.value[
+                locale
+              ]
+            }
+          </p>
         </div>
         <ul className="flex flex-col gap-2">
           <h3 className="font-medium text-xl">{t("quickLinks.title")}</h3>
@@ -52,42 +67,107 @@ export const Footer = () => {
         </ul>
         <ul className="flex flex-col gap-2">
           <h3 className="font-medium text-xl">{t("projects.title")}</h3>
-          <li className="font-medium leading-5">{t("projects.urukCity")}</li>
-          <li className="font-medium leading-5">{t("projects.salamCity")}</li>
-          <li className="font-medium leading-5">
-            {t("projects.kafeelHospital")}
-          </li>
-          <li className="font-medium leading-5">{t("projects.alAbbas")}</li>
+          {(data as ContactPageContent)?.sections?.footer?.projects?.value[
+            locale
+          ].map((project, i) => (
+            <li className="font-medium leading-5" key={i}>
+              {project?.name}
+            </li>
+          ))}
         </ul>
         <ul className="flex flex-col gap-0.5">
           <h3 className="font-medium text-xl mb-2">
             {t("headquarters.title")}
           </h3>
-          <li className="font-medium leading-5">{t("headquarters.address")}</li>
-          <li className="font-light text-base leading-6 text-end!" dir="ltr">
-            {t("headquarters.phone")}
+          <li className="font-medium leading-5">
+            {
+              (data as ContactPageContent)?.sections?.footer?.headOffice
+                ?.address?.value[locale]
+            }
           </li>
           <li className="font-light text-base leading-6">
-            {t("headquarters.email")}
+            {
+              (data as ContactPageContent)?.sections?.footer?.headOffice
+                ?.phoneNumber
+            }
+          </li>
+          <li className="font-light text-base leading-6">
+            {(data as ContactPageContent)?.sections?.footer?.headOffice?.email}
           </li>
           <li className="font-light text-base leading-6 mb-3">
-            {t("headquarters.website")}
+            <Link
+              className="hover:underline"
+              href={
+                (data as ContactPageContent)?.sections?.footer?.headOffice
+                  ?.website
+              }
+              target="_blank"
+            >
+              {
+                (data as ContactPageContent)?.sections?.footer?.headOffice
+                  ?.website
+              }
+            </Link>
           </li>
           <ul>
             <h4 className="font-medium text-sm mb-2">{t("social.title")}</h4>
             <div className="flex gap-2 items-center max-sm:justify-center">
-              <li>
-                <Facebook />
-              </li>
-              <li>
-                <Instagram />
-              </li>
-              <li>
-                <Whatsapp />
-              </li>
-              <li>
-                <Youtube />
-              </li>
+              {(data as ContactPageContent)?.sections?.footer?.headOffice
+                ?.facebook && (
+                <li>
+                  <Link
+                    href={
+                      (data as ContactPageContent)?.sections?.footer?.headOffice
+                        ?.facebook
+                    }
+                    target="_blank"
+                  >
+                    <Facebook />
+                  </Link>
+                </li>
+              )}
+              {(data as ContactPageContent)?.sections?.footer?.headOffice
+                ?.instagram && (
+                <li>
+                  <Link
+                    href={
+                      (data as ContactPageContent)?.sections?.footer?.headOffice
+                        ?.instagram
+                    }
+                    target="_blank"
+                  >
+                    <Instagram />
+                  </Link>
+                </li>
+              )}
+              {(data as ContactPageContent)?.sections?.footer?.headOffice
+                ?.whatsapp && (
+                <li>
+                  <Link
+                    href={
+                      (data as ContactPageContent)?.sections?.footer?.headOffice
+                        ?.whatsapp
+                    }
+                    target="_blank"
+                  >
+                    <Whatsapp />
+                  </Link>
+                </li>
+              )}
+              {(data as ContactPageContent)?.sections?.footer?.headOffice
+                ?.youtube && (
+                <li>
+                  <Link
+                    href={
+                      (data as ContactPageContent)?.sections?.footer?.headOffice
+                        ?.youtube
+                    }
+                    target="_blank"
+                  >
+                    <Youtube />
+                  </Link>
+                </li>
+              )}
             </div>
           </ul>
         </ul>

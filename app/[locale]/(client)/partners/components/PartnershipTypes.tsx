@@ -3,10 +3,12 @@ import Container from "@/components/Container";
 import { Badge } from "@/components/ui/badge";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Button } from "@/components/ui/button";
+import { PartnersPageContent } from "@/types/pages";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ArrowUpRight } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 
 import { Zap, Banknote, Sticker, PieChart } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -63,7 +65,11 @@ const partnershipsData = [
   },
 ];
 
-export const PartnershipTypes = () => {
+export const PartnershipTypes = ({
+  data,
+}: {
+  data: PartnersPageContent["sections"]["partnershipTypes"];
+}) => {
   const title = useRef(null);
   const caption = useRef(null);
   const button = useRef(null);
@@ -123,16 +129,16 @@ export const PartnershipTypes = () => {
     <section className="relative mt-26" ref={section}>
       <BluryBall className="left-0 w-[40%] h-full" />
       <Container className="flex gap-10 relative z-10 max-lg:flex-col">
-        <div className="flex flex-col gap-6 w-full">
-          <Badge variant={"dark"}>{t("badge")}</Badge>
+        <div className="flex flex-col gap-6 w-full max-w-3xl">
+          <Badge variant={"dark"}>{t('badge')}</Badge>
           <h2 className="font-bold text-6xl" ref={title}>
-            {t("title")}
+            {data?.headline?.value[locale]}
           </h2>
           <p
             className="font-medium text-base leading-6 text-subtitle-color"
             ref={caption}
           >
-            {t("caption")}
+            {data?.subheadline?.value[locale]}
           </p>
           <Button
             variant={"secondary"}
@@ -150,22 +156,24 @@ export const PartnershipTypes = () => {
           </Button>
         </div>
         <div className="grid grid-cols-2 gap-12 max-sm:grid-cols-1">
-          {partnershipsData.map((partnership, i) => (
-            <article
-              key={i}
-              className="flex flex-col gap-4 max-sm:items-center max-sm:text-center"
-            >
-              <div className="size-16 rounded-2xl bg-[#0D0D0D] flex items-center justify-center partnership-icon">
-                {partnership.icon}
-              </div>
-              <h3 className="text-2xl font-medium">
-                {partnership.title[locale]}
-              </h3>
-              <p className="text-base leading-6 font-medium text-subtitle-color">
-                {partnership.description[locale]}
-              </p>
-            </article>
-          ))}
+          {data?.types?.value[locale].map((partnership, i) => {
+            const IconComponent =
+              (LucideIcons as any)[partnership?.icon] || LucideIcons.HelpCircle;
+            return (
+              <article
+                key={i}
+                className="flex flex-col gap-4 max-sm:items-center max-sm:text-center"
+              >
+                <div className="size-16 rounded-2xl bg-[#0D0D0D] flex items-center justify-center partnership-icon">
+                  <IconComponent  className="text-primary"/>
+                </div>
+                <h3 className="text-2xl font-medium">{partnership.title}</h3>
+                <p className="text-base leading-6 font-medium text-subtitle-color">
+                  {partnership.caption}
+                </p>
+              </article>
+            );
+          })}
         </div>
       </Container>
     </section>

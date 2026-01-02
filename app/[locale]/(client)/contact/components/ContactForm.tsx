@@ -8,11 +8,16 @@ import Instagram from "@/assets/social/instagram.svg";
 import Linkedin from "@/assets/social/linkedin.svg";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Form } from "./Form";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { useGetPageContents } from "@/services/pages";
+import { ContactPageContent } from "@/types/pages";
+import { Link } from "@/i18n/routing";
 
 export const ContactForm = () => {
   const t = useTranslations("contact");
-
+  const { data } = useGetPageContents("contact");
+  const sections = (data as ContactPageContent)?.sections;
+  const locale = useLocale() as "ar" | "en";
   return (
     <section className="mt-16 relative">
       <BluryBall className="w-[1377px] h-full left-0 z-0" />
@@ -21,48 +26,51 @@ export const ContactForm = () => {
         <div className="md:flex gap-28 mb-16">
           <div className="min-w-fit max-md:mb-3">
             <h2 className="mb-2 font-semibold text-5xl">
-              {t("title")}
+              {sections?.header?.title?.value[locale]}
             </h2>
             <h3 className="font-medium text-2xl">
-              {t("subTitle")}
+              {sections?.header?.subtitle?.value[locale]}
             </h3>
           </div>
 
           <p className="font-light text-lg">
-            {t("caption")}
+            {sections?.header?.caption?.value[locale]}
           </p>
         </div>
 
-        <div className="lg:flex gap-12">
-          <GlassCard className="max-lg:mb-10">
+        <div className="lg:flex gap-12 ">
+          <GlassCard className="max-lg:mb-10 md:min-w-sm">
             <header>
               <h2 className="font-bold text-4xl mb-4">
-                {t("contactInfo.title")}
+                {sections?.contactInformation?.headline?.value[locale]}
               </h2>
 
-              <p className="font-normal text-sm text-subtitle-color mb-2">
-                {t("contactInfo.caption1")}
-              </p>
-
-              <p className="font-normal text-sm text-subtitle-color">
-                {t("contactInfo.caption2")}
-              </p>
+              <div
+                className="font-normal text-sm text-subtitle-color mb-2"
+                dangerouslySetInnerHTML={{
+                  __html: sections?.contactInformation?.caption?.value[locale],
+                }}
+              ></div>
             </header>
 
             <ul className="text-lg font-bold mt-11">
               <li className="flex items-center gap-2 mb-2">
                 <MailIcon />
-                <span>info@alsibtain.com</span>
+                <span>{sections?.contactInformation?.email}</span>
               </li>
 
               <li className="flex items-center gap-2 mb-4">
                 <MapPin />
-                <span>Iraq, Karbala</span>
+                <span>{sections?.contactInformation?.location?.value[locale]}</span>
               </li>
 
               <li className="flex items-center gap-2">
-                <Instagram />
-                <Linkedin />
+                <Link href={sections?.contactInformation?.instagram}>
+                  <Instagram />
+                </Link>
+                <Link href={sections?.contactInformation?.linkedin}>
+                  <Linkedin />
+                </Link>
               </li>
             </ul>
           </GlassCard>

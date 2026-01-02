@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { ReactLenis } from "@/lib/lenis";
 import { cn } from "@/lib/utils";
 import { Alexandria } from "next/font/google";
+import { Toaster } from "sonner";
 
 interface Props {
   children: React.ReactNode;
@@ -21,6 +22,7 @@ export default function Layout({ children }: Props) {
           alexandria.className
         )}
       >
+        <Toaster />
         <Header />
         {children}
         <Footer />

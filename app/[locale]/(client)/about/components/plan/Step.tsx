@@ -1,4 +1,5 @@
 import { BluryBall } from "@/components/ui/BluryBall";
+import { useLocale } from "next-intl";
 
 interface Props {
   headline: string;
@@ -8,12 +9,12 @@ interface Props {
 }
 export const Step = ({ headline, description, title, index }: Props) => {
   const stepNumber = String(index).padStart(2, "0");
-
+  const locale = useLocale() as "ar" | "en";
   return (
     <article className="w-full flex-1 min-w-sm overflow-hidden max-sm:min-w-full about-page-plan-step">
       <header className="px-5 py-4 border-l border-l-primary">
         <h3 className="relative z-30">
-          Step {stepNumber} — {title}
+          {{ ar: "الخطوة  ", en: "Step" }[locale]} {stepNumber} — {title}
         </h3>
       </header>
       <div className="p-px overflow-hidden bg-input rounded-xl rounded-tl-none relative">

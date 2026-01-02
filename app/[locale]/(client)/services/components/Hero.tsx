@@ -2,6 +2,7 @@
 import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Button } from "@/components/ui/button";
+import { ServicesPageContent } from "@/types/pages";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import gsap from "gsap";
@@ -12,14 +13,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-const images = [
-  { id: 0, src: "/services/hero.jpg" },
-  { id: 1, src: "/projects/1.png" },
-  { id: 2, src: "/projects/11.png" },
-  { id: 3, src: "/projects/3.jpg" },
-];
-
-export const Hero = () => {
+export const Hero = ({
+  data,
+}: {
+  data: ServicesPageContent["sections"]["hero"];
+}) => {
   const title = useRef(null);
   const caption = useRef(null);
   const button = useRef(null);
@@ -28,11 +26,16 @@ export const Hero = () => {
   const locale = useLocale() as "ar" | "en"; // get current locale, e.g., "ar" or "en"
 
   useEffect(() => {
+    if (!data?.images?.value?.length) return;
+
     const interval = setInterval(() => {
-      setActiveImage((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+      setActiveImage((prev) =>
+        prev === data.images.value.length - 1 ? 0 : prev + 1
+      );
     }, 3000);
+
     return () => clearInterval(interval);
-  }, []);
+  }, [data?.images?.value?.length]);
 
   useGSAP(() => {
     if (!title.current || !caption.current) return;
@@ -66,20 +69,18 @@ export const Hero = () => {
   return (
     <section className="relative z-10 h-[calc(100vh-var(--header-height))] flex items-center">
       <div className="absolute -top-(--header-height) left-0 w-full h-[calc(120%+var(--header-height))] bg-primary">
-        {images.map((image, i) => (
-          <Image
-            src={image.src}
+        {data?.images?.value?.map((image, i) => (
+          <img
+            src={image?.data?.url}
             key={image.id}
-            fill
             alt={`Hero image ${i + 1}`}
             className={clsx(
-              "object-cover object-top z-20 transition-opacity duration-1000",
+              "absolute top-0 left-0 object-cover object-top z-20 transition-opacity duration-1000 w-full h-full", // Added "absolute top-0 left-0"
               {
-                "opacity-90": activeImage === image.id,
-                "opacity-0": activeImage !== image.id,
+                "opacity-90": activeImage === i,
+                "opacity-0": activeImage !== i,
               }
             )}
-            priority={i === 0}
           />
         ))}
         <div className="layer absolute top-0 left-0 w-full h-full bg-linear-to-t from-black to-transparent z-20"></div>
@@ -90,7 +91,7 @@ export const Hero = () => {
 
       <Container className="relative z-70 max-lg:text-center">
         <div className="absolute top-1/2 end-5 z-30 w-4 flex flex-col gap-16 -translate-y-1/2">
-          {images.map((_, i) => (
+          {data?.images?.value?.map((_, i) => (
             <button
               key={i}
               className={clsx(
@@ -109,13 +110,13 @@ export const Hero = () => {
         <h1
           ref={title}
           className="font-bold text-6xl mb-5 uppercase leading-[150%] max-lg:text-5xl max-md:leading-[120%] max-md:text-4xl pe-10"
-          dangerouslySetInnerHTML={{ __html: t("title") }}
+          dangerouslySetInnerHTML={{ __html: data?.headline?.value[locale] }}
         ></h1>
         <p
           ref={caption}
           className="mb-6 font-normal text-lg w-full max-w-xl max-lg:mx-auto max-lg:text-base max-lg:max-w-full pe-10"
         >
-          {t("caption")}
+          {data?.subheadline?.value[locale]}
         </p>
         <div className="flex items-center gap-7 max-lg:justify-center pe-10">
           <Link

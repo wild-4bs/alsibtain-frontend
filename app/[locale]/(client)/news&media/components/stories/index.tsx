@@ -3,6 +3,9 @@ import Container from "@/components/Container";
 import { Story } from "./Story";
 import { Button } from "@/components/ui/button";
 import { useLocale, useTranslations } from "next-intl";
+import { useGetUpdates } from "@/services/projects-updates";
+import { timeAgo } from "@/lib/date";
+import { useQueryState } from "nuqs";
 
 const storiesData = [
   {
@@ -136,27 +139,33 @@ const storiesData = [
 ];
 
 export const Stories = () => {
-  const locale = useLocale() as "en" | "ar";
+  const [activeUpdates, setActiveUpdates] = useQueryState("active-updates");
   const t = useTranslations("common");
+  const { data } = useGetUpdates({});
 
   return (
     <section className="mt-28">
       <Container>
         <h2 className="font-black text-3xl mb-6">{t("stories")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-          {storiesData.map((story) => (
+          {data?.payload?.map((story) => (
             <Story
-              key={story.id}
-              image={story.image}
-              title={story.title[locale]}
-              createdBy={story.author[locale]}
-              date={story.date[locale]}
+              key={story._id}
+              image={story.thumbnail?.url}
+              title={story.title}
+              createdBy={story.writtenBy}
+              date={timeAgo(story.createdAt)}
+              active={activeUpdates == story?._id}
+              onClick={() => {
+                setActiveUpdates(story?._id);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
             />
           ))}
         </div>
-        <Button className="mt-6 text-lg font-black" variant={"ghost"}>
+        {/* <Button className="mt-6 text-lg font-black" variant={"ghost"}>
           {t("seeMore")} +
-        </Button>
+        </Button> */}
       </Container>
     </section>
   );

@@ -10,6 +10,7 @@ import { Oxanium } from "next/font/google";
 import Image from "next/image";
 import { useRef } from "react";
 import { useLocale } from "next-intl";
+import { Project } from "@/services/projects";
 
 const oxanium = Oxanium({
   subsets: ["latin"],
@@ -17,7 +18,7 @@ const oxanium = Oxanium({
   variable: "--font-oxanium",
 });
 
-export const Hero = () => {
+export const Hero = ({ project }: { project?: Project }) => {
   const image = useRef<HTMLDivElement>(null);
   const detailsList = useRef<HTMLDListElement>(null);
 
@@ -44,7 +45,7 @@ export const Hero = () => {
       ref={image}
     >
       <Image
-        src={"/projects/single-project.jpg"}
+        src={project?.background?.url || "/projects/single-project.jpg"}
         alt="singleproject"
         width={10000}
         height={10000}
@@ -66,36 +67,23 @@ export const Hero = () => {
         >
           <div className="flex flex-col gap-2">
             <dt>{t("labels.projectName")}</dt>
-            <dd>
-              {
-                {
-                  ar: "مشروع مدينة أوروك السكني",
-                  en: "Uruk City Residential Development",
-                }[locale]
-              }
-            </dd>
+            <dd>{project?.projectFullName}</dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
             <dt>{t("labels.location")}</dt>
-            <dd>{{ ar: "كربلاء، العراق", en: "Karbala, Iraq" }[locale]}</dd>
+            <dd>{project?.location}</dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
             <dt>{t("labels.totalArea")}</dt>
-            <dd>{{ ar: "950,500 م²", en: "950,500 m²" }[locale]}</dd>
+            <dd>{project?.totalArea}</dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
             <dt>{t("labels.totalResidentialUnits")}</dt>
-            <dd>{{ ar: "1,348 وحدة", en: "1,348 units" }[locale]}</dd>
+            <dd>{project?.totalResidentialUnits}</dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
             <dt>{t("labels.unitType")}</dt>
-            <dd>
-              {
-                { ar: "وحدات سكنية أفقية", en: "Horizontal residential units" }[
-                  locale
-                ]
-              }
-            </dd>
+            <dd>{project?.unitType}</dd>
           </div>
         </dl>
       </Container>

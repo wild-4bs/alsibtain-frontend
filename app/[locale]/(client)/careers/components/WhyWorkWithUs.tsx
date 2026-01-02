@@ -9,6 +9,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { useLocale, useTranslations } from "next-intl";
+import { CareersPageContent } from "@/types/pages";
+import * as LucideIcons from "lucide-react";
 
 gsap.registerPlugin(SplitText);
 
@@ -59,7 +61,11 @@ const reasons = [
   },
 ];
 
-export const WhyWorkWithUs = () => {
+export const WhyWorkWithUs = ({
+  data,
+}: {
+  data: CareersPageContent["sections"]["benefits"];
+}) => {
   const section = useRef<HTMLElement>(null);
   const tagline = useRef<HTMLHeadingElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -146,27 +152,31 @@ export const WhyWorkWithUs = () => {
       <Container className="flex md:justify-between gap-10 max-md:flex-col">
         <div>
           <h2 className="mb-4 font-medium text-lg" ref={tagline}>
-            {t("tagline")}
+            BENEFITS
           </h2>
           <h3 className="mb-6 font-bold text-4xl" ref={title}>
-            {t("title")}
+            {data?.title?.value[locale]}
           </h3>
-          <div className="text-sm [&_p]:not-last:mb-2" ref={caption}>
-            {t.rich("caption", {
-              p: (chunks) => <p>{chunks}</p>,
-            })}
-          </div>
+          <div
+            className="text-sm [&_p]:not-last:mb-2"
+            ref={caption}
+            dangerouslySetInnerHTML={{ __html: data?.caption?.value[locale] }}
+          ></div>
         </div>
         <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
-          {reasons.map((reason, i) => (
-            <div className="benefit-card flex flex-col" key={i}>
-              <div className="size-16 mb-8 rounded-sm bg-primary flex items-center justify-center">
-                {reason.icon}
+          {data?.benefitsList?.value[locale].map((reason, i) => {
+            const IconComponent =
+              (LucideIcons as any)[reason?.icon] || LucideIcons.HelpCircle;
+            return (
+              <div className="benefit-card flex flex-col" key={i}>
+                <div className="size-16 mb-8 rounded-sm bg-primary flex items-center justify-center">
+                  <IconComponent />
+                </div>
+                <h4 className="font-bold text-lg mb-3">{reason.title}</h4>
+                <p className="font-light text-sm">{reason.caption}</p>
               </div>
-              <h4 className="font-bold text-lg mb-3">{reason.title[locale]}</h4>
-              <p className="font-light text-sm">{reason.caption[locale]}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </Container>
     </section>

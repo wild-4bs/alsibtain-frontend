@@ -1,7 +1,6 @@
 "use client";
 
 import Container from "@/components/Container";
-import { Badge } from "@/components/ui/badge";
 import { BluryBall } from "@/components/ui/BluryBall";
 import Image from "next/image";
 import { useRef } from "react";
@@ -9,10 +8,14 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { useLocale, useTranslations } from "next-intl";
+import { useGetUpdatesById } from "@/services/projects-updates";
+import { useQueryState } from "nuqs";
 
 gsap.registerPlugin(SplitText);
 
 export const Hero = () => {
+  const [activeUpdates] = useQueryState("active-updates");
+  const { data } = useGetUpdatesById(activeUpdates || "first");
   const section = useRef<HTMLElement>(null);
   const badge = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -86,35 +89,37 @@ export const Hero = () => {
           ref={imageWrapper}
           className="h-[90%] w-full flex-1 rounded-3xl overflow-hidden max-lg:flex-[unset] max-lg:h-[400px]"
         >
-          <Image
-            src={"/news&media/hero.jpg"}
-            width={10000}
-            height={10000}
-            alt="image"
-            className="w-full h-full object-cover"
-          />
+          {data?.thumbnail?.url && (
+            <Image
+              src={data?.thumbnail?.url}
+              width={10000}
+              height={10000}
+              alt="image"
+              className="w-full h-full object-cover bg-primary/40"
+            />
+          )}
         </div>
 
         {/* CONTENT */}
         <div className="flex flex-col text-center items-center w-1/2 max-lg:w-full">
           <div ref={badge}>
-            <Badge
+            {/* <Badge
               className="mb-2 font-bold text-xs px-2 py-1"
               variant={"secondary"}
             >
               {t("badge")}
-            </Badge>
+            </Badge> */}
           </div>
 
           <h1 className="font-black text-3xl mb-2 rtl:mb-4" ref={title}>
-            {t("title")}
+            {data?.title}
           </h1>
 
           <p
             className="font-medium text-base leading-[100%] rtl:leading-[120%]"
             ref={caption}
           >
-            {t("caption")}
+            {data?.description}
           </p>
         </div>
       </Container>

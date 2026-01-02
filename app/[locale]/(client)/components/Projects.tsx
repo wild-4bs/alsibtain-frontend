@@ -14,7 +14,6 @@ import { Link } from "@/i18n/routing";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import {
   ArrowUpRight,
@@ -27,6 +26,7 @@ import Image from "next/image";
 import { useLocale } from "next-intl";
 import React, { useEffect, useRef, useState } from "react";
 import { getDirectionClass } from "@/lib/TextDirection";
+import { useGetSliderProjects } from "@/services/slider-projects";
 
 interface ProjectSlideProps {
   isActive: boolean;
@@ -40,6 +40,8 @@ interface ProjectSlideProps {
   areaLabel: string;
   readMoreLabel: string;
   locale: "en" | "ar";
+  link?: string;
+  projectId?: string;
 }
 
 const ProjectSlide: React.FC<ProjectSlideProps> = ({
@@ -54,6 +56,8 @@ const ProjectSlide: React.FC<ProjectSlideProps> = ({
   areaLabel,
   readMoreLabel,
   locale,
+  link,
+  projectId,
 }) => {
   const locationEl = useRef(null);
   const areaEl = useRef(null);
@@ -151,7 +155,7 @@ const ProjectSlide: React.FC<ProjectSlideProps> = ({
               <div className="sm:text-3xl text-xl flex items-center gap-2">
                 <dt className="font-bold" ref={projectNameEl}>
                   {projectName} |
-                </dt>{" "}
+                </dt>
                 <dd ref={locationEl}>{location}</dd>
               </div>
               <div className="sm:text-3xl text-xl flex items-center gap-2">
@@ -162,7 +166,7 @@ const ProjectSlide: React.FC<ProjectSlideProps> = ({
               </div>
             </div>
             <Link
-              href={"/projects/id"}
+              href={link || `/projects/${projectId}`}
               className="max-md:self-end inline-block"
             >
               <Button
@@ -182,89 +186,6 @@ const ProjectSlide: React.FC<ProjectSlideProps> = ({
   );
 };
 
-const projectsData = [
-  {
-    id: 1,
-    videoSrc: "/projects/1.mp4",
-    projectName: {
-      en: "Uruk",
-      ar: "أوروك",
-    },
-    location: {
-      en: "Karbala",
-      ar: "كربلاء",
-    },
-    area: {
-      en: "Over 950,000 m²",
-      ar: "أكثر من 950,000 م²",
-    },
-  },
-  {
-    id: 2,
-    videoSrc: "/projects/1.mp4",
-    projectName: {
-      en: "Babylon",
-      ar: "بابل",
-    },
-    location: {
-      en: "Baghdad",
-      ar: "بغداد",
-    },
-    area: {
-      en: "Over 800,000 m²",
-      ar: "أكثر من 800,000 م²",
-    },
-  },
-  {
-    id: 3,
-    videoSrc: "/projects/1.mp4",
-    projectName: {
-      en: "Nineveh",
-      ar: "نينوى",
-    },
-    location: {
-      en: "Mosul",
-      ar: "الموصل",
-    },
-    area: {
-      en: "Over 1,200,000 m²",
-      ar: "أكثر من 1,200,000 م²",
-    },
-  },
-  {
-    id: 4,
-    videoSrc: "/projects/1.mp4",
-    projectName: {
-      en: "Akkad",
-      ar: "أكد",
-    },
-    location: {
-      en: "Basra",
-      ar: "البصرة",
-    },
-    area: {
-      en: "Over 650,000 m²",
-      ar: "أكثر من 650,000 م²",
-    },
-  },
-  {
-    id: 5,
-    videoSrc: "/projects/1.mp4",
-    projectName: {
-      en: "Sumer",
-      ar: "سومر",
-    },
-    location: {
-      en: "Najaf",
-      ar: "النجف",
-    },
-    area: {
-      en: "Over 900,000 m²",
-      ar: "أكثر من 900,000 م²",
-    },
-  },
-];
-
 const labels = {
   projects: {
     en: "Projects",
@@ -281,6 +202,7 @@ const labels = {
 };
 
 export const Projects = () => {
+  const { data } = useGetSliderProjects({});
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [itemsLength, setItemsLength] = useState(0);
@@ -310,7 +232,7 @@ export const Projects = () => {
       {isPlaying && (
         <MediaViewer
           type="video"
-          src={projectsData[currentSlide].videoSrc}
+          src={data?.projects[currentSlide].video?.url}
           onClose={() => setIsPlaying(false)}
           autoPlay
         />
@@ -332,20 +254,22 @@ export const Projects = () => {
         />
         <BluryBall className="z-0" />
         <CarouselContent className="w-full h-screen max-md:h-[90vh] m-0">
-          {projectsData.map((project, index) => (
+          {data?.projects.map((project, index) => (
             <ProjectSlide
-              key={project.id}
+              key={project._id}
               isActive={currentSlide === index}
-              videoSrc={project.videoSrc}
-              projectName={project.projectName[locale]}
-              location={project.location[locale]}
-              area={project.area[locale]}
+              videoSrc={project?.video?.url}
+              projectName={project?.name}
+              location={project.location}
+              area={project.area}
               handlePlay={() => setIsPlaying(true)}
               isPlaying={isPlaying}
               projectsLabel={labels.projects[locale]}
               areaLabel={labels.area[locale]}
               readMoreLabel={labels.readMore[locale]}
               locale={locale}
+              link={project?.link}
+              projectId={project?.projectLink}
             />
           ))}
         </CarouselContent>
@@ -374,7 +298,7 @@ export const Projects = () => {
           <ChevronRight className="size-12 rtl:rotate-180" />
         </Button>
         <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-          {projectsData.map((_, i) => (
+          {data?.projects.map((_, i) => (
             <button
               key={i}
               onClick={() => api?.scrollTo(i)}

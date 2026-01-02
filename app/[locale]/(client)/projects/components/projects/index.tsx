@@ -15,6 +15,9 @@ import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
+import { ProjectsPageContent } from "@/types/pages";
+import { useGetSliderProjects } from "@/services/slider-projects";
+import { useGetProjects } from "@/services/projects";
 
 export const projects = [
   {
@@ -47,7 +50,11 @@ export const projects = [
   },
 ];
 
-export const Projects = () => {
+export const Projects = ({
+  data,
+}: {
+  data: ProjectsPageContent["sections"]["projects"];
+}) => {
   const section = useRef<HTMLElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const gridLayoutContainer = useRef(null);
@@ -57,6 +64,8 @@ export const Projects = () => {
   const sphere2 = useRef<SVGSVGElement>(null);
   const sphere3 = useRef<SVGSVGElement>(null);
   const logo = useRef<SVGSVGElement>(null);
+
+  const { data: projectsRes } = useGetProjects({});
 
   const locale = useLocale() as "ar" | "en";
   const t = useTranslations("projects.projects");
@@ -110,20 +119,20 @@ export const Projects = () => {
   return (
     <section className="relative" ref={section} id="projects">
       <Container>
-        <header className="text-center mb-12 z-10 relative">
+        <header className="text-center mb-20 z-10 relative">
           <Badge className="py-2 px-3 opacity-62 mb-1">
-            <h2>{t("badge")}</h2>
+            <h2>{data?.badge?.value[locale]}</h2>
           </Badge>
           <h3
             className="font-medium text-6xl leading-16 rtl:leading-[120%]"
             ref={title}
-            dangerouslySetInnerHTML={{ __html: t("title") }}
+            dangerouslySetInnerHTML={{ __html: data?.headline?.value[locale] }}
           ></h3>
         </header>
 
         <div className="grid grid-cols-2 max-md:grid-cols-1 gap-[235px] relative max-md:gap-20">
           <div
-            className="absolute inset-0 pointer-events-none z-0 flex
+            className="absolute hidden inset-0 pointer-events-none z-0 flex
   mask-[radial-gradient(circle_at_50%_50%,black_0px,black_150px,rgba(0,0,0,0.6)_170px,rgba(0,0,0,0.3)_190px,transparent_200px)]
   mask-no-repeat
   mask-size-[100%_100%]
@@ -181,11 +190,12 @@ export const Projects = () => {
             />
           </div>
 
-          {projects.map((project, i) => (
+          {projectsRes?.map((project, i) => (
             <Project
               key={i}
-              title={project.name[locale]}
-              caption={project.description[locale]}
+              title={project.name}
+              caption={project.description}
+              id={project?._id}
             />
           ))}
         </div>

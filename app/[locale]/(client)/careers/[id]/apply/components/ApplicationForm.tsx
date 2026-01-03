@@ -12,6 +12,7 @@ import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { ComponentProps } from "react";
+import { toast } from "sonner";
 
 /* =======================
    InputField Component
@@ -58,9 +59,11 @@ export const InputField = ({
 
 export const ApplicationForm = ({ className }: ComponentProps<"section">) => {
   const t = useTranslations("careers.singleCareer.apply");
+  const commonT = useTranslations("common");
   const inputsT = useTranslations("inputs");
   const router = useRouter();
   const { mutate, isPending, error } = useCreateApplication(() => {
+    toast.success(commonT("applicationSent"));
     router.push("/");
   });
   const { id } = useParams<{ id: string }>();

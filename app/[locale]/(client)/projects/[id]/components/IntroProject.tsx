@@ -18,7 +18,6 @@ export const IntroProject = ({ project }: { project?: Project }) => {
   const [isOpen, setIsOpen] = useState(false);
   const title = useRef(null);
   const section = useRef(null);
-  const image = useRef(null);
 
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current, {
@@ -67,13 +66,15 @@ export const IntroProject = ({ project }: { project?: Project }) => {
       </h2>
       <Container className="max-w-[90%] w-full select-none bg-primary relative max-h-[750px] h-[90vh] f p-0! z-10 rounded-4xl  not-last:overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full">
-          <Image
-            src={project?.introduction?.thumbnail?.url as string}
-            alt="project"
-            width={10000}
-            height={10000}
-            className="w-full h-full object-cover opacity-70 rounded-4xl"
-          />
+          {project?.introduction?.thumbnail && (
+            <Image
+              src={project?.introduction?.thumbnail?.url as string}
+              alt="project"
+              width={10000}
+              height={10000}
+              className="w-full h-full object-cover opacity-70 rounded-4xl"
+            />
+          )}
           <button className="absolute flex cursor-pointer items-center justify-center top-1/2 left-1/2 p-4 -translate-x-1/2 -translate-y-1/2 rounded-full">
             <Magnetic
               className="relative z-10"

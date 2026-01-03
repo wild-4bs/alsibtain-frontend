@@ -196,6 +196,7 @@ export const Projects = ({
               title={project.name}
               caption={project.description}
               id={project?._id}
+              logo={project?.logo?.url}
             />
           ))}
         </div>

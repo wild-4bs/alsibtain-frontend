@@ -144,7 +144,7 @@ export const Counters = ({
 
             <Image
               ref={image1}
-              src={'/services/project-1.jpg'}
+              src={data?.image1?.value?.url || "/services/project-1.jpg"}
               width={1000}
               height={1000}
               alt="project"
@@ -168,7 +168,7 @@ export const Counters = ({
 
         <Image
           ref={image2}
-          src={'/services/project-2.jpg'}
+          src={data?.image2?.value?.url || "/services/project-2.jpg"}
           width={1000}
           height={1000}
           alt="project"

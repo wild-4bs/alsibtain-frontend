@@ -40,24 +40,33 @@ export const Articles = () => {
         <div className="w-[90%] min-h-[500px] flex-1 relative overflow-hidden rounded-4xl px-3 py-4 flex items-end max-h-[600px] max-xl:h-[600px] max-xl:w-full">
           {clicked?.thumbnail?.url && (
             <Image
-              src={clicked?.thumbnail.url}
+              src={clicked.thumbnail.url}
               alt="article"
               width={1000}
               height={1000}
-              className="object-cover absolute top-0 left-0 w-full h-full z-0 pointer-events-none"
+              className="object-cover absolute inset-0 w-full h-full z-0 pointer-events-none"
             />
           )}
-          <div className="relative z-10">
+
+          {/* Black gradient overlay */}
+          <div className="absolute inset-0 z-1 bg-linear-to-t from-black/85 via-black/45 to-transparent" />
+
+          {/* Content */}
+          <div className="relative z-10 text-white">
             <Badge
               className="mb-2 font-bold text-xs px-2 py-1"
-              variant={"secondary"}
+              variant="secondary"
             >
               {clicked?.category}
             </Badge>
+
             <h3 className="font-black text-4xl mb-2 max-sm:text-3xl">
               {clicked?.title}
             </h3>
-            <p className="font-medium max-sm:text-sm">{clicked?.caption}</p>
+
+            <p className="font-medium max-sm:text-sm text-white/90">
+              {clicked?.caption}
+            </p>
           </div>
         </div>
       </Container>

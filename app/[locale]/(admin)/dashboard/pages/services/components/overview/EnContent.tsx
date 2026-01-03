@@ -3,9 +3,10 @@ import {
   InputField,
   TextareaField,
 } from "@/components/ui/dashboard/dynamic-sections";
+import { ImagesField } from "@/components/ui/dashboard/dynamic-sections/ImagesField";
 import { useUpdatePageContents } from "@/services/pages";
 import { ServicesPageContent } from "@/types/pages";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 export const EnContent = ({
   data,
@@ -13,7 +14,10 @@ export const EnContent = ({
   data: ServicesPageContent["sections"]["overview"];
 }) => {
   const { mutate, isPending } = useUpdatePageContents();
-
+  const [images, setImages] = useState<any[]>([
+    data?.image1?.value,
+    data?.image2?.value,
+  ]);
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
@@ -39,6 +43,12 @@ export const EnContent = ({
         },
         provinces: {
           value: form.get("provinces"),
+        },
+        image1: {
+          value: images[0],
+        },
+        image2: {
+          value: images[1],
         },
       },
     });
@@ -82,6 +92,13 @@ export const EnContent = ({
             defaultValue={data.provinces.value}
           />
         </div>
+        <ImagesField
+          images={images}
+          type="limited"
+          max={2}
+          setImages={setImages}
+        />
+
         <Button type="submit" className="w-fit" disabled={isPending}>
           {isPending ? "Saving..." : "Save Changes"}
         </Button>

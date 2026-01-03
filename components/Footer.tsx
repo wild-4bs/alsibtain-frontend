@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
 import { useGetPageContents } from "@/services/pages";
 import { ContactPageContent } from "@/types/pages";
+import { useGetProjects } from "@/services/projects";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,6 +25,7 @@ export const Footer = () => {
   const tLinks = useTranslations("header");
   const t = useTranslations("footer");
   const locale = useLocale() as "ar" | "en";
+  const { data: projects } = useGetProjects({});
 
   return (
     <footer
@@ -67,9 +69,7 @@ export const Footer = () => {
         </ul>
         <ul className="flex flex-col gap-2">
           <h3 className="font-medium text-xl">{t("projects.title")}</h3>
-          {(data as ContactPageContent)?.sections?.footer?.projects?.value[
-            locale
-          ].map((project, i) => (
+          {projects?.map((project, i) => (
             <li className="font-medium leading-5" key={i}>
               {project?.name}
             </li>
@@ -85,7 +85,7 @@ export const Footer = () => {
                 ?.address?.value[locale]
             }
           </li>
-          <li className="font-light text-base leading-6">
+          <li className="font-light text-base leading-6" dir="ltr">
             {
               (data as ContactPageContent)?.sections?.footer?.headOffice
                 ?.phoneNumber

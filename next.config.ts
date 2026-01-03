@@ -4,6 +4,19 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: "frame-src 'self' https://tour.panoee.net;",
+          },
+        ],
+      },
+    ];
+  },
   turbopack: {
     rules: {
       "*.svg": {

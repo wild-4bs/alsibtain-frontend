@@ -131,7 +131,7 @@ export const EnContent = ({
           name="instagram"
           defaultValue={data?.headOffice?.instagram}
         />
-        <div>
+        {/* <div>
           <h2 className="font-medium text-lg mb-2">Projects</h2>
           <ItemsField
             items={items}
@@ -139,7 +139,7 @@ export const EnContent = ({
             setItems={setItems}
             type="unlimited"
           />
-        </div>
+        </div> */}
 
         <Button type="submit" className="w-fit" disabled={isPending}>
           {isPending ? "Saving..." : "Save Changes"}

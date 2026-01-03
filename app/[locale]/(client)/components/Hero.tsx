@@ -243,18 +243,20 @@ export const Hero = ({
           key={i}
           className="absolute bottom-0 right-[10%] md:right-[30%] rtl:left-[10%] rtl:md:left-[30%] xl:w-[900px] z-10!"
         >
-          <Image
-            src={item.image?.url}
-            alt=""
-            width={1000}
-            height={1000}
-            className={clsx(
-              "object-cover md:min-w-[900px]  w-full duration-900",
-              currentSlide === i
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-full"
-            )}
-          />
+          {item?.image?.url && (
+            <Image
+              src={item.image?.url}
+              alt=""
+              width={1000}
+              height={1000}
+              className={clsx(
+                "object-cover md:min-w-[900px]  w-full duration-900",
+                currentSlide === i
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-full"
+              )}
+            />
+          )}
         </div>
       ))}
     </section>

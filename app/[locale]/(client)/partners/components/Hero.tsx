@@ -2,6 +2,7 @@
 import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
 import { PartnersPageContent } from "@/types/pages";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -73,12 +74,14 @@ export const Hero = ({
         ></h1>
         <div className="flex flex-col gap-6 w-md max-md:mx-auto max-md:w-full max-md:text-center max-md:items-center">
           <p ref={caption}>{data?.caption?.value[locale]}</p>
-          <Button
-            ref={badge}
-            className="bg-[#FFFFFF21] uppercase border-white/50 border min-w-32 min-h-8 hover:bg-[#ffffff54] w-fit -translate-x-20 opacity-0"
-          >
-            {t("cta")}
-          </Button>
+          <Link href={"/contact"}>
+            <Button
+              ref={badge}
+              className="bg-[#FFFFFF21] uppercase border-white/50 border min-w-32 min-h-8 hover:bg-[#ffffff54] w-fit -translate-x-20 opacity-0"
+            >
+              {t("cta")}
+            </Button>
+          </Link>
         </div>
       </Container>
     </section>

@@ -1,4 +1,4 @@
-import { CloudCog, Plus, X, Upload } from "lucide-react";
+import { CloudCog, Plus, X, Upload, Loader2 } from "lucide-react";
 import { Label } from "../../label";
 import { IconPicker } from "../IconPicker";
 import { InputField, TextareaField } from ".";
@@ -8,6 +8,7 @@ import {
   useDeleteFromImageKit,
 } from "@/services/imageKit";
 import { useState } from "react";
+import clsx from "clsx";
 
 interface ItemsFieldProps {
   type: "unlimited" | "limited";
@@ -58,6 +59,8 @@ export const UnlimitedItems = ({
   const { mutateAsync: deleteImage } = useDeleteFromImageKit();
   const [pendingFiles, setPendingFiles] = useState<{ [key: string]: File }>({});
   const [uploading, setUploading] = useState<{ [key: string]: boolean }>({});
+  const [deleting, setDeleting] = useState<{ [key: string]: boolean }>({});
+  const [imageErrors, setImageErrors] = useState<{ [key: string]: boolean }>({});
 
   const addItem = () => {
     const newItem: any = { id: crypto.randomUUID() };
@@ -98,17 +101,29 @@ export const UnlimitedItems = ({
         delete copy[id];
         return copy;
       });
+      setImageErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      });
+    } catch (error) {
+      console.error("Failed to upload image:", error);
+      alert("Failed to upload image. Please try again.");
     } finally {
       setUploading((prev) => ({ ...prev, [id]: false }));
     }
   };
 
   const handleImageDelete = async (id: string, fileId: string) => {
+    setDeleting((prev) => ({ ...prev, [id]: true }));
     try {
       await deleteImage({ fileId });
       updateItem(id, "image", "");
     } catch (error) {
       console.error("Failed to delete image:", error);
+      alert("Failed to delete image. Please try again.");
+    } finally {
+      setDeleting((prev) => ({ ...prev, [id]: false }));
     }
   };
 
@@ -138,26 +153,39 @@ export const UnlimitedItems = ({
       const hasUploadedImage = item?.[field]?.url;
       const hasPendingFile = pendingFiles[item.id];
       const isUploading = uploading[item.id];
+      const isDeleting = deleting[item.id];
+      const isProcessing = isUploading || isDeleting;
+      const hasImageError = imageErrors[item.id];
 
       return (
         <div key={field} className="relative">
           <ImageInput
-            id={`${item?.[field]}-${item?.[field]?.url}`}
+            id={`${item.id}-${field}`}
             defaultImage={item?.[field]?.url ?? ""}
             name=""
+            onError={() => {
+              setImageErrors((prev) => ({ ...prev, [item.id]: true }));
+            }}
             onChange={(v: any) => handleImageSelect(item.id, v)}
+            className={clsx({
+              "pointer-events-none": hasUploadedImage || isProcessing,
+              "opacity-50": isProcessing,
+            })}
           />
-          {hasPendingFile && !hasUploadedImage && (
+          
+          {/* Upload button - shows when file is selected but not uploaded */}
+          {hasPendingFile && !hasUploadedImage && !isProcessing && (
             <button
               type="button"
               onClick={() => handleImageUpload(item.id)}
-              disabled={isUploading}
-              className="absolute top-2 right-2 bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute top-2 right-2 bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 transition"
             >
               <Upload className="w-4 h-4" />
             </button>
           )}
-          {hasUploadedImage && (
+          
+          {/* Delete button - shows when image is uploaded AND no error */}
+          {hasUploadedImage && !isProcessing && !hasImageError && (
             <button
               type="button"
               onClick={() => handleImageDelete(item.id, item[field].fileId)}
@@ -165,6 +193,35 @@ export const UnlimitedItems = ({
             >
               <X className="w-4 h-4" />
             </button>
+          )}
+          
+          {/* Clear button for broken images */}
+          {hasImageError && !isProcessing && (
+            <button
+              type="button"
+              onClick={() => {
+                updateItem(item.id, "image", "");
+                setImageErrors((prev) => {
+                  const copy = { ...prev };
+                  delete copy[item.id];
+                  return copy;
+                });
+              }}
+              className="absolute top-2 right-2 bg-yellow-500 text-white rounded-full p-2 hover:bg-yellow-600 transition"
+              title="Clear broken image"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+          
+          {/* Loading overlay */}
+          {isProcessing && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded text-white">
+              <Loader2 className="w-6 h-6 animate-spin mb-2" />
+              <span className="text-sm">
+                {isUploading ? "Uploading..." : "Deleting..."}
+              </span>
+            </div>
           )}
         </div>
       );
@@ -260,6 +317,8 @@ export const LimitedItems = ({
   const { mutateAsync: deleteImage } = useDeleteFromImageKit();
   const [pendingFiles, setPendingFiles] = useState<{ [key: number]: File }>({});
   const [uploading, setUploading] = useState<{ [key: number]: boolean }>({});
+  const [deleting, setDeleting] = useState<{ [key: number]: boolean }>({});
+  const [imageErrors, setImageErrors] = useState<{ [key: number]: boolean }>({});
 
   const updateItem = (i: number, key: string, value: any) => {
     const copy = [...items];
@@ -293,17 +352,29 @@ export const LimitedItems = ({
         delete copy[index];
         return copy;
       });
+      setImageErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[index];
+        return copy;
+      });
+    } catch (error) {
+      console.error("Failed to upload image:", error);
+      alert("Failed to upload image. Please try again.");
     } finally {
       setUploading((prev) => ({ ...prev, [index]: false }));
     }
   };
 
   const handleImageDelete = async (index: number, fileId: string) => {
+    setDeleting((prev) => ({ ...prev, [index]: true }));
     try {
       await deleteImage({ fileId });
       updateItem(index, "image", "");
     } catch (error) {
       console.error("Failed to delete image:", error);
+      alert("Failed to delete image. Please try again.");
+    } finally {
+      setDeleting((prev) => ({ ...prev, [index]: false }));
     }
   };
 
@@ -340,26 +411,39 @@ export const LimitedItems = ({
       const hasUploadedImage = item?.[field]?.url;
       const hasPendingFile = pendingFiles[index];
       const isUploading = uploading[index];
+      const isDeleting = deleting[index];
+      const isProcessing = isUploading || isDeleting;
+      const hasImageError = imageErrors[index];
 
       return (
         <div key={field} className="relative">
           <ImageInput
-            id={`${item?.[field]}-${item?.[field]?.url}`}
+            id={`limited-${index}-${field}`}
             defaultImage={item?.[field]?.url ?? ""}
             name=""
+            onError={() => {
+              setImageErrors((prev) => ({ ...prev, [index]: true }));
+            }}
             onChange={(v: any) => handleImageSelect(index, v)}
+            className={clsx({
+              "pointer-events-none": hasUploadedImage || isProcessing,
+              "opacity-50": isProcessing,
+            })}
           />
-          {hasPendingFile && !hasUploadedImage && (
+          
+          {/* Upload button - shows when file is selected but not uploaded */}
+          {hasPendingFile && !hasUploadedImage && !isProcessing && (
             <button
               type="button"
               onClick={() => handleImageUpload(index)}
-              disabled={isUploading}
-              className="absolute top-2 right-2 bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute top-2 right-2 bg-blue-500 text-white rounded-full p-2 hover:bg-blue-600 transition"
             >
               <Upload className="w-4 h-4" />
             </button>
           )}
-          {hasUploadedImage && (
+          
+          {/* Delete button - shows when image is uploaded AND no error */}
+          {hasUploadedImage && !isProcessing && !hasImageError && (
             <button
               type="button"
               onClick={() => handleImageDelete(index, item[field].fileId)}
@@ -367,6 +451,35 @@ export const LimitedItems = ({
             >
               <X className="w-4 h-4" />
             </button>
+          )}
+          
+          {/* Clear button for broken images */}
+          {hasImageError && !isProcessing && (
+            <button
+              type="button"
+              onClick={() => {
+                updateItem(index, "image", "");
+                setImageErrors((prev) => {
+                  const copy = { ...prev };
+                  delete copy[index];
+                  return copy;
+                });
+              }}
+              className="absolute top-2 right-2 bg-yellow-500 text-white rounded-full p-2 hover:bg-yellow-600 transition"
+              title="Clear broken image"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+          
+          {/* Loading overlay */}
+          {isProcessing && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 rounded text-white">
+              <Loader2 className="w-6 h-6 animate-spin mb-2" />
+              <span className="text-sm">
+                {isUploading ? "Uploading..." : "Deleting..."}
+              </span>
+            </div>
           )}
         </div>
       );

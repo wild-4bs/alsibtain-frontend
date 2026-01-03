@@ -13,6 +13,7 @@ import { About } from "./About";
 import { CallToAction } from "@/components/CallToAction";
 import { useGetPageContents } from "@/services/pages";
 import { HomePageContent } from "@/types/pages";
+import { Player360 } from "../projects/[id]/components/360Player";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export const Content = () => {
       <Counters data={(data as HomePageContent)?.sections?.overview} />
       <Services data={(data as HomePageContent)?.sections?.companyOverview} />
       <Projects />
+      <Player360 />
       <About data={(data as HomePageContent)?.sections?.about} />
       <CallToAction />
     </main>

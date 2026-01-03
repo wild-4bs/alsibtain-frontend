@@ -2,29 +2,36 @@
 import Container from "@/components/Container";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { ComponentProps } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { useLocale, useTranslations } from "next-intl";
+import { ComponentProps, useEffect, useRef } from "react";
+import { useLocale } from "next-intl";
 import { useGetPartners } from "@/services/partners";
+import { useGetPageContents } from "@/services/pages";
+import { HomePageContent } from "@/types/pages";
+import gsap from "gsap";
 
 export const Partners = ({ className }: ComponentProps<"section">) => {
-  const t = useTranslations("common.partners");
   const { data } = useGetPartners({ query: {} });
   const locale = useLocale() as "en" | "ar";
+  const { data: dataContent } = useGetPageContents("home");
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<gsap.core.Tween | null>(null);
 
-  useGSAP(() => {
-    if (!data?.payload?.length) return;
+  useEffect(() => {
+    if (!marqueeRef.current || !data?.payload?.length) return;
 
-    const direction = locale === "en" ? -100 : 100;
-
-    gsap.to(".partners-marquee", {
-      xPercent: direction,
-      duration: 30,
+    const marqueeElement = marqueeRef.current;
+    const marqueeWidth = marqueeElement.scrollWidth / 2;
+    animationRef.current = gsap.to(marqueeElement, {
+      x: -marqueeWidth,
+      duration: 20,
       ease: "none",
       repeat: -1,
     });
-  }, [data, locale]);
+
+    return () => {
+      animationRef.current?.kill();
+    };
+  }, [data?.payload]);
 
   if (!data?.payload?.length) return null;
 
@@ -32,31 +39,37 @@ export const Partners = ({ className }: ComponentProps<"section">) => {
     <section className={cn(className)}>
       <Container>
         <h2 className="text-center my-12 text-xl font-medium leading-20">
-          {t("title")}
+          {
+            (dataContent as HomePageContent)?.sections?.partners?.title?.value[
+              locale
+            ]
+          }
         </h2>
       </Container>
-      <div className="w-full relative overflow-hidden">
+      <div className="w-full relative overflow-hidden" dir="ltr">
         <div
           className="absolute top-0 left-0 w-full h-full z-10 pointer-events-none"
           style={{
-            background: "linear-gradient(to right, black, transparent, black)",
+            background:
+              "linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 10%, transparent 90%, rgba(0,0,0,0.8) 100%)",
           }}
         />
-        <div className="flex partners-marquee">
+
+        <div ref={marqueeRef} className="flex gap-0">
           {[...data.payload, ...data.payload].map((partner, i) => (
             <div
-              className="w-44 h-44 flex items-center justify-center flex-shrink-0"
+              className="shrink-0 w-44 h-44 flex items-center justify-center"
               key={`${partner.logo?.url}-${i}`}
             >
               <div className="relative w-28 h-28">
                 <Image
-                  src={partner?.logo?.url}
+                  src={partner.logo?.url}
                   width={112}
                   height={112}
-                  alt="partner"
+                  alt={`Partner logo ${i + 1}`}
                   className="object-contain"
-                  priority={i < 7}
-                  loading={i < 7 ? "eager" : "lazy"}
+                  loading="eager"
+                  unoptimized={partner.logo?.url?.startsWith("http")}
                 />
               </div>
             </div>

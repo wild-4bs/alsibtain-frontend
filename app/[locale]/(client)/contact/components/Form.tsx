@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { useCreateMessage } from "@/services/messages";
 import { useRouter } from "@/i18n/routing";
 import clsx from "clsx";
+import { toast } from "sonner";
 
 interface InputFieldProps {
   label?: string;
@@ -71,6 +72,7 @@ export const Form = () => {
   const router = useRouter();
 
   const { mutate, error, isPending } = useCreateMessage(() => {
+    toast.success(commonT('messageSent'))
     router.push("/");
   });
 

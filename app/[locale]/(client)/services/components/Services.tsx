@@ -163,7 +163,7 @@ export const Services = ({
           {t("title")}
         </h2>
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {data?.items?.value[locale].map((service, i) => {
+          {data?.items?.value[locale]?.map((service, i) => {
             const IconComponent =
               (LucideIcons as any)[service?.icon] || LucideIcons.HelpCircle;
 

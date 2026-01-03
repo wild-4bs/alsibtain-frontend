@@ -46,13 +46,15 @@ export const Gallery = ({
           {data?.images?.value?.map((image, i) => (
             <Link href={"/projects/id"} key={i}>
               <article className="w-full h-40 rounded-3xl hover:opacity-50 duration-300 cursor-pointer projects-page-projects-list-project">
-                <Image
-                  src={image?.url}
-                  width={1000}
-                  height={1000}
-                  alt="Project"
-                  className="w-full h-full object-cover rounded-3xl"
-                />
+                {image && (
+                  <Image
+                    src={image?.url}
+                    width={1000}
+                    height={1000}
+                    alt="Project"
+                    className="w-full h-full object-cover rounded-3xl"
+                  />
+                )}
               </article>
             </Link>
           ))}

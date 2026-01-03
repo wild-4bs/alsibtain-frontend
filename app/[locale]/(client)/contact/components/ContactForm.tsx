@@ -12,11 +12,13 @@ import { useLocale } from "next-intl";
 import { useGetPageContents } from "@/services/pages";
 import { ContactPageContent } from "@/types/pages";
 import { Link } from "@/i18n/routing";
+import Facebook from "@/assets/social/facebook.svg";
 
 export const ContactForm = () => {
   const { data } = useGetPageContents("contact");
   const sections = (data as ContactPageContent)?.sections;
   const locale = useLocale() as "ar" | "en";
+
   return (
     <section className="mt-16 relative">
       <BluryBall className="w-[1377px] h-full left-0 z-0" />
@@ -66,12 +68,32 @@ export const ContactForm = () => {
               </li>
 
               <li className="flex items-center gap-2">
-                <Link href={sections?.contactInformation?.instagram}>
-                  <Instagram />
-                </Link>
-                <Link href={sections?.contactInformation?.linkedin}>
-                  <Linkedin />
-                </Link>
+                {(data as ContactPageContent)?.sections?.footer?.headOffice
+                  ?.instagram && (
+                  <li>
+                    <Link
+                      href={
+                        (data as ContactPageContent)?.sections?.footer
+                          ?.headOffice?.instagram
+                      }
+                      target="_blank"
+                    >
+                      <Instagram />
+                    </Link>
+                  </li>
+                )}
+                {(data as ContactPageContent)?.sections?.footer?.headOffice
+                  ?.facebook && (
+                  <Link
+                    href={
+                      (data as ContactPageContent)?.sections?.footer?.headOffice
+                        ?.facebook
+                    }
+                    target="_blank"
+                  >
+                    <Facebook />
+                  </Link>
+                )}
               </li>
             </ul>
           </GlassCard>
@@ -82,7 +104,7 @@ export const ContactForm = () => {
 
       <div className="relative">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d53775.200638225324!2d44.011532149999994!3d32.60751485!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15596be147b8cdc9%3A0xf6c5daaaaea111f0!2sKarbala%2C%20Karbala%20Governorate%2C%2056001!5e0!3m2!1sen!2siq!4v1765720754035!5m2!1sen!2siq"
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d419.88721980615725!2d43.9492952!3d32.6568426!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1559690067817da7%3A0x7a4f159b556aa65!2z2LTYsdmD2Kkg2KfZhNiz2KjYt9mK2YYg2YTZhNmF2YLYp9mI2YTYp9iqINin2YTYudin2YXYqSDYp9mE2YXYrdiv2YjYr9ipIC0g2YXYr9mK2YbYqSDYp9mE2LPZhNin2YUg"
           width="90%"
           height="649px"
           allowFullScreen

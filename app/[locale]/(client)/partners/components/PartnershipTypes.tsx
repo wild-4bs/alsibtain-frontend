@@ -3,6 +3,7 @@ import Container from "@/components/Container";
 import { Badge } from "@/components/ui/badge";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
 import { PartnersPageContent } from "@/types/pages";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -140,6 +141,7 @@ export const PartnershipTypes = ({
           >
             {data?.subheadline?.value[locale]}
           </p>
+          <Link href={"/contact"}>
           <Button
             variant={"secondary"}
             className="w-fit h-12 font-medium rounded-full duration-200 -translate-x-20 opacity-0"
@@ -153,7 +155,7 @@ export const PartnershipTypes = ({
                 strokeWidth={2}
               />
             </div>
-          </Button>
+          </Button></Link>
         </div>
         <div className="grid grid-cols-2 gap-12 max-sm:grid-cols-1">
           {data?.types?.value[locale].map((partnership, i) => {

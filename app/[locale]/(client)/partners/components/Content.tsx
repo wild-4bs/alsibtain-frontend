@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Barlow } from "next/font/google";
 import { Hero } from "../components/Hero";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,7 @@ import { useLocale } from "next-intl";
 import { useGetPageContents } from "@/services/pages";
 import { PartnersPageContent } from "@/types/pages";
 import { ProjectsSlider } from "../../projects/[id]/components/ProjectsSlider";
+import { useGetGallery } from "@/services/gallery";
 
 const barlow = Barlow({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ const barlow = Barlow({
 export const Content = () => {
   const locale = useLocale();
   const { data } = useGetPageContents("partners");
+  const { data: gallery } = useGetGallery();
   return (
     <main className={cn(locale == "en" && barlow.className)}>
       <Hero data={(data as PartnersPageContent)?.sections?.hero} />
@@ -33,7 +35,7 @@ export const Content = () => {
       <CallToAction
         data={(data as PartnersPageContent)?.sections?.callToAction}
       />
-      <ProjectsSlider />
+      <ProjectsSlider gallery={gallery} />
       <Clients />
       <CallToActionHome />
     </main>

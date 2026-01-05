@@ -23,10 +23,12 @@ import {
   useDeleteApplicaiton,
   useGetApplications,
 } from "@/services/applications";
+import { useLocale } from "next-intl";
 
 export const Content = () => {
   const [search, setSearch] = useState("");
   const { data } = useGetApplications({ search });
+  const locale = useLocale() as "ar" | "en";
   const { mutate: deleteApplicaiton, isPending: isDeleting } =
     useDeleteApplicaiton();
 
@@ -102,12 +104,12 @@ export const Content = () => {
                   <div className="flex items-center gap-2 mb-1">
                     <Briefcase size={16} className="text-subtitle-color" />
                     <span className="font-medium">
-                      Applied for: {application.job.title}
+                      Applied for: {application.job.title[locale]}
                     </span>
                   </div>
                   {application.job.category?.name && (
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-subtitle-color text-blue-100">
-                      {application.job.category.name}
+                      {application.job.category.name[locale]}
                     </span>
                   )}
                 </div>

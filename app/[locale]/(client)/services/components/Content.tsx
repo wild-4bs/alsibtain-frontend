@@ -10,6 +10,7 @@ import { useLocale } from "next-intl";
 import { ProjectsSlider } from "../../projects/[id]/components/ProjectsSlider";
 import { useGetPageContents } from "@/services/pages";
 import { ServicesPageContent } from "@/types/pages";
+import { useGetGallery } from "@/services/gallery";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -19,6 +20,7 @@ const lato = Lato({
 export const Content = () => {
   const locale = useLocale();
   const { data } = useGetPageContents("services");
+  const { data: gallery } = useGetGallery();
   return (
     <main className={cn(locale == "en" && lato.className)}>
       <Hero data={(data as ServicesPageContent)?.sections?.hero} />
@@ -28,7 +30,7 @@ export const Content = () => {
       <CallToAction
         data={(data as ServicesPageContent)?.sections?.callToAction}
       />
-      <ProjectsSlider />
+      <ProjectsSlider gallery={gallery} />
     </main>
   );
 };

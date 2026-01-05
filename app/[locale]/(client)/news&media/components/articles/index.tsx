@@ -4,7 +4,7 @@ import { Article } from "./Article";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useGetNews, useGetNewsById } from "@/services/latest-news";
 import { timeAgo } from "@/lib/date";
 import { useQueryState } from "nuqs";
@@ -13,6 +13,7 @@ export const Articles = () => {
   const [activeNews, setActiveNews] = useQueryState("active-news");
   const t = useTranslations("common");
   const { data } = useGetNews({});
+  const locale = useLocale() as "ar" | "en";
   const { data: clicked } = useGetNewsById(activeNews || "first");
 
   return (
@@ -25,8 +26,8 @@ export const Articles = () => {
               <Article
                 key={article._id}
                 image={article?.thumbnail?.url}
-                title={article.title}
-                createdBy={article?.writtenBy}
+                title={article.title[locale]}
+                createdBy={article?.writtenBy[locale]}
                 date={timeAgo(article?.createdAt)}
                 active={clicked?._id == article?._id}
                 onClick={() => setActiveNews(article?._id)}
@@ -57,15 +58,15 @@ export const Articles = () => {
               className="mb-2 font-bold text-xs px-2 py-1"
               variant="secondary"
             >
-              {clicked?.category}
+              {clicked?.category[locale]}
             </Badge>
 
             <h3 className="font-black text-4xl mb-2 max-sm:text-3xl">
-              {clicked?.title}
+              {clicked?.title[locale]}
             </h3>
 
             <p className="font-medium max-sm:text-sm text-white/90">
-              {clicked?.caption}
+              {clicked?.caption[locale]}
             </p>
           </div>
         </div>

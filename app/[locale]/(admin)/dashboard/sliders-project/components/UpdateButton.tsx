@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -36,6 +37,12 @@ export const UpdateProjectButton = ({ projectId }: Props) => {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [selectedProjectLink, setSelectedProjectLink] = useState<string>("");
 
+  // Tabs state for AR/EN
+  const [name, setName] = useState({ ar: "", en: "" });
+  const [location, setLocation] = useState({ ar: "", en: "" });
+  const [area, setArea] = useState("");
+  const [link, setLink] = useState("");
+
   const { data: sliderResponse, isLoading } = useGetProjectById(projectId);
   const slider = sliderResponse?.project;
 
@@ -43,13 +50,31 @@ export const UpdateProjectButton = ({ projectId }: Props) => {
 
   const { mutate, isPending, error } = useUpdateProject(() => {
     setIsOpen(false);
+    setVideoFile(null);
   });
 
+  // Populate form when slider data is loaded
   useEffect(() => {
-    if (slider?.projectLink) {
-      setSelectedProjectLink(slider.projectLink);
-    } else {
-      setSelectedProjectLink("");
+    if (slider) {
+      setName({
+        ar:
+          typeof slider.name === "string" ? slider.name : slider.name?.ar || "",
+        en:
+          typeof slider.name === "string" ? slider.name : slider.name?.en || "",
+      });
+      setLocation({
+        ar:
+          typeof slider.location === "string"
+            ? slider.location
+            : slider.location?.ar || "",
+        en:
+          typeof slider.location === "string"
+            ? slider.location
+            : slider.location?.en || "",
+      });
+      setArea(slider.area || "");
+      setLink(slider.link || "");
+      setSelectedProjectLink(slider.projectLink || "");
     }
   }, [slider]);
 
@@ -60,15 +85,16 @@ export const UpdateProjectButton = ({ projectId }: Props) => {
 
     // Create FormData with files
     const projectSliderData = new FormData();
-    projectSliderData.append("name", form.get("name") as string);
-    projectSliderData.append("area", form.get("area") as string);
-    projectSliderData.append("location", form.get("location") as string);
 
-    const link = form.get("link") as string;
-    const projectLink = form.get("projectLink") as string;
+    // Combine multilingual fields into JSON
+    projectSliderData.append("name", JSON.stringify(name));
+    projectSliderData.append("location", JSON.stringify(location));
+    projectSliderData.append("area", area);
 
+    // Optional links
     if (link) projectSliderData.append("link", link);
-    if (projectLink) projectSliderData.append("projectLink", projectLink);
+    if (selectedProjectLink)
+      projectSliderData.append("projectLink", selectedProjectLink);
 
     // Append new video file if selected
     if (videoFile) projectSliderData.append("video", videoFile);
@@ -140,7 +166,7 @@ export const UpdateProjectButton = ({ projectId }: Props) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" className="justify-start gap-2">
+        <Button variant="ghost" className="justify-start gap-2 w-full">
           <Edit size={14} /> Edit
         </Button>
       </DialogTrigger>
@@ -150,37 +176,96 @@ export const UpdateProjectButton = ({ projectId }: Props) => {
           <DialogTitle>Update Project Slider</DialogTitle>
         </DialogHeader>
         {isLoading ? (
-          <p className="text-center py-10">Loading...</p>
+          <div className="flex items-center justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          </div>
         ) : (
           <form
             className="flex flex-col gap-4 p-4 pb-0"
             onSubmit={updateProjectSlider}
           >
-            {/* Basic Information */}
+            {/* Multilingual Name & Location */}
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-subtitle-color">
                 Basic Information
               </h3>
 
-              <InputField
-                label="Name"
-                name="name"
-                defaultValue={slider?.name}
-                error={(error as any)?.fieldErrors?.name}
-              />
+              <Tabs defaultValue="en" className="w-full">
+                <TabsList className="grid grid-cols-2 w-full mb-2">
+                  <TabsTrigger value="en">English</TabsTrigger>
+                  <TabsTrigger value="ar">العربية</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="en" className="space-y-4">
+                  <InputField
+                    label="Name (English)"
+                    placeholder="Enter slider name in English"
+                    value={name.en}
+                    onChange={(e) => setName({ ...name, en: e as string })}
+                    name="name_en"
+                    error={
+                      (error as any)?.fieldErrors?.name?.[0]?.includes("nested")
+                        ? "Both English and Arabic names are required"
+                        : (error as any)?.fieldErrors?.name?.en
+                    }
+                  />
+                  <InputField
+                    label="Location (English)"
+                    placeholder="Enter location in English"
+                    value={location.en}
+                    onChange={(e) =>
+                      setLocation({ ...location, en: e as string })
+                    }
+                    name="location_en"
+                    error={
+                      (error as any)?.fieldErrors?.location?.[0]?.includes(
+                        "nested"
+                      )
+                        ? "Both English and Arabic locations are required"
+                        : (error as any)?.fieldErrors?.location?.en
+                    }
+                  />
+                </TabsContent>
+
+                <TabsContent value="ar" className="space-y-4">
+                  <InputField
+                    label="الاسم (عربي)"
+                    placeholder="أدخل اسم السلايدر بالعربية"
+                    value={name.ar}
+                    onChange={(e) => setName({ ...name, ar: e as string })}
+                    name="name_ar"
+                    error={
+                      (error as any)?.fieldErrors?.name?.[0]?.includes("nested")
+                        ? "يجب إدخال الاسم بالإنجليزية والعربية"
+                        : (error as any)?.fieldErrors?.name?.ar
+                    }
+                  />
+                  <InputField
+                    label="الموقع (عربي)"
+                    placeholder="أدخل الموقع بالعربية"
+                    value={location.ar}
+                    onChange={(e) =>
+                      setLocation({ ...location, ar: e as string })
+                    }
+                    name="location_ar"
+                    error={
+                      (error as any)?.fieldErrors?.location?.[0]?.includes(
+                        "nested"
+                      )
+                        ? "يجب إدخال الموقع بالإنجليزية والعربية"
+                        : (error as any)?.fieldErrors?.location?.ar
+                    }
+                  />
+                </TabsContent>
+              </Tabs>
 
               <InputField
                 label="Area"
+                placeholder="e.g., 5,000 sq m"
+                value={area}
+                onChange={(e) => setArea(e as string)}
                 name="area"
-                defaultValue={slider?.area}
                 error={(error as any)?.fieldErrors?.area}
-              />
-
-              <InputField
-                label="Location"
-                name="location"
-                defaultValue={slider?.location}
-                error={(error as any)?.fieldErrors?.location}
               />
             </div>
 
@@ -209,18 +294,14 @@ export const UpdateProjectButton = ({ projectId }: Props) => {
               <InputField
                 label="External Link"
                 placeholder="https://example.com"
+                value={link}
+                onChange={(e) => setLink(e as string)}
                 name="link"
-                defaultValue={slider?.link || ""}
                 error={(error as any)?.fieldErrors?.link}
               />
 
               <div className="grid gap-2">
                 <Label>Project to Link With (optional)</Label>
-                {slider?.projectLink && !selectedProjectLink && (
-                  <div className="text-xs text-subtitle-color mb-1">
-                    Current: Linked to a project
-                  </div>
-                )}
                 <Select
                   name="projectLink"
                   value={selectedProjectLink || ""}
@@ -232,7 +313,7 @@ export const UpdateProjectButton = ({ projectId }: Props) => {
                   <SelectContent>
                     {projects?.map((project) => (
                       <SelectItem key={project?._id} value={project?._id}>
-                        {project?.name}
+                        {project?.name?.en || project?.name?.ar}
                       </SelectItem>
                     ))}
                   </SelectContent>

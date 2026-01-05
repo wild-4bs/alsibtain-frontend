@@ -110,16 +110,16 @@ export const Team = ({
             >
               <Image
                 src={member.image.url}
-                alt={member.name}
+                alt={member.name.en}
                 width={1000}
                 height={1000}
                 className="w-[235px] h-[253px] object-cover object-center rounded-xl mx-auto mb-12"
               />
               <h3 className="font-semibold text-2xl leading-6 mb-2">
-                {member.name}
+                {member.name[locale]}
               </h3>
               <h4 className="font-medium text-lg leading-6 text-subtitle-color">
-                {member.position}
+                {member.position[locale]}
               </h4>
             </article>
           ))}

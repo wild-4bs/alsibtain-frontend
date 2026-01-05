@@ -1,6 +1,8 @@
+import { LangForm } from "@/services/projects";
+
 export interface Employee {
-  name: string;
-  position: string;
+  name: LangForm;
+  position: LangForm;
   image: {
     url: string;
     fileId: string;

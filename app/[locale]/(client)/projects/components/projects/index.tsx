@@ -132,7 +132,7 @@ export const Projects = ({
 
         <div className="grid grid-cols-2 max-md:grid-cols-1 gap-[235px] relative max-md:gap-20">
           <div
-            className="absolute hidden inset-0 pointer-events-none z-0 flex
+            className="absolute hidden inset-0 pointer-events-none z-0
   mask-[radial-gradient(circle_at_50%_50%,black_0px,black_150px,rgba(0,0,0,0.6)_170px,rgba(0,0,0,0.3)_190px,transparent_200px)]
   mask-no-repeat
   mask-size-[100%_100%]
@@ -193,8 +193,8 @@ export const Projects = ({
           {projectsRes?.map((project, i) => (
             <Project
               key={i}
-              title={project.name}
-              caption={project.description}
+              title={project.name[locale]}
+              caption={project.description[locale]}
               id={project?._id}
               logo={project?.logo?.url}
             />

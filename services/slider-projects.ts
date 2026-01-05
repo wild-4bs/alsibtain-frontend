@@ -3,6 +3,7 @@ import { GalleryImage } from "@/types/gallery";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/providers/queryClientProvider";
 import { Job } from "./jobs";
+import { LangForm } from "./testimonials";
 
 export type FileAsset = {
   _id: string;
@@ -12,9 +13,9 @@ export type FileAsset = {
 
 export type SliderProject = {
   video: FileAsset;
-  name: string;
+  name: LangForm;
   area: string;
-  location: string;
+  location: LangForm;
   link: string;
   projectLink: string;
   createdAt: string;

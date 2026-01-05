@@ -16,8 +16,8 @@ export const Content = () => {
       <Hero project={data} />
       <IntroProject project={data} />
       {data?.showUrukCity360 && <Player360 />}
-      <ProjectsSlider />
-      <VideosSlider />
+      <ProjectsSlider gallery={data?.imageGallery} />
+      <VideosSlider gallery={data?.videoGallery}/>
       <CallToAction />
     </main>
   );

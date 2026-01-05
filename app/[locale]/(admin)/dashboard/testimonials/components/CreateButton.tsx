@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   InputField,
@@ -11,14 +13,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCreateTestimonial } from "@/services/testimonials";
 import { Plus, Upload, X, Star } from "lucide-react";
 import { FormEvent, useState } from "react";
@@ -26,29 +22,37 @@ import { FormEvent, useState } from "react";
 export const CreateButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [testimonial, setTestimonial] = useState("");
   const [stars, setStars] = useState<number>(5);
+  const [lang, setLang] = useState<"ar" | "en">("ar");
+
+  const [clientType, setClientType] = useState({ ar: "", en: "" });
+  const [location, setLocation] = useState({ ar: "", en: "" });
+  const [testimonialText, setTestimonialText] = useState({ ar: "", en: "" });
 
   const { mutate, isPending, error } = useCreateTestimonial();
+  const fieldErrors = (error as any)?.fieldErrors || {};
+
+  const hasLangError = (l: "ar" | "en") =>
+    Object.keys(fieldErrors).some((key) => key.endsWith(`.${l}`));
 
   const createTestimonial = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = new FormData(e.target as HTMLFormElement);
 
     const testimonialData = new FormData();
-    testimonialData.append("clientType", form.get("clientType") as string);
-    testimonialData.append("location", form.get("location") as string);
-    testimonialData.append("testimonial", testimonial);
+    testimonialData.append("clientType", JSON.stringify(clientType));
+    testimonialData.append("location", JSON.stringify(location));
+    testimonialData.append("testimonial", JSON.stringify(testimonialText));
     testimonialData.append("stars", stars.toString());
-
     if (imageFile) testimonialData.append("image", imageFile);
 
     mutate(testimonialData as any, {
       onSuccess: () => {
         setIsOpen(false);
         setImageFile(null);
-        setTestimonial("");
         setStars(5);
+        setClientType({ ar: "", en: "" });
+        setLocation({ ar: "", en: "" });
+        setTestimonialText({ ar: "", en: "" });
       },
     });
   };
@@ -79,9 +83,7 @@ export const CreateButton = () => {
             input.accept = accept;
             input.onchange = (e) => {
               const target = e.target as HTMLInputElement;
-              if (target.files?.[0]) {
-                setFile(target.files[0]);
-              }
+              if (target.files?.[0]) setFile(target.files[0]);
             };
             input.click();
           }}
@@ -144,10 +146,12 @@ export const CreateButton = () => {
           Create Testimonial
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
+
+      <DialogContent className="px-0!">
         <DialogHeader>
           <DialogTitle>Create a New Testimonial</DialogTitle>
         </DialogHeader>
+
         <form
           className="flex flex-col gap-4 p-4 pb-0"
           onSubmit={createTestimonial}
@@ -157,32 +161,95 @@ export const CreateButton = () => {
               Client Information
             </h3>
 
-            <InputField
-              label="Client Type / Name"
-              placeholder="Enter client name or type"
-              name="clientType"
-              error={(error as any)?.fieldErrors?.clientType}
-            />
+            <Tabs value={lang} onValueChange={(v) => setLang(v as "ar" | "en")}>
+              <TabsList
+                className="grid grid-cols-2 w-full"
+                variant={"bordered"}
+              >
+                <TabsTrigger
+                  value="ar"
+                  className={
+                    hasLangError("ar") ? "text-red-500 border-red-500" : ""
+                  }
+                >
+                  Arabic
+                </TabsTrigger>
+                <TabsTrigger
+                  value="en"
+                  className={
+                    hasLangError("en") ? "text-red-500 border-red-500" : ""
+                  }
+                >
+                  English
+                </TabsTrigger>
+              </TabsList>
 
-            <InputField
-              label="Location"
-              placeholder="Enter client location"
-              name="location"
-              error={(error as any)?.fieldErrors?.location}
-            />
+              <TabsContent value="ar" className="space-y-4 mt-4">
+                <InputField
+                  label="Client Name (AR)"
+                  value={clientType.ar}
+                  onChange={(v) =>
+                    setClientType((p) => ({ ...p, ar: v as string }))
+                  }
+                  error={fieldErrors["clientType.ar"]}
+                />
+                <InputField
+                  label="Location & client type (AR)"
+                  value={location.ar}
+                  onChange={(v) =>
+                    setLocation((p) => ({ ...p, ar: v as string }))
+                  }
+                  error={fieldErrors["location.ar"]}
+                />
+                <TextareaField
+                  label="Testimonial (AR)"
+                  value={testimonialText.ar}
+                  onChange={(v) =>
+                    setTestimonialText((p) => ({ ...p, ar: v as string }))
+                  }
+                  error={fieldErrors["testimonial.ar"]}
+                />
+              </TabsContent>
+
+              <TabsContent value="en" className="space-y-4 mt-4">
+                <InputField
+                  label="Client Name (EN)"
+                  value={clientType.en}
+                  onChange={(v) =>
+                    setClientType((p) => ({ ...p, en: v as string }))
+                  }
+                  error={fieldErrors["clientType.en"]}
+                />
+                <InputField
+                  label="Location & Client type (EN)"
+                  value={location.en}
+                  onChange={(v) =>
+                    setLocation((p) => ({ ...p, en: v as string }))
+                  }
+                  error={fieldErrors["location.en"]}
+                />
+                <TextareaField
+                  label="Testimonial (EN)"
+                  value={testimonialText.en}
+                  onChange={(v) =>
+                    setTestimonialText((p) => ({ ...p, en: v as string }))
+                  }
+                  error={fieldErrors["testimonial.en"]}
+                />
+              </TabsContent>
+            </Tabs>
           </div>
 
           <div className="space-y-4 border-t pt-4">
             <h3 className="text-sm font-semibold text-subtitle-color">
               Client Image
             </h3>
-
             <FileUploadField
               label="Image"
               file={imageFile}
               setFile={setImageFile}
               accept="image/*"
-              error={(error as any)?.fieldErrors?.image}
+              error={fieldErrors["image"]}
             />
           </div>
 
@@ -190,15 +257,7 @@ export const CreateButton = () => {
             <h3 className="text-sm font-semibold text-subtitle-color">
               Testimonial Details
             </h3>
-
             <StarRating value={stars} onChange={setStars} />
-
-            <TextareaField
-              label="Testimonial"
-              value={testimonial}
-              onChange={(e) => setTestimonial(e as string)}
-              placeholder="Enter the client's testimonial"
-            />
           </div>
 
           <DialogFooter>

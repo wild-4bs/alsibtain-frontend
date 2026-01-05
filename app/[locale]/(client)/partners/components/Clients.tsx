@@ -12,67 +12,16 @@ import { useGetTestimonials } from "@/services/testimonials";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { ArrowUp, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import {
+  ArrowUp,
+  ChevronLeft,
+  ChevronRight,
+  LocationEdit,
+  Star,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-
-const clientTestimonials = [
-  {
-    id: 1,
-    name: {
-      en: "Ali Kareem",
-      ar: "علي كريم",
-    },
-    role: {
-      en: "Homeowner - Karbala",
-      ar: "مالك منزل - كربلاء",
-    },
-    image: "/clients/1.png",
-    testimonial: {
-      en: "Al-Subtain made the entire process smooth and professional. From choosing the unit to understanding the project details, their team supported us at every stage. Truly a trustworthy developer.",
-      ar: "جعلت السبطين العملية بأكملها سلسة ومهنية. من اختيار الوحدة إلى فهم تفاصيل المشروع، دعمنا فريقهم في كل مرحلة. مطور جدير بالثقة حقاً.",
-    },
-    rating: 5,
-    link: "#",
-  },
-  {
-    id: 2,
-    name: {
-      en: "Hassan Al-Rubaie",
-      ar: "حسن الربيعي",
-    },
-    role: {
-      en: "Real Estate Investor",
-      ar: "مستثمر عقاري",
-    },
-    image: "/clients/2.png",
-    testimonial: {
-      en: "Their projects are well-planned and built with long-term value in mind. Al-Subtain has become my preferred choice for reliable and safe real estate investments in Iraq.",
-      ar: "مشاريعهم مخططة جيداً ومبنية مع مراعاة القيمة طويلة الأجل. أصبحت السبطين خياري المفضل للاستثمارات العقارية الموثوقة والآمنة في العراق.",
-    },
-    rating: 5,
-    link: "#",
-  },
-  {
-    id: 3,
-    name: {
-      en: "Hassan Al-Rubaie",
-      ar: "حسن الربيعي",
-    },
-    role: {
-      en: "Real Estate Investor",
-      ar: "مستثمر عقاري",
-    },
-    image: "/clients/2.png",
-    testimonial: {
-      en: "Their projects are well-planned and built with long-term value in mind. Al-Subtain has become my preferred choice for reliable and safe real estate investments in Iraq.",
-      ar: "مشاريعهم مخططة جيداً ومبنية مع مراعاة القيمة طويلة الأجل. أصبحت السبطين خياري المفضل للاستثمارات العقارية الموثوقة والآمنة في العراق.",
-    },
-    rating: 5,
-    link: "#",
-  },
-];
 
 const NAV_SIZE = 50;
 
@@ -197,18 +146,18 @@ export const Clients = () => {
                         src={client?.image?.url}
                         width={1000}
                         height={1000}
-                        alt={client?.clientType}
+                        alt={client?.clientType.en}
                         className="size-16 rounded-full object-cover mb-7"
                       />
                       <h3 className="font-medium text-sm lg:text-base text-center mb-2">
-                        {client.clientType}
+                        {client.clientType[locale]}
                       </h3>
                       <span className="font-normal text-subtitle-color">
-                        {client.location}
+                        {client.location[locale]}
                       </span>
                     </header>
                     <p className="font-light text-subtitle-color text-center mt-8 flex-1 mb-5">
-                      {client.testimonial}
+                      {client.testimonial[locale]}
                     </p>
                     <footer className="flex items-center justify-between gap-5">
                       <div className="flex items-center gap-2">

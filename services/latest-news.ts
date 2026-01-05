@@ -1,13 +1,14 @@
 import ApiClient from "@/lib/apiClient";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/providers/queryClientProvider";
+import { LangForm } from "./projects";
 
 export type News = {
   thumbnail: { fileId: string; url: string };
-  title: string;
-  writtenBy: string;
-  caption: string;
-  category: string;
+  title: LangForm;
+  writtenBy: LangForm;
+  caption: LangForm;
+  category: LangForm;
   _id: string;
   createdAt: string;
   updatedAt: string;

@@ -27,10 +27,15 @@ import { TrashIcon } from "lucide-react";
 import { useState } from "react";
 
 export const Content = () => {
-  const [name, setName] = useState("");
+  const [searchName, setSearchName] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [activeLang, setActiveLang] = useState<"ar" | "en">("ar");
+  const [displayLang, setDisplayLang] = useState<"ar" | "en">("en");
 
-  const { data } = useGetCategories({ name });
+  // State for multilingual name
+  const [name, setName] = useState({ ar: "", en: "" });
+
+  const { data } = useGetCategories({ name: searchName });
 
   const { mutate, isPending: isDeleting } = useDeleteCategory();
   const {
@@ -39,7 +44,10 @@ export const Content = () => {
     error,
   } = useCreateCategory(() => {
     setIsOpen(false);
+    setName({ ar: "", en: "" });
+    setActiveLang("ar");
   });
+
   return (
     <main>
       <header className="mb-4">
@@ -49,7 +57,7 @@ export const Content = () => {
             placeholder="Search by name..."
             onChange={(e) =>
               setTimeout(() => {
-                setName(e.target.value);
+                setSearchName(e.target.value);
               }, 500)
             }
           />
@@ -62,18 +70,39 @@ export const Content = () => {
                 <DialogTitle>Create a New Category</DialogTitle>
               </DialogHeader>
               <form
-              className="p-3"
+                className="p-3"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  const form = new FormData(e.target as HTMLFormElement);
-                  addCategory({ name: form.get("name") });
+                  addCategory({ name });
                 }}
               >
+                {/* Language Tabs */}
+                <div className="flex gap-2 mb-4">
+                  <Button
+                    type="button"
+                    variant={activeLang === "ar" ? "default" : "outline"}
+                    onClick={() => setActiveLang("ar")}
+                  >
+                    Arabic
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={activeLang === "en" ? "default" : "outline"}
+                    onClick={() => setActiveLang("en")}
+                  >
+                    English
+                  </Button>
+                </div>
+
                 <InputField
-                  name="name"
-                  placeholder="Enter category name"
+                  placeholder={`Enter category name in ${activeLang === "ar" ? "Arabic" : "English"}`}
                   label="Category Name"
-                  error={(error as any)?.fieldErrors?.name[0]}
+                  value={name[activeLang]}
+                  onChange={(v) => {
+                    const value = typeof v === 'string' ? v : String(v);
+                    setName({ ...name, [activeLang]: value });
+                  }}
+                  error={(error as any)?.fieldErrors?.name}
                 />
                 <Button disabled={isAdding} className="mt-4 w-full">
                   {isAdding ? "Saving..." : "Save"}
@@ -83,10 +112,29 @@ export const Content = () => {
           </Dialog>
         </div>
       </header>
+
+      {/* Display Language Toggle */}
+      <div className="flex gap-2 mb-4">
+        <Button
+          size="sm"
+          variant={displayLang === "en" ? "default" : "outline"}
+          onClick={() => setDisplayLang("en")}
+        >
+          Show English
+        </Button>
+        <Button
+          size="sm"
+          variant={displayLang === "ar" ? "default" : "outline"}
+          onClick={() => setDisplayLang("ar")}
+        >
+          Show Arabic
+        </Button>
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
+            <TableHead>Name ({displayLang.toUpperCase()})</TableHead>
             <TableHead className="w-[200px]">Created At</TableHead>
             <TableHead className="w-[200px] text-center">Total Jobs</TableHead>
             <TableHead className="w-[100px]">Action</TableHead>
@@ -95,7 +143,7 @@ export const Content = () => {
         <TableBody>
           {data?.categories?.map((category, i) => (
             <TableRow key={i}>
-              <TableCell>{category.name}</TableCell>
+              <TableCell>{category.name[displayLang]}</TableCell>
               <TableCell>{timeAgo(category.createdAt)}</TableCell>
               <TableCell>
                 <div className="flex items-center justify-center">

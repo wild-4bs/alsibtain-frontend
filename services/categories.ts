@@ -2,10 +2,11 @@ import ApiClient from "@/lib/apiClient";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Job } from "./jobs";
 import { queryClient } from "@/providers/queryClientProvider";
+import { LangForm } from "./projects";
 
 export type Category = {
   _id: string;
-  name: string;
+  name: LangForm;
   createdAt: string;
   updatedAt: string;
   __v: number;

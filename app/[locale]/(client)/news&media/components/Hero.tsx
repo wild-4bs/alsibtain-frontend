@@ -112,14 +112,14 @@ export const Hero = () => {
           </div>
 
           <h1 className="font-black text-3xl mb-2 rtl:mb-4" ref={title}>
-            {data?.title}
+            {data?.title[locale]}
           </h1>
 
           <p
             className="font-medium text-base leading-[100%] rtl:leading-[120%]"
             ref={caption}
           >
-            {data?.description}
+            {data?.description[locale]}
           </p>
         </div>
       </Container>

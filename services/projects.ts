@@ -1,34 +1,73 @@
 import ApiClient from "@/lib/apiClient";
-import { GalleryImage } from "@/types/gallery";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/providers/queryClientProvider";
-import { Job } from "./jobs";
+
+// Base types
+export type LangForm = {
+  ar: string;
+  en: string;
+};
+
+export type AssetType = {
+  fileId: string;
+  url: string;
+  _id?: string;
+};
+
+// Project type matching your schema
+export type Project = {
+  _id: string;
+  name: LangForm;
+  caption: LangForm;
+  logo: AssetType;
+  background: AssetType;
+  projectFullName: LangForm;
+  location: LangForm;
+  totalArea: string;
+  totalResidentialUnits: string;
+  unitType: LangForm;
+  description: LangForm;
+  introduction: {
+    thumbnail: AssetType;
+    video: AssetType;
+    _id?: string;
+  };
+  imageGallery?: AssetType[];
+  videoGallery?: AssetType[];
+  showUrukCity360: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
+};
+
+// API Response type (if you have pagination)
+export type ProjectsResponse = {
+  payload: Project[];
+  total: number;
+  page: number;
+  lastPage: number;
+};
+
+// For create/update operations
+export type CreateProjectDTO = Omit<
+  Project,
+  "_id" | "createdAt" | "updatedAt" | "__v"
+>;
+
+export type UpdateProjectDTO = Partial<CreateProjectDTO>;
+
+// Query params for getting projects
+export type GetProjectsParams = {
+  search?: string;
+  page?: number;
+  limit?: number;
+  showUrukCity360?: boolean;
+};
 
 export type FileAsset = {
   _id: string;
   fileId: string;
   url: string;
-};
-
-export type Project = {
-  name: string;
-  caption: string;
-  logo: FileAsset;
-  background: FileAsset;
-  projectFullName: string;
-  location: string;
-  totalArea: string;
-  totalResidentialUnits: string;
-  unitType: string;
-  description: string;
-  introduction: {
-    thumbnail: FileAsset;
-    video: FileAsset;
-  };
-  showUrukCity360: boolean;
-  createdAt: string;
-  updatedAt: string;
-  _id: string;
 };
 
 export const useGetProjects = ({ search }: { search?: string }) => {

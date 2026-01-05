@@ -221,7 +221,7 @@ export const JobApplications = () => {
                     }
                   )}
                 >
-                  {category.name}{" "}
+                  {category.name[locale]}{" "}
                   {category.totalJobs && <>({category.totalJobs})</>}
                 </button>
               </li>
@@ -236,14 +236,16 @@ export const JobApplications = () => {
               >
                 <div className="flex items-center w-full max-md:flex-col max-md:items-start gap-2">
                   <h3 className="font-medium text-xl md:w-[40%]">
-                    {job.title}
+                    {job.title[locale]}
                   </h3>
                   <dl className="flex items-center md:gap-28 max-md:gap-10">
                     <div className="flex flex-col gap-1">
                       <dt className="font-medium text-base text-subtitle-color">
                         {t("experience")}
                       </dt>
-                      <dd className="font-medium text-lg">{job.experience}</dd>
+                      <dd className="font-medium text-lg">
+                        {job.experience[locale]}
+                      </dd>
                     </div>
                     <div className="flex flex-col gap-1">
                       <dt className="font-medium text-base text-subtitle-color">

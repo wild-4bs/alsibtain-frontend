@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   InputField,
@@ -23,6 +24,7 @@ import { useGetCategories } from "@/services/categories";
 import { useGetJobById, useUpdateJob } from "@/services/jobs";
 import { Edit } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Props {
   jobId: string;
@@ -30,7 +32,8 @@ interface Props {
 
 export const UpdateJobButton = ({ jobId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [description, setDescription] = useState("");
+  const [tab, setTab] = useState<"ar" | "en">("ar");
+  const [description, setDescription] = useState({ ar: "", en: "" });
 
   const { data: categories } = useGetCategories({});
   const { data: jobResponse, isLoading } = useGetJobById(jobId);
@@ -40,6 +43,7 @@ export const UpdateJobButton = ({ jobId }: Props) => {
   const { mutate, isPending, error } = useUpdateJob(() => {
     setIsOpen(false);
   });
+
   useEffect(() => {
     if (job?.description) {
       setDescription(job.description);
@@ -53,17 +57,35 @@ export const UpdateJobButton = ({ jobId }: Props) => {
     mutate({
       id: jobId,
       data: {
-        title: form.get("title") as string,
-        experience: form.get("experience") as string,
+        title: {
+          ar: form.get("title_ar") as string,
+          en: form.get("title_en") as string,
+        },
+        experience: {
+          ar: form.get("experience_ar") as string,
+          en: form.get("experience_en") as string,
+        },
         deadline: form.get("deadline")
           ? new Date(form.get("deadline") as string)
           : undefined,
         category: form.get("category") as string,
         description,
-        location: form.get("location") as string | undefined,
-        jobType: form.get("jobType") as string | undefined,
-        workingHours: form.get("workingHours") as string | undefined,
-        workingDays: form.get("workingDays") as string | undefined,
+        location: {
+          ar: form.get("location_ar") as string,
+          en: form.get("location_en") as string,
+        },
+        jobType: {
+          ar: form.get("jobType_ar") as string,
+          en: form.get("jobType_en") as string,
+        },
+        workingHours: {
+          ar: form.get("workingHours_ar") as string,
+          en: form.get("workingHours_en") as string,
+        },
+        workingDays: {
+          ar: form.get("workingDays_ar") as string,
+          en: form.get("workingDays_en") as string,
+        },
         vacancy: form.get("vacancy") ? Number(form.get("vacancy")) : undefined,
       },
     });
@@ -72,7 +94,7 @@ export const UpdateJobButton = ({ jobId }: Props) => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost">
+        <Button variant="ghost" className="text-foreground">
           <Edit width={12} /> Update
         </Button>
       </DialogTrigger>
@@ -86,20 +108,67 @@ export const UpdateJobButton = ({ jobId }: Props) => {
           <p className="text-center py-10">Loading...</p>
         ) : (
           <form className="flex flex-col gap-4 p-4 pb-0" onSubmit={updateJob}>
-            <InputField
-              label="Title"
-              name="title"
-              defaultValue={job?.title}
-              error={(error as any)?.fieldErrors?.title}
-            />
+            {/* Tabs for AR / EN */}
+            <Tabs
+              value={tab}
+              onValueChange={(v) => setTab(v as "ar" | "en")}
+              className="w-full"
+            >
+              <TabsList className="grid grid-cols-2 mb-2">
+                <TabsTrigger value="ar">AR</TabsTrigger>
+                <TabsTrigger value="en">EN</TabsTrigger>
+              </TabsList>
 
-            <InputField
-              label="Experience"
-              name="experience"
-              defaultValue={job?.experience}
-              error={(error as any)?.fieldErrors?.experience}
-            />
+              <TabsContent value={tab}>
+                <InputField
+                  label="Title"
+                  name={`title_${tab}`}
+                  defaultValue={job?.title?.[tab]}
+                  error={(error as any)?.fieldErrors?.title}
+                />
 
+                <InputField
+                  label="Experience"
+                  name={`experience_${tab}`}
+                  defaultValue={job?.experience?.[tab]}
+                  error={(error as any)?.fieldErrors?.experience}
+                />
+
+                <RichTextField
+                  label="Description"
+                  value={description[tab] || ""}
+                  onChange={(v) =>
+                    setDescription((prev) => ({ ...prev, [tab]: v as string }))
+                  }
+                />
+
+                <InputField
+                  label="Location"
+                  name={`location_${tab}`}
+                  defaultValue={job?.location?.[tab]}
+                />
+
+                <InputField
+                  label="Job Type"
+                  name={`jobType_${tab}`}
+                  defaultValue={job?.jobType?.[tab]}
+                />
+
+                <InputField
+                  label="Working Hours"
+                  name={`workingHours_${tab}`}
+                  defaultValue={job?.workingHours?.[tab]}
+                />
+
+                <InputField
+                  label="Working Days"
+                  name={`workingDays_${tab}`}
+                  defaultValue={job?.workingDays?.[tab]}
+                />
+              </TabsContent>
+            </Tabs>
+
+            {/* Common fields */}
             <InputField
               label="Deadline"
               name="deadline"
@@ -119,41 +188,11 @@ export const UpdateJobButton = ({ jobId }: Props) => {
               <SelectContent>
                 {categories?.categories?.map((cat) => (
                   <SelectItem key={cat._id} value={cat._id}>
-                    {cat.name}
+                    {cat.name.ar} / {cat.name.en}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-
-            <RichTextField
-              label="Description"
-              value={description}
-              onChange={(v) => setDescription(v as string)}
-            />
-
-            <InputField
-              label="Location"
-              name="location"
-              defaultValue={job?.location}
-            />
-
-            <InputField
-              label="Job Type"
-              name="jobType"
-              defaultValue={job?.jobType}
-            />
-
-            <InputField
-              label="Working Hours"
-              name="workingHours"
-              defaultValue={job?.workingHours}
-            />
-
-            <InputField
-              label="Working Days"
-              name="workingDays"
-              defaultValue={job?.workingDays}
-            />
 
             <InputField
               label="Vacancy"

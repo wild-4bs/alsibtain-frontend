@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -28,9 +29,15 @@ export const CreateButton = () => {
   // File state
   const [videoFile, setVideoFile] = useState<File | null>(null);
 
+  // Tabs state for AR/EN
+  const [name, setName] = useState({ ar: "", en: "" });
+  const [location, setLocation] = useState({ ar: "", en: "" });
+
   const { mutate, isPending, error } = useCreateProject(() => {
     setIsOpen(false);
     setVideoFile(null);
+    setName({ ar: "", en: "" });
+    setLocation({ ar: "", en: "" });
   });
 
   const { data } = useGetProjects({});
@@ -39,19 +46,20 @@ export const CreateButton = () => {
     e.preventDefault();
     const form = new FormData(e.target as HTMLFormElement);
 
-    // Create FormData with files
     const projectSliderData = new FormData();
-    projectSliderData.append("name", form.get("name") as string);
-    projectSliderData.append("area", form.get("area") as string);
-    projectSliderData.append("location", form.get("location") as string);
 
+    // Combine multilingual fields into JSON
+    projectSliderData.append("name", JSON.stringify(name));
+    projectSliderData.append("location", JSON.stringify(location));
+    projectSliderData.append("area", form.get("area") as string);
+
+    // Optional links
     const link = form.get("link") as string;
     const projectLink = form.get("projectLink") as string;
-
     if (link) projectSliderData.append("link", link);
     if (projectLink) projectSliderData.append("projectLink", projectLink);
 
-    // Append video file
+    // Video
     if (videoFile) projectSliderData.append("video", videoFile);
 
     mutate(projectSliderData as any);
@@ -83,9 +91,7 @@ export const CreateButton = () => {
             input.accept = accept;
             input.onchange = (e) => {
               const target = e.target as HTMLInputElement;
-              if (target.files?.[0]) {
-                setFile(target.files[0]);
-              }
+              if (target.files?.[0]) setFile(target.files[0]);
             };
             input.click();
           }}
@@ -116,25 +122,90 @@ export const CreateButton = () => {
           Create Slider
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
+
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Create a New Project Slider</DialogTitle>
         </DialogHeader>
+
         <form
           className="flex flex-col gap-4 p-4 pb-0"
           onSubmit={createProjectSlider}
         >
+          {/* Multilingual Name & Location */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-subtitle-color">
               Basic Information
             </h3>
 
-            <InputField
-              label="Name"
-              placeholder="Enter slider name"
-              name="name"
-              error={(error as any)?.fieldErrors?.name}
-            />
+            <Tabs defaultValue="en" className="w-full">
+              <TabsList className="grid grid-cols-2 w-full mb-2">
+                <TabsTrigger value="en">English</TabsTrigger>
+                <TabsTrigger value="ar">العربية</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="en" className="space-y-4">
+                <InputField
+                  label="Name (English)"
+                  placeholder="Enter slider name in English"
+                  value={name.en}
+                  onChange={(e) => setName({ ...name, en: e as string })}
+                  name="name_en"
+                  error={
+                    (error as any)?.fieldErrors?.name?.[0]?.includes("nested")
+                      ? "Both English and Arabic names are required"
+                      : (error as any)?.fieldErrors?.name?.en
+                  }
+                />
+                <InputField
+                  label="Location (English)"
+                  placeholder="Enter location in English"
+                  value={location.en}
+                  onChange={(e) =>
+                    setLocation({ ...location, en: e as string })
+                  }
+                  name="location_en"
+                  error={
+                    (error as any)?.fieldErrors?.location?.[0]?.includes(
+                      "nested"
+                    )
+                      ? "Both English and Arabic locations are required"
+                      : (error as any)?.fieldErrors?.location?.en
+                  }
+                />
+              </TabsContent>
+
+              <TabsContent value="ar" className="space-y-4">
+                <InputField
+                  label="الاسم (عربي)"
+                  placeholder="أدخل اسم السلايدر بالعربية"
+                  value={name.ar}
+                  onChange={(e) => setName({ ...name, ar: e as string })}
+                  name="name_ar"
+                  error={
+                    (error as any)?.fieldErrors?.name?.[0]?.includes("nested")
+                      ? "يجب إدخال الاسم بالإنجليزية والعربية"
+                      : (error as any)?.fieldErrors?.name?.ar
+                  }
+                />
+                <InputField
+                  label="الموقع (عربي)"
+                  placeholder="أدخل الموقع بالعربية"
+                  value={location.ar}
+                  onChange={(e) =>
+                    setLocation({ ...location, ar: e as string })
+                  }
+                  name="location_ar"
+                  error={
+                    (error as any)?.fieldErrors?.location?.[0]?.includes(
+                      "nested"
+                    )
+                      ? "يجب إدخال الموقع بالإنجليزية والعربية"
+                      : (error as any)?.fieldErrors?.location?.ar
+                  }
+                />
+              </TabsContent>
+            </Tabs>
 
             <InputField
               label="Area"
@@ -142,19 +213,11 @@ export const CreateButton = () => {
               name="area"
               error={(error as any)?.fieldErrors?.area}
             />
-
-            <InputField
-              label="Location"
-              placeholder="Enter location"
-              name="location"
-              error={(error as any)?.fieldErrors?.location}
-            />
           </div>
 
-          {/* Video File */}
+          {/* Video Upload */}
           <div className="space-y-4 border-t pt-4">
             <h3 className="text-sm font-semibold text-subtitle-color">Video</h3>
-
             <FileUploadField
               label="Video"
               file={videoFile}
@@ -185,8 +248,8 @@ export const CreateButton = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {data?.map((project, i) => (
-                    <SelectItem value={project?._id}>
-                      {project?.name}
+                    <SelectItem key={i} value={project?._id}>
+                      {project?.name?.en || project?.name?.ar}
                     </SelectItem>
                   ))}
                 </SelectContent>

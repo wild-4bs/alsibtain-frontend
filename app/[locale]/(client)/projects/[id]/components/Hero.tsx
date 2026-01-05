@@ -67,11 +67,11 @@ export const Hero = ({ project }: { project?: Project }) => {
         >
           <div className="flex flex-col gap-2">
             <dt>{t("labels.projectName")}</dt>
-            <dd>{project?.projectFullName}</dd>
+            <dd>{project?.projectFullName[locale]}</dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
             <dt>{t("labels.location")}</dt>
-            <dd>{project?.location}</dd>
+            <dd>{project?.location[locale]}</dd>
           </div>
           <div className="flex flex-col gap-2 ps-4">
             <dt>{t("labels.totalArea")}</dt>
@@ -83,7 +83,7 @@ export const Hero = ({ project }: { project?: Project }) => {
           </div>
           <div className="flex flex-col gap-2 ps-4">
             <dt>{t("labels.unitType")}</dt>
-            <dd>{project?.unitType}</dd>
+            <dd>{project?.unitType[locale]}</dd>
           </div>
         </dl>
       </Container>

@@ -12,7 +12,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useGetUpdatesById, useUpdateUpdates } from "@/services/projects-updates";
+import {
+  useGetUpdatesById,
+  useUpdateUpdates,
+} from "@/services/projects-updates";
 import { Edit, Upload, X } from "lucide-react";
 import { FormEvent, useEffect, useState } from "react";
 
@@ -22,30 +25,38 @@ interface Props {
 
 export const UpdateButton = ({ updateId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeLang, setActiveLang] = useState<"ar" | "en">("ar");
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-  const [description, setDescription] = useState("");
 
-  const { data: updateResponse, isLoading } = useGetUpdatesById(updateId);
-  const update = updateResponse;
+  // State for multilingual fields
+  const [title, setTitle] = useState({ ar: "", en: "" });
+  const [description, setDescription] = useState({ ar: "", en: "" });
+  const [writtenBy, setWrittenBy] = useState({ ar: "", en: "" });
+
+  const { data: update, isLoading } = useGetUpdatesById(updateId);
 
   const { mutate, isPending, error } = useUpdateUpdates(() => {
     setIsOpen(false);
+    setThumbnailFile(null);
+    setActiveLang("ar");
   });
 
+  // Load existing data when update loads
   useEffect(() => {
-    if (update?.description) {
-      setDescription(update.description);
+    if (update) {
+      setTitle(update.title || { ar: "", en: "" });
+      setDescription(update.description || { ar: "", en: "" });
+      setWrittenBy(update.writtenBy || { ar: "", en: "" });
     }
   }, [update]);
 
   const updateProjectUpdate = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = new FormData(e.target as HTMLFormElement);
 
     const updateData = new FormData();
-    updateData.append("title", form.get("title") as string);
-    updateData.append("writtenBy", form.get("writtenBy") as string);
-    updateData.append("description", description);
+    updateData.append("title", JSON.stringify(title));
+    updateData.append("writtenBy", JSON.stringify(writtenBy));
+    updateData.append("description", JSON.stringify(description));
 
     if (thumbnailFile) updateData.append("thumbnail", thumbnailFile);
 
@@ -61,14 +72,12 @@ export const UpdateButton = ({ updateId }: Props) => {
     setFile,
     accept,
     currentUrl,
-    error,
   }: {
     label: string;
     file: File | null;
     setFile: (file: File | null) => void;
     accept: string;
     currentUrl?: string;
-    error?: string;
   }) => (
     <div className="flex flex-col gap-2">
       <label className="text-sm font-medium">{label}</label>
@@ -109,7 +118,6 @@ export const UpdateButton = ({ updateId }: Props) => {
           </Button>
         )}
       </div>
-      {error && <span className="text-xs text-red-500">{error}</span>}
     </div>
   );
 
@@ -133,6 +141,24 @@ export const UpdateButton = ({ updateId }: Props) => {
             className="flex flex-col gap-4 p-4 pb-0"
             onSubmit={updateProjectUpdate}
           >
+            {/* Language Tabs */}
+            <div className="flex gap-2 mb-4">
+              <Button
+                type="button"
+                variant={activeLang === "ar" ? "default" : "outline"}
+                onClick={() => setActiveLang("ar")}
+              >
+                Arabic
+              </Button>
+              <Button
+                type="button"
+                variant={activeLang === "en" ? "default" : "outline"}
+                onClick={() => setActiveLang("en")}
+              >
+                English
+              </Button>
+            </div>
+
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-subtitle-color">
                 Update Information
@@ -140,22 +166,40 @@ export const UpdateButton = ({ updateId }: Props) => {
 
               <InputField
                 label="Title"
-                name="title"
-                defaultValue={update?.title}
+                placeholder={`Enter title in ${
+                  activeLang === "ar" ? "Arabic" : "English"
+                }`}
+                value={title[activeLang]}
+                onChange={(v) => {
+                  const value = typeof v === "string" ? v : String(v);
+                  setTitle({ ...title, [activeLang]: value });
+                }}
                 error={(error as any)?.fieldErrors?.title}
               />
 
               <TextareaField
                 label="Description"
-                value={description}
-                onChange={(v) => setDescription(v as string)}
-                placeholder="Enter update description"
+                placeholder={`Enter description in ${
+                  activeLang === "ar" ? "Arabic" : "English"
+                }`}
+                value={description[activeLang]}
+                onChange={(v) => {
+                  const value = typeof v === "string" ? v : String(v);
+                  setDescription({ ...description, [activeLang]: value });
+                }}
+                error={(error as any)?.fieldErrors?.description}
               />
 
               <InputField
                 label="Written By"
-                name="writtenBy"
-                defaultValue={update?.writtenBy}
+                placeholder={`Enter author name in ${
+                  activeLang === "ar" ? "Arabic" : "English"
+                }`}
+                value={writtenBy[activeLang]}
+                onChange={(v) => {
+                  const value = typeof v === "string" ? v : String(v);
+                  setWrittenBy({ ...writtenBy, [activeLang]: value });
+                }}
                 error={(error as any)?.fieldErrors?.writtenBy}
               />
             </div>
@@ -171,7 +215,6 @@ export const UpdateButton = ({ updateId }: Props) => {
                 setFile={setThumbnailFile}
                 accept="image/*"
                 currentUrl={update?.thumbnail?.url}
-                error={(error as any)?.fieldErrors?.thumbnail}
               />
             </div>
 

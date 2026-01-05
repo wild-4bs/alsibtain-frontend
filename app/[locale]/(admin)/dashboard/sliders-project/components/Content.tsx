@@ -7,6 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Trash2,
   MapPin,
@@ -15,8 +16,6 @@ import {
   MoreVertical,
   Maximize2,
   Link2,
-  Edit,
-  Eye,
 } from "lucide-react";
 import { useGetProjectById } from "@/services/projects";
 import {
@@ -27,7 +26,7 @@ import { CreateButton } from "./CreateButton";
 import { UpdateProjectButton } from "./UpdateButton";
 
 // Project Link Component
-const ProjectLinkDisplay = ({ projectId }: { projectId: string }) => {
+const ProjectLinkDisplay = ({ projectId, language }: { projectId: string; language: "ar" | "en" }) => {
   const { data: project, isLoading } = useGetProjectById(projectId);
 
   if (isLoading) {
@@ -54,11 +53,11 @@ const ProjectLinkDisplay = ({ projectId }: { projectId: string }) => {
       <div className="flex-1 min-w-0">
         <p className="text-xs text-blue-300 mb-0.5">Linked Project</p>
         <p className="text-sm font-medium text-blue-400 truncate">
-          {project.name}
+          {typeof project.name === 'string' ? project.name : (project.name?.[language] || '')}
         </p>
         {project.location && (
           <p className="text-xs text-blue-300/70 truncate">
-            {project.location}
+            {typeof project.location === 'string' ? project.location : (project.location?.[language] || '')}
           </p>
         )}
       </div>
@@ -167,85 +166,157 @@ export const Content = () => {
                 className="border border-input rounded-xl shadow-sm hover:shadow-lg transition-all overflow-hidden bg-background"
               >
                 <div className="p-6">
-                  {/* Header Section */}
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="h-10 w-1 bg-blue-500 rounded-full" />
-                        <h3 className="text-2xl font-bold">{slider.name}</h3>
-                      </div>
-                      <div className="flex flex-wrap items-center gap-4 ml-4 text-sm text-subtitle-color">
-                        <div className="flex items-center gap-1.5">
-                          <MapPin size={14} className="text-blue-400" />
-                          <span>{slider.location}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                          <Maximize2 size={14} className="text-green-400" />
-                          <span>{slider.area}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="ghost" className="p-2 h-9 w-9">
-                          <MoreVertical size={18} />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="flex flex-col gap-1 w-fit p-1 bg-background text-white border border-input"
-                        align="end"
-                      >
-                        <UpdateProjectButton projectId={slider._id} />
-                        <Button
-                          variant="ghost"
-                          className="justify-start gap-2 text-red-500"
-                          onClick={() => deleteSlider(slider._id)}
-                          disabled={isDeleting}
+                  <Tabs defaultValue="en" className="w-full">
+                    <div className="flex items-start justify-between mb-4">
+                      <TabsList>
+                        <TabsTrigger value="en">English</TabsTrigger>
+                        <TabsTrigger value="ar">العربية</TabsTrigger>
+                      </TabsList>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="ghost" className="p-2 h-9 w-9">
+                            <MoreVertical size={18} />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          className="flex flex-col gap-1 w-fit p-1 bg-background text-white border border-input"
+                          align="end"
                         >
-                          <Trash2 size={14} /> Delete
-                        </Button>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-
-                  {/* Video Section */}
-                  {slider.video?.url && (
-                    <div className="mb-6">
-                      <VideoPreview
-                        videoUrl={slider.video.url}
-                        name={slider.name}
-                      />
-                    </div>
-                  )}
-
-                  {/* Links Section */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {slider.link && (
-                      <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
-                        <ExternalLink
-                          size={14}
-                          className="text-purple-400 shrink-0"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs text-purple-300 mb-0.5">
-                            External Link
-                          </p>
-                          <a
-                            href={slider.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-purple-400 hover:text-purple-300 truncate block underline"
+                          <UpdateProjectButton projectId={slider._id} />
+                          <Button
+                            variant="ghost"
+                            className="justify-start gap-2 text-red-500"
+                            onClick={() => deleteSlider(slider._id)}
+                            disabled={isDeleting}
                           >
-                            {slider.link}
-                          </a>
+                            <Trash2 size={14} /> Delete
+                          </Button>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    <TabsContent value="en">
+                      {/* Header Section */}
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="h-10 w-1 bg-blue-500 rounded-full" />
+                            <h3 className="text-2xl font-bold">{typeof slider.name === 'string' ? slider.name : slider.name?.en}</h3>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-4 ml-4 text-sm text-subtitle-color">
+                            <div className="flex items-center gap-1.5">
+                              <MapPin size={14} className="text-blue-400" />
+                              <span>{typeof slider.location === 'string' ? slider.location : slider.location?.en}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Maximize2 size={14} className="text-green-400" />
+                              <span>{slider.area}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    )}
 
-                    {slider.projectLink && (
-                      <ProjectLinkDisplay projectId={slider.projectLink} />
-                    )}
-                  </div>
+                      {/* Video Section */}
+                      {slider.video?.url && (
+                        <div className="mb-6">
+                          <VideoPreview
+                            videoUrl={slider.video.url}
+                            name={typeof slider.name === 'string' ? slider.name : (slider.name?.en || '')}
+                          />
+                        </div>
+                      )}
+
+                      {/* Links Section */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {slider.link && (
+                          <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                            <ExternalLink
+                              size={14}
+                              className="text-purple-400 shrink-0"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs text-purple-300 mb-0.5">
+                                External Link
+                              </p>
+                              <a
+                                href={slider.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-purple-400 hover:text-purple-300 truncate block underline"
+                              >
+                                {slider.link}
+                              </a>
+                            </div>
+                          </div>
+                        )}
+
+                        {slider.projectLink && (
+                          <ProjectLinkDisplay projectId={slider.projectLink} language="en" />
+                        )}
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="ar" dir="rtl">
+                      {/* Header Section */}
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="h-10 w-1 bg-blue-500 rounded-full" />
+                            <h3 className="text-2xl font-bold">{typeof slider.name === 'string' ? slider.name : slider.name?.ar}</h3>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-4 ml-4 text-sm text-subtitle-color">
+                            <div className="flex items-center gap-1.5">
+                              <MapPin size={14} className="text-blue-400" />
+                              <span>{typeof slider.location === 'string' ? slider.location : slider.location?.ar}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Maximize2 size={14} className="text-green-400" />
+                              <span>{slider.area}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Video Section */}
+                      {slider.video?.url && (
+                        <div className="mb-6">
+                          <VideoPreview
+                            videoUrl={slider.video.url}
+                            name={typeof slider.name === 'string' ? slider.name : (slider.name?.ar || '')}
+                          />
+                        </div>
+                      )}
+
+                      {/* Links Section */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {slider.link && (
+                          <div className="flex items-center gap-2 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                            <ExternalLink
+                              size={14}
+                              className="text-purple-400 shrink-0"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs text-purple-300 mb-0.5">
+                                رابط خارجي
+                              </p>
+                              <a
+                                href={slider.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-sm text-purple-400 hover:text-purple-300 truncate block underline"
+                              >
+                                {slider.link}
+                              </a>
+                            </div>
+                          </div>
+                        )}
+
+                        {slider.projectLink && (
+                          <ProjectLinkDisplay projectId={slider.projectLink} language="ar" />
+                        )}
+                      </div>
+                    </TabsContent>
+                  </Tabs>
 
                   {/* Footer Metadata */}
                   <div className="mt-4 pt-4 border-t border-input/50 flex items-center justify-between text-xs text-subtitle-color">

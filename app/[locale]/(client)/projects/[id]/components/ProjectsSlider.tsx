@@ -13,8 +13,13 @@ import { useLocale } from "next-intl";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import MediaViewer from "@/components/ViewportMedia";
+import { Project } from "@/services/projects";
 
-export const ProjectsSlider = () => {
+export const ProjectsSlider = ({
+  gallery,
+}: {
+  gallery: Project["imageGallery"];
+}) => {
   const plugin = useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -22,7 +27,6 @@ export const ProjectsSlider = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const locale = useLocale() as "ar" | "en";
-  const { data } = useGetGallery();
 
   useEffect(() => {
     if (!api) return;
@@ -63,7 +67,7 @@ export const ProjectsSlider = () => {
         opts={{ direction: getDirectionClass(locale) }}
       >
         <CarouselContent className="w-full h-full items-center">
-          {data?.map((image, i) => (
+          {gallery?.map((image, i) => (
             <CarouselItem
               key={i}
               className={clsx(
@@ -94,7 +98,7 @@ export const ProjectsSlider = () => {
       </Carousel>
 
       <div className="flex items-center gap-2 mt-12 absolute bottom-0 left-1/2 -translate-x-1/2">
-        {data?.map((_, i) => (
+        {gallery?.map((_, i) => (
           <button
             key={i}
             onClick={() => api?.scrollTo(i)}

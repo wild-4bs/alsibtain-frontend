@@ -1,13 +1,15 @@
 import ApiClient from "@/lib/apiClient";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/providers/queryClientProvider";
-import { Job } from "./jobs";
-
+export interface LangForm {
+  ar: string;
+  en: string;
+}
 export type Testimonial = {
   image: { fileId: string; url: string };
-  clientType: string;
-  location: string;
-  testimonial: string;
+  clientType: LangForm;
+  location: LangForm;
+  testimonial: LangForm;
   stars: number;
   _id: string;
   createdAt: string;

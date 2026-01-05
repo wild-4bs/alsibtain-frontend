@@ -16,7 +16,6 @@ import {
   User,
   MessageSquare,
   Clock,
-  Plus,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -25,6 +24,8 @@ import {
 } from "@/services/testimonials";
 import { CreateButton } from "./CreateButton";
 import { UpdateTestimonialButton } from "./UpdateButton";
+import { Tabs } from "@radix-ui/react-tabs";
+import { TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Content = () => {
   const [search, setSearch] = useState("");
@@ -91,7 +92,7 @@ export const Content = () => {
                         <div className="relative w-20 h-20 rounded-full overflow-hidden border-2 border-blue-500/20 shrink-0">
                           <Image
                             src={testimonial.image.url}
-                            alt={testimonial.clientType}
+                            alt={testimonial.clientType?.ar ?? "client"}
                             fill
                             className="object-cover"
                           />
@@ -100,27 +101,88 @@ export const Content = () => {
 
                       {/* Client Info */}
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <User size={18} className="text-blue-400" />
-                          <h3 className="text-xl font-semibold">
-                            {testimonial.clientType}
-                          </h3>
-                        </div>
+                        <Tabs defaultValue="ar" className="w-full">
+                          <TabsList className="grid grid-cols-2 w-full mb-2">
+                            <TabsTrigger value="ar">Arabic</TabsTrigger>
+                            <TabsTrigger value="en">English</TabsTrigger>
+                          </TabsList>
 
-                        {testimonial.location && (
-                          <div className="flex items-center gap-2 text-sm text-subtitle-color mb-3">
-                            <MapPin size={14} className="text-green-400" />
-                            <span>{testimonial.location}</span>
-                          </div>
-                        )}
+                          <TabsContent value="ar">
+                            <div className="flex items-center gap-2 mb-2">
+                              <User size={18} className="text-blue-400" />
+                              <h3 className="text-xl font-semibold">
+                                {testimonial.clientType.ar}
+                              </h3>
+                            </div>
 
-                        {/* Star Rating */}
-                        <div className="flex items-center gap-2">
-                          {renderStars(testimonial.stars)}
-                          <span className="text-sm text-subtitle-color">
-                            ({testimonial.stars}/5)
-                          </span>
-                        </div>
+                            {testimonial.location?.ar && (
+                              <div className="flex items-center gap-2 text-sm text-subtitle-color mb-3">
+                                <MapPin size={14} className="text-green-400" />
+                                <span>{testimonial.location.ar}</span>
+                              </div>
+                            )}
+
+                            <div className="flex items-center gap-2">
+                              {renderStars(testimonial.stars)}
+                              <span className="text-sm text-subtitle-color">
+                                ({testimonial.stars}/5)
+                              </span>
+                            </div>
+
+                            <div className="mb-4 p-4 border border-input rounded-lg bg-background/50">
+                              <div className="flex items-center gap-2 mb-3">
+                                <MessageSquare
+                                  size={16}
+                                  className="text-purple-400"
+                                />
+                                <span className="font-semibold text-sm">
+                                  Testimonial:
+                                </span>
+                              </div>
+                              <p className="text-sm text-subtitle-color whitespace-pre-wrap leading-relaxed ml-6">
+                                "{testimonial.testimonial.ar}"
+                              </p>
+                            </div>
+                          </TabsContent>
+
+                          <TabsContent value="en">
+                            <div className="flex items-center gap-2 mb-2">
+                              <User size={18} className="text-blue-400" />
+                              <h3 className="text-xl font-semibold">
+                                {testimonial.clientType.en}
+                              </h3>
+                            </div>
+
+                            {testimonial.location?.en && (
+                              <div className="flex items-center gap-2 text-sm text-subtitle-color mb-3">
+                                <MapPin size={14} className="text-green-400" />
+                                <span>{testimonial.location.en}</span>
+                              </div>
+                            )}
+
+                            <div className="flex items-center gap-2">
+                              {renderStars(testimonial.stars)}
+                              <span className="text-sm text-subtitle-color">
+                                ({testimonial.stars}/5)
+                              </span>
+                            </div>
+
+                            <div className="mb-4 p-4 border border-input rounded-lg bg-background/50">
+                              <div className="flex items-center gap-2 mb-3">
+                                <MessageSquare
+                                  size={16}
+                                  className="text-purple-400"
+                                />
+                                <span className="font-semibold text-sm">
+                                  Testimonial:
+                                </span>
+                              </div>
+                              <p className="text-sm text-subtitle-color whitespace-pre-wrap leading-relaxed ml-6">
+                                "{testimonial.testimonial.en}"
+                              </p>
+                            </div>
+                          </TabsContent>
+                        </Tabs>
                       </div>
                     </div>
 
@@ -148,19 +210,6 @@ export const Content = () => {
                         </Button>
                       </PopoverContent>
                     </Popover>
-                  </div>
-
-                  {/* Testimonial Content */}
-                  <div className="mb-4 p-4 border border-input rounded-lg bg-background/50">
-                    <div className="flex items-center gap-2 mb-3">
-                      <MessageSquare size={16} className="text-purple-400" />
-                      <span className="font-semibold text-sm">
-                        Testimonial:
-                      </span>
-                    </div>
-                    <p className="text-sm text-subtitle-color whitespace-pre-wrap leading-relaxed ml-6">
-                      "{testimonial.testimonial}"
-                    </p>
                   </div>
 
                   {/* Footer - Timestamps */}

@@ -4,20 +4,21 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { Category } from "./categories";
 import { Application } from "./applications";
 import { queryClient } from "@/providers/queryClientProvider";
+import { LangForm } from "./projects";
 
 export type Job = {
   _id: string;
-  title: string;
-  experience: string;
+  title: LangForm;
+  experience: LangForm;
   deadline: string;
   category: Category;
   applications: Application[];
   vacancy: number;
-  description?: string;
-  location?: string;
-  jobType?: string;
-  workingHours?: string;
-  workingDays?: string;
+  description?: LangForm;
+  location?: LangForm;
+  jobType?: LangForm;
+  workingHours?: LangForm;
+  workingDays?: LangForm;
   createdAt: string;
   updatedAt: string;
   __v: number;

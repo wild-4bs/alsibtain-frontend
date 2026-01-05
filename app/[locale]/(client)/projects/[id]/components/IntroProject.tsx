@@ -11,13 +11,14 @@ import MediaViewer from "@/components/ViewportMedia";
 import { useGSAP } from "@gsap/react";
 import SplitText from "gsap/src/SplitText";
 import gsap from "gsap";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Project } from "@/services/projects";
 
 export const IntroProject = ({ project }: { project?: Project }) => {
   const [isOpen, setIsOpen] = useState(false);
   const title = useRef(null);
   const section = useRef(null);
+  const locale = useLocale() as "ar" | "en";
 
   useGSAP(() => {
     const splitTitle = SplitText.create(title.current, {
@@ -62,7 +63,7 @@ export const IntroProject = ({ project }: { project?: Project }) => {
       <BluryBall className="top-0 left-0 translate-x-0 translate-y-0 blur-[120px]" />
       <PurpleLargeComet className="absolute bottom-0 w-full right-0" />
       <h2 className="text-center font-medium text-lg px-10" ref={title}>
-        {project?.description}
+        {project?.description[locale]}
       </h2>
       <Container className="max-w-[90%] w-full select-none bg-primary relative max-h-[750px] h-[90vh] f p-0! z-10 rounded-4xl  not-last:overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full">

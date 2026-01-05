@@ -86,11 +86,11 @@ export const groups = [
         path: "/dashboard/gallery",
         icon: <ImageIcon width={linkIconWidth} />,
       },
-      {
-        name: "Video Gallery",
-        path: "/dashboard/video-gallery",
-        icon: <VideoIcon width={linkIconWidth} />,
-      },
+      // {
+      //   name: "Video Gallery",
+      //   path: "/dashboard/video-gallery",
+      //   icon: <VideoIcon width={linkIconWidth} />,
+      // },
       {
         name: "Careers Categories",
         path: "/dashboard/categories",

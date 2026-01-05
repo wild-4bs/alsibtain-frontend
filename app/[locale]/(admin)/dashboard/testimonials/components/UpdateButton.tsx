@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   useGetTestimonialById,
   useUpdateTestimonial,
@@ -27,7 +28,9 @@ interface Props {
 export const UpdateTestimonialButton = ({ testimonialId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [testimonial, setTestimonial] = useState("");
+  const [clientType, setClientType] = useState({ ar: "", en: "" });
+  const [location, setLocation] = useState({ ar: "", en: "" });
+  const [testimonial, setTestimonial] = useState({ ar: "", en: "" });
   const [stars, setStars] = useState<number>(5);
 
   const { data: testimonialResponse, isLoading } =
@@ -37,36 +40,28 @@ export const UpdateTestimonialButton = ({ testimonialId }: Props) => {
   const { mutate, isPending, error } = useUpdateTestimonial();
 
   useEffect(() => {
-    if (testimonialData?.testimonial) {
-      setTestimonial(testimonialData.testimonial);
-    }
-    if (testimonialData?.stars !== undefined) {
-      setStars(testimonialData.stars);
+    if (testimonialData) {
+      setClientType(testimonialData.clientType || { ar: "", en: "" });
+      setLocation(testimonialData.location || { ar: "", en: "" });
+      setTestimonial(testimonialData.testimonial || { ar: "", en: "" });
+      if (testimonialData.stars !== undefined) setStars(testimonialData.stars);
     }
   }, [testimonialData]);
 
-  const updateTestimonial = async (e: FormEvent<HTMLFormElement>) => {
+  const updateTestimonial = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = new FormData(e.target as HTMLFormElement);
 
     const updateData = new FormData();
-    updateData.append("clientType", form.get("clientType") as string);
-    updateData.append("location", form.get("location") as string);
-    updateData.append("testimonial", testimonial);
-    updateData.append("stars", stars.toString());
 
+    updateData.append("clientType", JSON.stringify(clientType));
+    updateData.append("location", JSON.stringify(location));
+    updateData.append("testimonial", JSON.stringify(testimonial));
+    updateData.append("stars", stars.toString());
     if (imageFile) updateData.append("image", imageFile);
 
     mutate(
-      {
-        id: testimonialId,
-        data: updateData as any,
-      },
-      {
-        onSuccess: () => {
-          setIsOpen(false);
-        },
-      }
+      { id: testimonialId, data: updateData as any },
+      { onSuccess: () => setIsOpen(false) }
     );
   };
 
@@ -103,9 +98,7 @@ export const UpdateTestimonialButton = ({ testimonialId }: Props) => {
             input.accept = accept;
             input.onchange = (e) => {
               const target = e.target as HTMLInputElement;
-              if (target.files?.[0]) {
-                setFile(target.files[0]);
-              }
+              if (target.files?.[0]) setFile(target.files[0]);
             };
             input.click();
           }}
@@ -133,18 +126,13 @@ export const UpdateTestimonialButton = ({ testimonialId }: Props) => {
     onChange,
   }: {
     value: number;
-    onChange: (value: number) => void;
+    onChange: (v: number) => void;
   }) => (
     <div className="flex flex-col gap-2">
       <Label>Rating</Label>
       <div className="flex items-center gap-1">
         {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            onClick={() => onChange(star)}
-            className="transition-colors"
-          >
+          <button key={star} type="button" onClick={() => onChange(star)}>
             <Star
               size={24}
               className={
@@ -184,27 +172,78 @@ export const UpdateTestimonialButton = ({ testimonialId }: Props) => {
               <h3 className="text-sm font-semibold text-subtitle-color">
                 Client Information
               </h3>
+              <Tabs defaultValue="ar" className="w-full">
+                <TabsList className="grid grid-cols-2 w-full mb-2">
+                  <TabsTrigger value="ar">Arabic</TabsTrigger>
+                  <TabsTrigger value="en">English</TabsTrigger>
+                </TabsList>
 
-              <InputField
-                label="Client Type / Name"
-                name="clientType"
-                defaultValue={testimonialData?.clientType}
-                error={(error as any)?.fieldErrors?.clientType}
-              />
+                <TabsContent value="ar" className="space-y-4">
+                  <InputField
+                    label="Client Type / Name"
+                    name="clientType_ar"
+                    value={clientType.ar}
+                    onChange={(e) =>
+                      setClientType({ ...clientType, ar: e as string })
+                    }
+                    error={(error as any)?.fieldErrors?.clientType?.ar}
+                  />
+                  <InputField
+                    label="Location"
+                    name="location_ar"
+                    value={location.ar}
+                    onChange={(e) =>
+                      setLocation({ ...location, ar: e as string })
+                    }
+                    error={(error as any)?.fieldErrors?.location?.ar}
+                  />
+                  <TextareaField
+                    label="Testimonial"
+                    value={testimonial.ar}
+                    onChange={(e) =>
+                      setTestimonial({ ...testimonial, ar: e as string })
+                    }
+                    placeholder="Enter Arabic testimonial"
+                    error={(error as any)?.fieldErrors?.testimonial?.ar}
+                  />
+                </TabsContent>
 
-              <InputField
-                label="Location"
-                name="location"
-                defaultValue={testimonialData?.location}
-                error={(error as any)?.fieldErrors?.location}
-              />
+                <TabsContent value="en">
+                  <InputField
+                    label="Client Type / Name"
+                    name="clientType_en"
+                    value={clientType.en}
+                    onChange={(e) =>
+                      setClientType({ ...clientType, en: e as string })
+                    }
+                    error={(error as any)?.fieldErrors?.clientType?.en}
+                  />
+                  <InputField
+                    label="Location"
+                    name="location_en"
+                    value={location.en}
+                    onChange={(e) =>
+                      setLocation({ ...location, en: e as string })
+                    }
+                    error={(error as any)?.fieldErrors?.location?.en}
+                  />
+                  <TextareaField
+                    label="Testimonial"
+                    value={testimonial.en}
+                    onChange={(e) =>
+                      setTestimonial({ ...testimonial, en: e as string })
+                    }
+                    placeholder="Enter English testimonial"
+                    error={(error as any)?.fieldErrors?.testimonial?.en}
+                  />
+                </TabsContent>
+              </Tabs>
             </div>
 
             <div className="space-y-4 border-t pt-4">
               <h3 className="text-sm font-semibold text-subtitle-color">
                 Client Image
               </h3>
-
               <FileUploadField
                 label="Image"
                 file={imageFile}
@@ -217,17 +256,9 @@ export const UpdateTestimonialButton = ({ testimonialId }: Props) => {
 
             <div className="space-y-4 border-t pt-4">
               <h3 className="text-sm font-semibold text-subtitle-color">
-                Testimonial Details
+                Stars
               </h3>
-
               <StarRating value={stars} onChange={setStars} />
-
-              <TextareaField
-                label="Testimonial"
-                value={testimonial}
-                onChange={(e) => setTestimonial(e as string)}
-                placeholder="Enter the client's testimonial"
-              />
             </div>
 
             <DialogFooter>

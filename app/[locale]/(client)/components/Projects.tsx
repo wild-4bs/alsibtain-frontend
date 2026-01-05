@@ -259,8 +259,8 @@ export const Projects = () => {
               key={project._id}
               isActive={currentSlide === index}
               videoSrc={project?.video?.url}
-              projectName={project?.name}
-              location={project.location}
+              projectName={project?.name[locale]}
+              location={project.location[locale]}
               area={project.area}
               handlePlay={() => setIsPlaying(true)}
               isPlaying={isPlaying}

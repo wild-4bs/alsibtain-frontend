@@ -13,8 +13,13 @@ import MediaViewer from "@/components/ViewportMedia";
 import { useLocale } from "next-intl";
 import { getDirectionClass } from "@/lib/TextDirection";
 import { useGetVideos } from "@/services/video-gallery";
+import { Project } from "@/services/projects";
 
-export const VideosSlider = () => {
+export const VideosSlider = ({
+  gallery,
+}: {
+  gallery: Project["videoGallery"];
+}) => {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
@@ -23,7 +28,6 @@ export const VideosSlider = () => {
   const [api, setApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [itemsLength, setItemsLength] = useState(0);
-  const { data } = useGetVideos();
 
   useEffect(() => {
     if (!api) return;
@@ -63,7 +67,7 @@ export const VideosSlider = () => {
         opts={{ direction: getDirectionClass(locale) }}
       >
         <CarouselContent className="w-full m-0 flex items-center gap-6 px-3 select-none">
-          {data?.map((video, index) => (
+          {gallery?.map((video, index) => (
             <CarouselItem
               key={index}
               className="basis-1/3 max-md:basis-full max-xl:basis-1/2 h-[262px] relative z-10"

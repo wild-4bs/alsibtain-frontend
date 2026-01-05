@@ -71,7 +71,7 @@ export const Footer = () => {
           <h3 className="font-medium text-xl">{t("projects.title")}</h3>
           {projects?.map((project, i) => (
             <li className="font-medium leading-5" key={i}>
-              {project?.name}
+              {project?.name[locale]}
             </li>
           ))}
         </ul>

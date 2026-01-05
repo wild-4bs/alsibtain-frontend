@@ -42,7 +42,7 @@ export const Requirements = ({ data }: { data?: Job }) => {
               <dt>
                 {t("location") || { ar: "الموقع", en: "Location" }[locale]}
               </dt>
-              <dd>{data?.location}</dd>
+              <dd>{data?.location?.[locale]}</dd>
             </dl>
           </li>
 
@@ -52,7 +52,7 @@ export const Requirements = ({ data }: { data?: Job }) => {
               <dt>
                 {t("jobType") || { ar: "نوع الوظيفة", en: "Job Type" }[locale]}
               </dt>
-              <dd>{data?.jobType}</dd>
+              <dd>{data?.jobType?.[locale]}</dd>
             </dl>
           </li>
 
@@ -63,7 +63,7 @@ export const Requirements = ({ data }: { data?: Job }) => {
                 {t("datePosted") ||
                   { ar: "تاريخ النشر", en: "Date Posted" }[locale]}
               </dt>
-              <dd>{timeAgo(data?.createdAt as string)}</dd>
+              <dd>{timeAgo(data?.createdAt as string, locale)}</dd>
             </dl>
           </li>
 
@@ -73,7 +73,7 @@ export const Requirements = ({ data }: { data?: Job }) => {
               <dt>
                 {t("experience") || { ar: "الخبرة", en: "Experience" }[locale]}
               </dt>
-              <dd>{data?.experience}</dd>
+              <dd>{data?.experience?.[locale]}</dd>
             </dl>
           </li>
 
@@ -84,7 +84,7 @@ export const Requirements = ({ data }: { data?: Job }) => {
                 {t("workingHours") ||
                   { ar: "ساعات العمل", en: "Working Hours" }[locale]}
               </dt>
-              <dd>{data?.workingHours}</dd>
+              <dd>{data?.workingHours?.[locale]}</dd>
             </dl>
           </li>
 
@@ -95,7 +95,7 @@ export const Requirements = ({ data }: { data?: Job }) => {
                 {t("workingDays") ||
                   { ar: "أيام العمل", en: "Working Days" }[locale]}
               </dt>
-              <dd>{data?.workingDays}</dd>
+              <dd>{data?.workingDays?.[locale]}</dd>
             </dl>
           </li>
 

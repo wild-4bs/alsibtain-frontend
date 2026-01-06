@@ -194,7 +194,7 @@ export const Projects = ({
             <Project
               key={i}
               title={project.name[locale]}
-              caption={project.description[locale]}
+              caption={project.caption[locale]}
               id={project?._id}
               logo={project?.logo?.url}
             />

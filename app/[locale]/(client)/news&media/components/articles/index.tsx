@@ -28,7 +28,7 @@ export const Articles = () => {
                 image={article?.thumbnail?.url}
                 title={article.title[locale]}
                 createdBy={article?.writtenBy[locale]}
-                date={timeAgo(article?.createdAt)}
+                date={timeAgo(article?.createdAt, locale)}
                 active={clicked?._id == article?._id}
                 onClick={() => setActiveNews(article?._id)}
               />

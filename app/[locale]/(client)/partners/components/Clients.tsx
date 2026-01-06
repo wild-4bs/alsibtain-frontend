@@ -171,7 +171,7 @@ export const Clients = () => {
                       </div>
                       <Button
                         variant={"ghost"}
-                        className="hover:bg-primary/10 hover:text-white/90"
+                        className="hidden hover:bg-primary/10 hover:text-white/90"
                       >
                         <ArrowUp className="rotate-45 size-6 rtl:-rotate-45" />
                       </Button>

@@ -89,15 +89,13 @@ export const Hero = () => {
           ref={imageWrapper}
           className="h-[90%] w-full flex-1 rounded-3xl overflow-hidden max-lg:flex-[unset] max-lg:h-[400px]"
         >
-          {data?.thumbnail?.url && (
-            <Image
-              src={data?.thumbnail?.url}
-              width={10000}
-              height={10000}
-              alt="image"
-              className="w-full h-full object-cover bg-primary/40"
-            />
-          )}
+          <Image
+            src={data?.thumbnail?.url || "/news&media/hero.jpg"}
+            width={10000}
+            height={10000}
+            alt="image"
+            className="w-full h-full object-cover bg-primary/40"
+          />
         </div>
 
         {/* CONTENT */}
@@ -112,14 +110,14 @@ export const Hero = () => {
           </div>
 
           <h1 className="font-black text-3xl mb-2 rtl:mb-4" ref={title}>
-            {data?.title[locale]}
+            {data?.title?.[locale] || t("title")}
           </h1>
 
           <p
             className="font-medium text-base leading-[100%] rtl:leading-[120%]"
             ref={caption}
           >
-            {data?.description[locale]}
+            {data?.description?.[locale] || t("caption")}
           </p>
         </div>
       </Container>

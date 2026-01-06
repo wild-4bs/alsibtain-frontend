@@ -57,7 +57,7 @@ export const Partners = ({ className }: ComponentProps<"section">) => {
   const displayLogos = Array(duplicateCount).fill(data.payload).flat();
 
   return (
-    <section className={cn(className, "py-16")}>
+    <section className={cn(className, "py-16")} dir="ltr">
       <Container>
         <h2 className="text-center mb-12 text-2xl font-semibold">
           {
@@ -90,7 +90,7 @@ export const Partners = ({ className }: ComponentProps<"section">) => {
         >
           {displayLogos.map((partner, i) => (
             <div
-              className="flex-shrink-0 px-8 md:px-12"
+              className="shrink-0 px-8 md:px-12"
               key={`${partner.logo?.url}-${i}`}
             >
               <div className="relative w-32 h-20 md:w-40 md:h-24 flex items-center justify-center">

@@ -120,7 +120,7 @@ export const Projects = ({
     <section className="relative" ref={section} id="projects">
       <Container>
         <header className="text-center mb-20 z-10 relative">
-          <Badge className="py-2 px-3 opacity-62 mb-1">
+          <Badge className="py-2 px-3 opacity-62 mb-1 rtl:mb-10">
             <h2>{data?.badge?.value[locale]}</h2>
           </Badge>
           <h3
@@ -197,6 +197,7 @@ export const Projects = ({
               caption={project.caption[locale]}
               id={project?._id}
               logo={project?.logo?.url}
+              
             />
           ))}
         </div>

@@ -224,7 +224,7 @@ export const Content = () => {
                       {project.totalResidentialUnits && (
                         <Meta
                           icon={<Home size={16} />}
-                          label={`${project.totalResidentialUnits} Units`}
+                          label={`${project.totalResidentialUnits}`}
                         />
                       )}
                       {project.unitType && (

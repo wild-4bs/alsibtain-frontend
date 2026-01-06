@@ -70,8 +70,10 @@ export const Footer = () => {
         <ul className="flex flex-col gap-2">
           <h3 className="font-medium text-xl">{t("projects.title")}</h3>
           {projects?.map((project, i) => (
-            <li className="font-medium leading-5" key={i}>
-              {project?.name[locale]}
+            <li className="font-medium leading-5 hover:underline" key={i}>
+              <Link href={`/projects/${project?._id}`}>
+                {project?.name[locale]}
+              </Link>
             </li>
           ))}
         </ul>
@@ -85,7 +87,7 @@ export const Footer = () => {
                 ?.address?.value[locale]
             }
           </li>
-          <li className="font-light text-base leading-6" dir="ltr">
+          <li className="font-light text-base leading-6 rtl:text-end" dir="ltr">
             {
               (data as ContactPageContent)?.sections?.footer?.headOffice
                 ?.phoneNumber

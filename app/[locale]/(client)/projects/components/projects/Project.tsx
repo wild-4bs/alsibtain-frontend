@@ -10,7 +10,7 @@ interface Props {
 
 export const Project = ({ title, caption, id, logo }: Props) => {
   return (
-    <Link href={`/projects/${id}`} className="projects-page-project">
+    <Link href={`/projects/${id}`} className="projects-page-project z-100 relative -translate-y-2">
       <article className="flex items-center flex-col relative z-10 hover:opacity-100 opacity-70 duration-200">
         {logo && <Image src={logo} width={1000} height={1000} className="mb-4 w-10" alt={title}/>
         }

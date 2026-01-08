@@ -237,7 +237,7 @@ export const Hero = ({
         </Container>
       </div>
       {data?.sliderItems?.value[locale].map((item, i) => (
-        <div key={i} className="absolute bottom-0 end-0 w-[900px] max-lg:w-[500px] 2xl:w-1/2 z-10!">
+        <div key={i} className="absolute bottom-0 end-0 w-[900px] max-lg:w-[500px] 2xl:w-[60%] max-w-[1200px] z-10!">
           {item?.image?.url && (
             <Image
               src={item.image?.url}

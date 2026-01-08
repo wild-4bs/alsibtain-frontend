@@ -179,10 +179,9 @@ export const Hero = ({
           ></p>
         </GlassCard>
       </Container>
-
-      <article className="mt-8 relative self-end w-full max-w-md ps-4 z-20">
+      <Container className="mt-8 relative w-full flex flex-col justify-start z-20">
         <BluryBall className="w-[262px] h-20" />
-        <GlassCard className="px-4 py-5 rounded-e-none">
+        <GlassCard className="px-4 py-5 max-w-xl">
           <Carousel
             plugins={[plugin]}
             setApi={setApi}
@@ -207,7 +206,7 @@ export const Hero = ({
             </CarouselContent>
           </Carousel>
         </GlassCard>
-        <div className="flex items-center gap-2 mt-4 relative z-10 w-fit rtl:float-left ltr:float-right me-10">
+        <div className="flex items-center gap-2 mt-4 relative z-10 w-fit">
           {data?.sliderItems.value[locale].map((_, i) => (
             <button
               key={i}
@@ -222,8 +221,7 @@ export const Hero = ({
             ></button>
           ))}
         </div>
-      </article>
-
+      </Container>
       <div className="flex-1 flex items-end pb-12 z-20">
         <Container>
           <div className="flex flex-col font-semibold text-lg">
@@ -239,10 +237,7 @@ export const Hero = ({
         </Container>
       </div>
       {data?.sliderItems?.value[locale].map((item, i) => (
-        <div
-          key={i}
-          className="absolute bottom-0 end-[10%] 2xl:min-w-[60%] z-10!"
-        >
+        <div key={i} className="absolute bottom-0 end-0 w-[900px] max-lg:w-[500px] 2xl:w-1/2 z-10!">
           {item?.image?.url && (
             <Image
               src={item.image?.url}
@@ -250,7 +245,7 @@ export const Hero = ({
               width={1000}
               height={1000}
               className={clsx(
-                "object-cover md:min-w-[750px] lg:min-w-[900px] xl:min-w-[1000px] w-full duration-900",
+                "object-cover w-full duration-900",
                 currentSlide === i
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-full"

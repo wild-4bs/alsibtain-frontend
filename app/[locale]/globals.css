@@ -107,39 +107,6 @@ body {
   filter: blur(170px);
 }
 
-@keyframes pulse-glow {
-  0%,
-  100% {
-    text-shadow: 0 0 16px var(--primary);
-  }
-  50% {
-    text-shadow: 0 0 32px var(--primary), 0 0 48px var(--primary);
-  }
-}
-
-@keyframes pulse-glow-white {
-  0%,
-  100% {
-    text-shadow: 0 0 16px rgba(255, 255, 255, 0.9);
-  }
-  50% {
-    text-shadow: 0 0 32px rgba(255, 255, 255, 0.9),
-      0 0 48px rgba(255, 255, 255, 0.9);
-  }
-}
-
-@keyframes pulse-glow-bg {
-  0%,
-  100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.1);
-  }
-}
-
 .animate-pulse-glow {
   animation: pulse-glow 3s ease-in-out infinite;
 }
@@ -207,17 +174,6 @@ html {
   font-size: 13px;
 }
 /* Pulse animation */
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(39, 88, 70, 0.5);
-  }
-  70% {
-    box-shadow: 0 0 0 20px rgba(61, 147, 115, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(39, 88, 70, 0);
-  }
-}
 
 /* container */
 .constelacao {
@@ -241,10 +197,21 @@ html {
 /* star base */
 .estrela {
   position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
   border-radius: 50%;
-  background-color: var(--star-color, #ffffff);
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 /* sizes */

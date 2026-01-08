@@ -2,17 +2,13 @@
 import Container from "@/components/Container";
 import { BluryBall } from "@/components/ui/BluryBall";
 import { Link } from "@/i18n/routing";
-import { ProjectsPageContent } from "@/types/pages";
+import { GalleryImage } from "@/types/gallery";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Image from "next/image";
 import { useRef } from "react";
 
-export const Gallery = ({
-  data,
-}: {
-  data: ProjectsPageContent["sections"]["gallery"];
-}) => {
+export const Gallery = ({ data }: { data: GalleryImage[] }) => {
   const section = useRef<HTMLElement>(null);
   useGSAP(() => {
     const projects = section.current?.querySelectorAll(
@@ -40,10 +36,10 @@ export const Gallery = ({
   }, []);
   return (
     <section className="mt-56 relative translate-y-25" ref={section}>
-      <BluryBall className="w-[90%] h-[638px] blur-[228.1px] bottom-0 left-1/2" />
+      <BluryBall className="w-[90%] h-[638px] animate-pulse blur-[228.1px] bottom-0 left-1/2" />
       <Container className="relative z-10">
         <div className="grid grid-cols-1 gap-6 min-[500px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {data?.images?.value?.map((image, i) => (
+          {data?.map((image, i) => (
             <Link href={"/projects/id"} key={i}>
               <article className="w-full h-40 rounded-3xl hover:opacity-50 duration-300 cursor-pointer projects-page-projects-list-project">
                 {image && (

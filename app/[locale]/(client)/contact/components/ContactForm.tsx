@@ -21,7 +21,7 @@ export const ContactForm = () => {
 
   return (
     <section className="mt-16 relative">
-      <BluryBall className="w-[1377px] h-full left-0 z-0" />
+      <BluryBall className="w-[100px] h-full left-0 z-0 animate-pulse" />
 
       <Container className="relative z-10 min-h-[80vh]">
         <div className="md:flex gap-28 mb-16">
@@ -113,7 +113,7 @@ export const ContactForm = () => {
           referrerPolicy="no-referrer-when-downgrade"
         />
 
-        <BluryBall className="w-full h-1/2 top-0" />
+        <BluryBall className="w-full h-1/3 top-0 animate-pulse" />
       </div>
     </section>
   );

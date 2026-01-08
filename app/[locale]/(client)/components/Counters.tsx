@@ -102,13 +102,13 @@ export const Counters = ({
     if (locale === "en") {
       labels.forEach((label) => {
         const split = SplitText.create(label, {
-          type: "chars",
+          type: "words",
           smartWrap: true,
-          charsClass: "char",
+          wordsClass: "char",
         });
 
         tl.from(
-          split.chars,
+          split.words,
           {
             opacity: 0,
             y: 20,

@@ -4,7 +4,7 @@ import Image from "next/image";
 export const Hero = () => {
   return (
     <section className="h-screen -mt-(--header-height) relative">
-      <BluryBall className="top-0 right-0 left-[unset] w-[600px] h-[900px] z-10 translate-x-1/2 -translate-y-1/2" />
+      <BluryBall className="top-0 right-0 left-[unset] w-[600px] h-[900px] z-10 translate-x-1/2 -translate-y-1/2 animate-pulse" />
       <Image
         src={"/contact/hero.jpg"}
         width={10000}

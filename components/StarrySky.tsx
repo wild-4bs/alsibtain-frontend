@@ -1,69 +1,44 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useMemo } from "react";
 
-export default function StarsLayer({ count = 250 }: { count?: number }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+type Star = {
+  style: string;
+  size: string;
+  opacity: string;
+  x: number;
+  y: number;
+  delay: number;
+};
 
-  useEffect(() => {
-    if (!containerRef.current) return;
+export default function StarsLayer() {
+  const stars = useMemo<Star[]>(() => {
+    const styles = ["style1", "style2"];
+    const sizes = ["tam1", "tam2"];
+    const opacities = ["opacity1", "opacity2"];
 
-    const styles = ["style1", "style2", "style3", "style4"];
-    const sizes = ["tam1", "tam1", "tam1", "tam2", "tam3"];
-    const opacities = [
-      "opacity1",
-      "opacity1",
-      "opacity1",
-      "opacity2",
-      "opacity2",
-      "opacity3",
-    ];
-
-    const createStars = () => {
-      if (!containerRef.current) return;
-
-      // Clear previous stars
-      containerRef.current.innerHTML = "";
-
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const fragment = document.createDocumentFragment();
-
-      for (let i = 0; i < count; i++) {
-        const star = document.createElement("span");
-
-        star.className = `
-          estrela
-          ${styles[Math.floor(Math.random() * styles.length)]}
-          ${sizes[Math.floor(Math.random() * sizes.length)]}
-          ${opacities[Math.floor(Math.random() * opacities.length)]}
-        `;
-
-        star.style.left = `${Math.random() * width}px`;
-        star.style.top = `${Math.random() * height}px`;
-        star.style.animationDelay = `.${Math.floor(Math.random() * 9)}s`;
-
-        fragment.appendChild(star);
-      }
-
-      containerRef.current.appendChild(fragment);
-    };
-
-    // Initial load
-    createStars();
-
-    // Resize listener (width/height change)
-    window.addEventListener("resize", createStars);
-
-    return () => {
-      window.removeEventListener("resize", createStars);
-    };
-  }, [count]);
+    return Array.from({ length: 80 }, () => ({
+      style: styles[Math.random() * styles.length | 0],
+      size: sizes[Math.random() * sizes.length | 0],
+      opacity: opacities[Math.random() * opacities.length | 0],
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      delay: Math.random() * 4,
+    }));
+  }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="constelacao pointer-events-none absolute inset-0"
-    />
+    <div className="constelacao pointer-events-none absolute inset-0 overflow-hidden" suppressHydrationWarning>
+      {stars.map((s, i) => (
+        <span
+          key={i}
+          className={`estrela ${s.style} ${s.size} ${s.opacity}`}
+          style={{
+            transform: `translate3d(${s.x}vw, ${s.y}vh, 0)`,
+            animationDelay: `${s.delay}s`,
+          }}
+        />
+      ))}
+    </div>
   );
 }

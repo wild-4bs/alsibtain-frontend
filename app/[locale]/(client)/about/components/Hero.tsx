@@ -160,7 +160,7 @@ export const Hero = ({
             ))}
           </div>
         </div>
-        <BluryBall className="-right-1/2 w-[900px] h-[650px] left-[unset]" />
+        <BluryBall className="-right-1/2 w-[900px] h-[650px] left-[unset] animate-pulse" />
         <div
           className="min-w-[500px] max-lg:hidden w-[500px] max-xl:min-w-[400px] max-xl:w-[400px] h-fit bg-[#262626] min-h-[450px] flex items-end rounded-xl relative overflow-hidden"
           ref={image}

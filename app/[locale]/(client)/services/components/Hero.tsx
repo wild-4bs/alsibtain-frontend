@@ -9,7 +9,6 @@ import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ArrowDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -86,7 +85,7 @@ export const Hero = ({
         <div className="layer absolute top-0 left-0 w-full h-full bg-linear-to-t from-black to-transparent z-20"></div>
       </div>
 
-      <BluryBall className="right-0 left-[unset] translate-x-1/2 blur-[335px] h-full w-[480px] z-20" />
+      <BluryBall className="right-0 left-[unset] translate-x-1/2 blur-[335px] h-full animate-pulse w-[480px] z-20" />
       <BluryBall className="left-0 -translate-x-1/2 blur-[135px] h-[363px] w-[732px] z-20" />
 
       <Container className="relative z-70 max-lg:text-center">

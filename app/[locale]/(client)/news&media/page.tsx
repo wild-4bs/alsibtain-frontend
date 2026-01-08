@@ -19,7 +19,7 @@ export default function page() {
     <main className={cn(locale == "en" && inter.className)}>
       <Hero />
       <div className="relative">
-        <BluryBall className="left-0 h-full w-[30%]" />
+        <BluryBall className="left-0 h-full w-[30%] animate-pulse" />
         <Articles />
         <Stories />
       </div>

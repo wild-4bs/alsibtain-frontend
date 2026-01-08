@@ -128,7 +128,7 @@ export const PartnershipTypes = ({
   const t = useTranslations("partners.partnershipTypes");
   return (
     <section className="relative mt-26" ref={section}>
-      <BluryBall className="left-0 w-[40%] h-full" />
+      <BluryBall className="left-0 w-[40%] h-full animate-pulse" />
       <Container className="flex gap-10 relative z-10 max-lg:flex-col">
         <div className="flex flex-col gap-6 w-full max-w-3xl">
           <Badge variant={"dark"}>{t('badge')}</Badge>

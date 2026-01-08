@@ -67,7 +67,7 @@ export const Hero = ({
   data: HomePageContent["sections"]["hero"];
 }) => {
   const plugin = useMemo(
-    () => Autoplay({ delay: 3000, stopOnInteraction: true }),
+    () => Autoplay({ delay: 5000, stopOnInteraction: true }),
     []
   );
   const [api, setApi] = useState<CarouselApi>();
@@ -156,7 +156,7 @@ export const Hero = ({
   const t = useTranslations("home.hero");
 
   return (
-    <section className="sm:h-[calc(100vh-var(--header-height))] h-[80vh] relative overflow-hidden flex flex-col rounded-b-[165px] max-md:rounded-b-[100px]">
+    <section className="sm:h-[calc(100vh-var(--header-height))] h-[80vh] overflow-hidden flex flex-col rounded-b-[165px] z-60 relative max-md:rounded-b-[100px]">
       <StarsLayer />
       <Container className="pt-20 relative z-10">
         <h1 ref={tagline} className="text-xs font-light mb-2">
@@ -166,7 +166,7 @@ export const Hero = ({
         <GlassCard className="p-5 w-fit overflow-hidden">
           <h2
             ref={title}
-            className="text-7xl max-md:text-5xl max-sm:text-4xl font-medium mb-2 leading-[108%] rtl:leading-[130%]"
+            className="text-6xl max-md:text-5xl max-sm:text-4xl font-medium mb-2 leading-[108%] rtl:leading-[130%]"
             dangerouslySetInnerHTML={{ __html: data?.headline?.value[locale] }}
           ></h2>
 
@@ -181,7 +181,7 @@ export const Hero = ({
       </Container>
 
       <article className="mt-8 relative self-end w-full max-w-md ps-4 z-20">
-        <BluryBall className="w-[462px] h-[111px]" />
+        <BluryBall className="w-[262px] h-20" />
         <GlassCard className="px-4 py-5 rounded-e-none">
           <Carousel
             plugins={[plugin]}
@@ -208,7 +208,7 @@ export const Hero = ({
           </Carousel>
         </GlassCard>
         <div className="flex items-center gap-2 mt-4 relative z-10 w-fit rtl:float-left ltr:float-right me-10">
-          {data?.sliderItems.value[locale].map((item, i) => (
+          {data?.sliderItems.value[locale].map((_, i) => (
             <button
               key={i}
               onClick={() => handleSlideChange(i)}
@@ -241,7 +241,7 @@ export const Hero = ({
       {data?.sliderItems?.value[locale].map((item, i) => (
         <div
           key={i}
-          className="absolute bottom-0 right-[10%] md:right-[30%] rtl:left-[10%] rtl:md:left-[30%] xl:w-[900px] z-10!"
+          className="absolute bottom-0 end-[10%] 2xl:min-w-[60%] z-10!"
         >
           {item?.image?.url && (
             <Image
@@ -250,7 +250,7 @@ export const Hero = ({
               width={1000}
               height={1000}
               className={clsx(
-                "object-cover md:min-w-[900px]  w-full duration-900",
+                "object-cover md:min-w-[750px] lg:min-w-[900px] xl:min-w-[1000px] w-full duration-900",
                 currentSlide === i
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-full"

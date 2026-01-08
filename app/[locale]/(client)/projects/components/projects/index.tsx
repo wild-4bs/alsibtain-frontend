@@ -158,8 +158,8 @@ export const Projects = ({
             </div>
           </div>
 
-          <BluryBall className="bottom-0 left-[unset] right-0 translate-x-1/2 translate-y-0 w-[600px] h-[500px] blur-[235.3px]" />
-          <BluryBall className="top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] blur-[235.3px]" />
+          <BluryBall className="bottom-0 left-[unset] right-0 translate-x-1/2 translate-y-0 w-[600px] h-[500px] blur-[235.3px] animate-pulse" />
+          <BluryBall className="top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[500px] blur-[235.3px] animate-pulse" />
           <FullWidthComet className="absolute top-[60%] left-[50%] -translate-y-[50%] -translate-x-[60%] z-0" />
 
           <div

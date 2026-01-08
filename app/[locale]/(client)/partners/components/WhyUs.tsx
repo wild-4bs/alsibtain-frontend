@@ -118,7 +118,7 @@ export const WhyUs = ({
   const t = useTranslations("partners.whyUs");
   return (
     <section className="pt-28 relative z-10" ref={section}>
-      <BluryBall className="left-[unset] right-0 h-full w-[30%] translate-x-1/2" />
+      <BluryBall className="left-[unset] right-0 h-full w-[30%] translate-x-1/2 animate-pulse" />
       <Container>
         <h2 className="font-semibold text-3xl mb-10 text-center" ref={title}>
           {t("title")}

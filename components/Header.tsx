@@ -72,12 +72,12 @@ export const Header = () => {
     >
       <Container className="flex items-center gap-8 justify-between h-(--header-height) max-xl:px-2">
         <Link className="relative" href={"/"}>
-          <BluryBall className="w-[500px] h-[500px]" />
+          <BluryBall className="w-[100px] h-[100px]" />
           <Logo className="relative z-10" />
         </Link>
         <div className="flex-1 flex justify-center">
           <GlassCard className="px-6 w-fit py-0 rounded-full relative z-10 max-xl:px-2 max-lg:hidden">
-            <BluryBall className="w-full h-[200px] -top-20" />
+            <BluryBall className="w-full h-[100px] -top-20" />
             <ul className="flex items-center gap-2 w-full text-sm font-normal leading-5 relative z-10">
               {navLinks.map((link, i) => (
                 <li key={i}>
